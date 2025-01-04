@@ -1,10 +1,25 @@
-const { app, BrowserWindow } = require("electron");
-const path = require("path");
-const url = require("url");
+import { app, BrowserWindow, ipcMain } from "electron";
+import path from "path";
+import url from "url";
+import { AppStore } from "./store.js";
 
 function createWindow() {
-    let mainWindow = new BrowserWindow({});
-    mainWindow.maximize();
+    let mainWindow = new BrowserWindow({
+        webPreferences: {
+            preload: path.join(__dirname, "preload.js"),
+        },
+    });
+    let store = new AppStore();
+
+    ipcMain.handle("get-tokens", () => {
+        return store.getTokens();
+    });
+    ipcMain.handle("store-tokens", (_, accessToken: any, refreshToken: any) => {
+        store.storeTokens(accessToken, refreshToken);
+    });
+    ipcMain.handle("clear-tokens", () => {
+        store.clearTokens();
+    });
 
     const startUrl =
         process.env.ELECTRON_START_URL ||
@@ -14,6 +29,7 @@ function createWindow() {
             slashes: true,
         });
 
+    mainWindow.maximize();
     mainWindow.loadURL(startUrl);
 }
 
