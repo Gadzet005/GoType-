@@ -1,5 +1,5 @@
 import { signUp } from "@/api/user";
-import { PasswordField } from "@/components/form/PasswordField";
+import { PasswordField } from "@common/components/form/PasswordField";
 import { useUser } from "@/public/user";
 import { RoutePath } from "@/routing/routePath";
 import {
