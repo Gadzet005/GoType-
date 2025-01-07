@@ -19,7 +19,7 @@ services:
     db-migrator:
       build:
         dockerfile: goose/Dockerfile
-      command: ["postgresql://postgres:gotypepwd@db:5432/postgres", "up"]
+      command: ["postgresql://gotype:gotypepwd@db:5432/gotypedb", "up"]
       depends_on:
         db:
           condition: service_healthy

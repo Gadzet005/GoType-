@@ -1,8 +1,8 @@
 port: "8000"
 
 db:
-  username: "postgres"
+  username: "gotype"
   host: "localhost"
   port: "5432"
-  dbname: "postgres"
+  dbname: "gotypedb"
   sslmode: "disable"
