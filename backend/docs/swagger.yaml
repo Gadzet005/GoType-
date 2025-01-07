@@ -1,0 +1,197 @@
+definitions:
+  gotype.User:
+    properties:
+      name:
+        type: string
+      password:
+        description: hash
+        type: string
+    required:
+    - name
+    - password
+    type: object
+  handler.errorResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.logoutStruct:
+    properties:
+      access_token:
+        type: string
+    type: object
+  handler.refreshStruct:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: API Server for GoType game and website
+  title: GoType App API
+  version: 0.0.1
+paths:
+  /auth/login:
+    post:
+      consumes:
+      - application/json
+      description: authorize using login and password
+      operationId: login
+      parameters:
+      - description: login and password
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/gotype.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.refreshStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Login
+      tags:
+      - auth
+  /auth/refresh:
+    post:
+      consumes:
+      - application/json
+      description: get new access token and refresh token by existing access token
+        and refresh token
+      operationId: refresh
+      parameters:
+      - description: RefreshToken and AccessToken
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.refreshStruct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.refreshStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Refresh
+      tags:
+      - auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      description: create new account
+      operationId: create-account
+      parameters:
+      - description: new account info
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/gotype.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.refreshStruct'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Register
+      tags:
+      - auth
+  /logout/logout:
+    post:
+      consumes:
+      - application/json
+      description: Expire refreshToken manually
+      operationId: logout
+      parameters:
+      - description: AccessToken
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/handler.logoutStruct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Logout
+      tags:
+      - logout
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
