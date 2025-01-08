@@ -3,18 +3,15 @@ version: "3.9"
 name: hsedb
 
 services:
-#  postgres:
-#    image: postgres:14.8-alpine3.18
-#    environment:
-#      POSTGRES_DB: "gotypedb"
-#      POSTGRES_USER: "gotype"
-#      POSTGRES_PASSWORD: "gotypepwd"
-##      PGDATA: "/var/lib/postgresql/data/pgdata"
-#    volumes:
-#      - .:/docker-entrypoint-initdb.d/docker-entrypoint-initdb.d
-##      - gotypedb-data:/var/lib/postgresql/data
-#    ports:
-#      - "5432:5432"
+    server:
+      build:
+        dockerfile: Dockerfile_app
+        context: .
+      ports:
+        - "8080:8080"
+      depends_on:
+        db:
+          condition: service_healthy
 
     db-migrator:
       build:
@@ -38,12 +35,8 @@ services:
       volumes:
         - ./postgres-data:/var/lib/postgresql/data
       healthcheck:
-        test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+        test: [ "CMD-SHELL", "pg_isready -U gotype -d gotypedb" ]
         interval: 10s
         timeout: 5s
         retries: 5
         start_period: 10s
-
-
-#volumes:
-#  habrdb-data:

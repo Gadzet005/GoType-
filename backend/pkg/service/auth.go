@@ -141,12 +141,12 @@ func (s *AuthService) NewAccessToken(id, Access int) (string, error) {
 		Access,
 	})
 
-	timet, _ := authToken.Claims.GetExpirationTime()
-	fmt.Printf("Exp time: %s \n", timet)
-	timet1, _ := authToken.Claims.GetIssuedAt()
-	fmt.Printf("Iss time: %s \n", timet1)
-	ans, _ := authToken.SignedString([]byte(signingKey))
-	fmt.Printf("TokenString: %s \n", ans)
+	//timet, _ := authToken.Claims.GetExpirationTime()
+	//fmt.Printf("Exp time: %s \n", timet)
+	//timet1, _ := authToken.Claims.GetIssuedAt()
+	//fmt.Printf("Iss time: %s \n", timet1)
+	//ans, _ := authToken.SignedString([]byte(signingKey))
+	//fmt.Printf("TokenString: %s \n", ans)
 
 	return authToken.SignedString([]byte(signingKey))
 }
@@ -202,7 +202,7 @@ func (s *AuthService) NewRefreshToken() (string, error) {
 //}
 
 func (s *AuthService) Parse(accessToken string) (time.Time, int, int, error) {
-	fmt.Printf("Token: %s \n", accessToken)
+	//fmt.Printf("Token: %s \n", accessToken)
 
 	token, err := jwt.ParseWithClaims(accessToken, new(tokenClaims), func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -213,7 +213,7 @@ func (s *AuthService) Parse(accessToken string) (time.Time, int, int, error) {
 	})
 
 	if err != nil {
-		fmt.Print(err.Error())
+		//fmt.Print(err.Error())
 		return time.Time{}, -1, -1, fmt.Errorf("failed to parse token: %w", err)
 	}
 

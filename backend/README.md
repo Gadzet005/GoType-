@@ -1,8 +1,6 @@
-Как запускать?\
-Пока сервер и бдшка запускаются отдельно 
+Как запускать?
 ```bash
-    make run #db ну или docker compose up --build если нет make
-    go run cmd/main.go #server (кринж конечно, скоро исправлю)
+    make run #ну или docker compose up --build если нет make
 ```
 
 документация swagger доступна по ссылке:
