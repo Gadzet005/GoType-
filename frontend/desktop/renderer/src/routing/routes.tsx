@@ -4,11 +4,13 @@ import { HomePage } from "../components/pages/HomePage";
 import { SignInPage } from "../components/pages/SignInPage";
 import { SignUpPage } from "../components/pages/SignUpPage";
 import { ProfilePage } from "../components/pages/ProfilePage";
+import { GamePage } from "../components/pages/GamePage";
+import { LevelListPage } from "../components/pages/LevelListPage";
+import { LevelEditorPage } from "../components/pages/LevelEditorPage";
 
 export interface Route {
-  path: RoutePath;
+  path: string;
   component: React.ReactNode;
-  title?: string;
   private?: boolean;
 }
 
@@ -16,22 +18,37 @@ export const routes: Route[] = [
   {
     path: RoutePath.home,
     component: <HomePage />,
-    title: "Домашняя страница",
+  },
+  {
+    path: "*",
+    component: <HomePage />,
   },
   {
     path: RoutePath.signIn,
     component: <SignInPage />,
-    title: "Вход",
   },
   {
     path: RoutePath.signUp,
     component: <SignUpPage />,
-    title: "Регистрация",
   },
   {
     path: RoutePath.profile,
     component: <ProfilePage />,
-    title: "Профиль",
+    private: true,
+  },
+  {
+    path: RoutePath.levelList,
+    component: <LevelListPage />,
+    private: true,
+  },
+  {
+    path: RoutePath.game + "/:levelId",
+    component: <GamePage />,
+    private: true,
+  },
+  {
+    path: RoutePath.editor,
+    component: <LevelEditorPage />,
     private: true,
   },
 ];

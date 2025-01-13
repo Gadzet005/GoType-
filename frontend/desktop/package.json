@@ -4,10 +4,8 @@
     "license": "MIT",
     "main": "main/main.ts",
     "scripts": {
-      "dev": "vite renderer",
-      "electron": "ELECTRON_START_URL=http://localhost:5173 NODE_OPTIONS='--import tsx' electron .",
-      "build": "tsc -b renderer && vite build renderer",
-      "package": "electron-builder"
+      "dev": "./dev.sh",
+      "build": "tsc -b renderer && vite build renderer && electron-builder"
     },
     "dependencies": {
       "@emotion/react": "^11.14.0",

@@ -11,3 +11,18 @@ contextBridge.exposeInMainWorld("storeAPI", {
         await ipcRenderer.invoke("clear-tokens");
     },
 });
+
+contextBridge.exposeInMainWorld("levelAPI", {
+    getLevels: async () => {
+        return await ipcRenderer.invoke("get-levels");
+    },
+    getLevel: async (levelId) => {
+        return await ipcRenderer.invoke("get-level", levelId);
+    },
+    addLevel: async (level) => {
+        await ipcRenderer.invoke("add-level", level);
+    },
+    removeLevel: async (levelId) => {
+        await ipcRenderer.invoke("remove-level", levelId);
+    },
+});

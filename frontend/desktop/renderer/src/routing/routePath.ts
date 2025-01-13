@@ -3,4 +3,7 @@ export enum RoutePath {
     signIn = "/signIn",
     signUp = "/signUp",
     profile = "/profile",
+    levelList = "/levelList",
+    game = "/game",
+    editor = "/editor",
 }

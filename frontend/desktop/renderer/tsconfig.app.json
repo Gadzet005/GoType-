@@ -24,6 +24,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@common/*": ["../../common/*"],
+      "@desktop-common/*": ["../common/*"],
     }
   },
   "include": ["src"]

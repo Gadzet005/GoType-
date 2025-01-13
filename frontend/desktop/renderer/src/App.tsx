@@ -13,11 +13,11 @@ export const App = () => {
 
   return (
     <UserContext.Provider value={user}>
-      <BrowserRouter>
-        <ThemeProvider theme={appTheme}>
+      <ThemeProvider theme={appTheme}>
+        <BrowserRouter>
           <AppRouter />
-        </ThemeProvider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </ThemeProvider>
     </UserContext.Provider>
   );
 };

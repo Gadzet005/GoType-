@@ -15,8 +15,11 @@ import { observer } from "mobx-react-lite";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BackButton } from "../other/BackButton";
+import { useTitle } from "@/public/utils/title";
 
 export const SignUpPage = observer(() => {
+  useTitle("Регистрация");
+
   const user = useUser();
   const navigate = useNavigate();
 

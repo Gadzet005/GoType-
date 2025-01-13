@@ -11,8 +11,11 @@ import {
 } from "@mui/material";
 import { BackButton } from "../other/BackButton";
 import { RoutePath } from "@/routing/routePath";
+import { useTitle } from "@/public/utils/title";
 
 export const ProfilePage = observer(() => {
+  useTitle("Профиль");
+
   const user = useUser();
 
   const handleLogout = () => {

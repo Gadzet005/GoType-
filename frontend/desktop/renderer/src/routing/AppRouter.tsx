@@ -1,7 +1,6 @@
 import { observer } from "mobx-react-lite";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import { useUser } from "../public/user";
-import { RoutePath } from "./routePath";
 import { routes } from "./routes";
 
 export const AppRouter = observer(() => {
@@ -27,7 +26,6 @@ export const AppRouter = observer(() => {
     <Routes>
       {user.isAuth && authRoutes}
       {publicRoutes}
-      <Route path="*" element={<Navigate to={RoutePath.home} />} />
     </Routes>
   );
 });
