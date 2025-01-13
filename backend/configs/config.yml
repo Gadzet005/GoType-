@@ -6,3 +6,9 @@ db:
   port: "5432"
   dbname: "gotypedb"
   sslmode: "disable"
+
+cache:
+  host: "cache"
+  port: "6379"
+  db: "0"
+

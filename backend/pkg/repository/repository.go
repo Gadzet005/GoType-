@@ -2,6 +2,7 @@ package repository
 
 import (
 	gotype "github.com/Gadzet005/GoType/backend"
+	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
 	"time"
 )
@@ -18,8 +19,8 @@ type Repository struct {
 	Authorization Authorization
 }
 
-func NewRepository(db *sqlx.DB) *Repository {
+func NewRepository(db *sqlx.DB, client *redis.Client) *Repository {
 	return &Repository{
-		Authorization: NewAuthPostgres(db),
+		Authorization: NewAuthPostgres(db, client),
 	}
 }

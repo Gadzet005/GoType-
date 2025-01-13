@@ -34,7 +34,7 @@ func main() {
 		logrus.Fatalf("Error loading .env file, %s", err.Error())
 	}
 
-	db, err := repository.NewPostgresDB(repository.Config{
+	db, err := repository.NewPostgresDB(repository.PostgresConfig{
 		Host:     viper.GetString("db.host"),
 		Port:     viper.GetString("db.port"),
 		Username: viper.GetString("db.username"),
@@ -47,7 +47,17 @@ func main() {
 		logrus.Fatalf("Error connecting to database, %s", err.Error())
 	}
 
-	repos := repository.NewRepository(db)
+	redisClient, err := repository.NewRedisDB(repository.RedisConfig{
+		Host:     viper.GetString("cache.host"),
+		Port:     viper.GetString("cache.port"),
+		Password: os.Getenv("REDIS_PASSWORD"),
+	})
+
+	if err != nil {
+		logrus.Fatalf("Error connecting to redis, %s", err.Error())
+	}
+
+	repos := repository.NewRepository(db, redisClient)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
 

@@ -3,16 +3,18 @@ package repository
 import (
 	"fmt"
 	gotype "github.com/Gadzet005/GoType/backend"
+	"github.com/go-redis/redis"
 	"github.com/jmoiron/sqlx"
 	"time"
 )
 
 type AuthPostgres struct {
-	db *sqlx.DB
+	db     *sqlx.DB
+	client *redis.Client
 }
 
-func NewAuthPostgres(db *sqlx.DB) *AuthPostgres {
-	return &AuthPostgres{db: db}
+func NewAuthPostgres(db *sqlx.DB, client *redis.Client) *AuthPostgres {
+	return &AuthPostgres{db: db, client: client}
 }
 
 func (s *AuthPostgres) CreateUser(user gotype.User) (int, int, string, error) {
