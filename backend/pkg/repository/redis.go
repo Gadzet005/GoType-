@@ -1,8 +1,9 @@
 package repository
 
 import (
+	"context"
 	"fmt"
-	"github.com/go-redis/redis"
+	"github.com/redis/go-redis/v9"
 )
 
 type RedisConfig struct {
@@ -18,7 +19,7 @@ func NewRedisDB(cfg RedisConfig) (*redis.Client, error) {
 		DB:       0,
 	})
 
-	ping, err := client.Ping().Result()
+	ping, err := client.Ping(context.Background()).Result()
 	if err != nil || ping != "PONG" {
 		return nil, err
 	}

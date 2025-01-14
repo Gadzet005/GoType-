@@ -1,6 +1,7 @@
 package handler
 
 import (
+	gotype "github.com/Gadzet005/GoType/backend"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strings"
@@ -17,25 +18,25 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 	header := c.GetHeader(AuthorizationHeader)
 
 	if header == "" {
-		NewErrorResponse(c, http.StatusUnauthorized, "No Authorization header")
+		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrUnauthorized)
 		return
 	}
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 {
-		NewErrorResponse(c, http.StatusUnauthorized, "Invalid Authorization header")
+		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrAccessToken)
 		return
 	}
-	//fmt.Print("AAAAAAAAAAAAAAAAA\n")
+
 	expTime, id, access, err := h.services.Authorization.Parse(headerParts[1])
-	//fmt.Print("BBBBBBBBBBBBBBBBB\n")
+
 	if err != nil {
-		NewErrorResponse(c, http.StatusUnauthorized, "Invalid Authorization header")
+		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrAccessToken)
 		return
 	}
 
 	if expTime.Before(time.Now()) {
-		NewErrorResponse(c, http.StatusUnauthorized, "Access token expired")
+		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrUnauthorized)
 		return
 	}
 

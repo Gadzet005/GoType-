@@ -27,10 +27,36 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		//auth.POST("/logout", h.UserIdentity, h.logout)
 	}
 
-	logout := router.Group("/logout", h.UserIdentity)
+	userActions := router.Group("/user-actions", h.UserIdentity)
 	{
-		logout.POST("/logout", h.logout)
+		userActions.POST("/logout", h.logout)
+		userActions.GET("/get_user_info", h.getUserInfo)
 	}
+
+	//stats := router.Group("/stats", h.UserIdentity)
+	//{
+	//
+	//}
+
+	//admin := router.Group("/admin", h.UserIdentity)
+	//{
+	//
+	//}
+
+	//level := router.Group("/level")
+	//{
+	//
+	//}
+
+	//multGame := router.Group("/mult-game")
+	//{
+	//
+	//}
+
+	//singleGame := router.Group("/single-game")
+	//{
+	//
+	//}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.Run(":8080")

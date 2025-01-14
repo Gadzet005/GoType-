@@ -40,7 +40,7 @@ func (s *AuthService) CreateUser(user gotype.User) (string, string, error) {
 	rToken, err := s.NewRefreshToken()
 
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New(gotype.ErrInternal)
 	}
 
 	user.RefreshToken = rToken
@@ -55,7 +55,7 @@ func (s *AuthService) CreateUser(user gotype.User) (string, string, error) {
 	accessToken, err := s.NewAccessToken(id, access)
 
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New(gotype.ErrInternal)
 	}
 
 	return accessToken, refreshToken, nil
@@ -72,7 +72,7 @@ func (s *AuthService) GenerateToken(username, password string) (string, string, 
 	refreshToken, err := s.NewRefreshToken()
 
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New(gotype.ErrInternal)
 	}
 	expiresAt := time.Now().UTC().Add(refreshTokenTTL)
 
@@ -83,15 +83,19 @@ func (s *AuthService) GenerateToken(username, password string) (string, string, 
 	}
 
 	accessToken, err := s.NewAccessToken(id, access)
-	return refreshToken, accessToken, err
+
+	if err != nil {
+		return "", "", errors.New(gotype.ErrInternal)
+	}
+
+	return refreshToken, accessToken, nil
 }
 
-// refreshToken, accessToken, error
 func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (string, string, error) {
 	_, id, _, err := s.Parse(accessToken)
 
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New(gotype.ErrAccessToken)
 	}
 
 	user, err := s.repo.GetUserById(id)
@@ -100,14 +104,18 @@ func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (st
 		return "", "", err
 	}
 
-	if user.RefreshToken != refreshToken || user.ExpiresAt.Before(time.Now()) {
-		return "", "", errors.New("refresh token expired or does not match")
+	if user.RefreshToken != refreshToken {
+		return "", "", errors.New(gotype.ErrRefreshToken)
+	}
+
+	if user.ExpiresAt.Before(time.Now()) {
+		return "", "", errors.New(gotype.ErrUnauthorized)
 	}
 
 	newRefreshToken, err := s.NewRefreshToken()
 
 	if err != nil {
-		return "", "", err
+		return "", "", errors.New(gotype.ErrInternal)
 	}
 	expiresAt := time.Now().UTC().Add(refreshTokenTTL)
 
@@ -118,17 +126,12 @@ func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (st
 	}
 
 	newAccessToken, err := s.NewAccessToken(retId, retAccess)
-	return newRefreshToken, newAccessToken, err
-}
 
-func (s *AuthService) DropRefreshToken(id int) error {
-	retId, err := s.repo.DropRefreshToken(id, time.Now())
-
-	if err != nil || retId != id {
-		return err
+	if err != nil {
+		return "", "", errors.New(gotype.ErrInternal)
 	}
 
-	return nil
+	return newRefreshToken, newAccessToken, nil
 }
 
 func (s *AuthService) NewAccessToken(id, Access int) (string, error) {

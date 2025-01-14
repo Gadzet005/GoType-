@@ -15,11 +15,6 @@ definitions:
       message:
         type: string
     type: object
-  handler.logoutStruct:
-    properties:
-      access_token:
-        type: string
-    type: object
   handler.refreshStruct:
     properties:
       access_token:
@@ -55,15 +50,13 @@ paths:
           schema:
             $ref: '#/definitions/handler.refreshStruct'
         "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "404":
-          description: Not Found
+          description: 'Possible messages: ERR_INVALID_INPUT - Wrong structure of
+            input json'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         "500":
-          description: Internal Server Error
+          description: 'Possible messages: ERR_NO_SUCH_USER - User with such name
+            and password does not exist; ERR_INTERNAL - Error on server'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         default:
@@ -95,15 +88,15 @@ paths:
           schema:
             $ref: '#/definitions/handler.refreshStruct'
         "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "404":
-          description: Not Found
+          description: 'Possible messages: ERR_INVALID_INPUT - Wrong structure of
+            input json'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         "500":
-          description: Internal Server Error
+          description: 'Possible messages: ERR_NO_SUCH_USER - User with id as in refresh
+            token does not exist; ERR_INTERNAL - Error on server; ERR_ACCESS_TOKEN_WRONG
+            - Wrong access token; ERR_REFRESH_TOKEN_WRONG - Wrong refresh token; ERR_UNAUTHORIZED
+            - Refresh token expired; '
           schema:
             $ref: '#/definitions/handler.errorResponse'
         default:
@@ -134,15 +127,13 @@ paths:
           schema:
             $ref: '#/definitions/handler.refreshStruct'
         "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/handler.errorResponse'
-        "404":
-          description: Not Found
+          description: 'Possible messages: ERR_INVALID_INPUT - Wrong structure of
+            input json'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         "500":
-          description: Internal Server Error
+          description: 'Possible messages: ERR_USER_EXISTS - User with such name already
+            exists; ERR_INTERNAL - Error on server'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         default:
@@ -152,34 +143,63 @@ paths:
       summary: Register
       tags:
       - auth
-  /logout/logout:
-    post:
+  /user-actions/get_user_info:
+    get:
       consumes:
       - application/json
-      description: Expire refreshToken manually
-      operationId: logout
-      parameters:
-      - description: AccessToken
-        in: body
-        name: input
-        required: true
-        schema:
-          $ref: '#/definitions/handler.logoutStruct'
+      description: Get username by id
+      operationId: get_user_info
       produces:
       - application/json
       responses:
         "200":
           description: OK
         "400":
-          description: Bad Request
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id
+            in token payload'
           schema:
             $ref: '#/definitions/handler.errorResponse'
-        "404":
-          description: Not Found
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired
+            or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         "500":
-          description: Internal Server Error
+          description: 'Possible messages: ERR_NO_SUCH_USER - User with such id not
+            found; ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Get User Info
+      tags:
+      - user-actions
+  /user-actions/logout:
+    post:
+      consumes:
+      - application/json
+      description: Expire refreshToken manually
+      operationId: logout
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id
+            in token payload'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired
+            or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_NO_SUCH_USER - User with such id not
+            found; ERR_INTERNAL - Error on server'
           schema:
             $ref: '#/definitions/handler.errorResponse'
         default:
@@ -188,7 +208,7 @@ paths:
             $ref: '#/definitions/handler.errorResponse'
       summary: Logout
       tags:
-      - logout
+      - user-actions
 securityDefinitions:
   ApiKeyAuth:
     in: header
