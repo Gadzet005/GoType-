@@ -48,19 +48,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
+                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Possible messages: ERR_NO_SUCH_USER - User with such name and password does not exist; ERR_INTERNAL - Error on server",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -107,19 +101,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
+                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Possible messages: ERR_NO_SUCH_USER - User with id as in refresh token does not exist; ERR_INTERNAL - Error on server; ERR_ACCESS_TOKEN_WRONG - Wrong access token; ERR_REFRESH_TOKEN_WRONG - Wrong refresh token; ERR_UNAUTHORIZED - Refresh token expired; ",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -166,19 +154,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.errorResponse"
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
+                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Possible messages: ERR_USER_EXISTS - User with such name already exists; ERR_INTERNAL - Error on server",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -192,7 +174,52 @@ const docTemplate = `{
                 }
             }
         },
-        "/logout/logout": {
+        "/user-actions/get_user_info": {
+            "get": {
+                "description": "Get username by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-actions"
+                ],
+                "summary": "Get User Info",
+                "operationId": "get_user_info",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Possible messages: ERR_NO_SUCH_USER - User with such id not found; ERR_INTERNAL - Error on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-actions/logout": {
             "post": {
                 "description": "Expire refreshToken manually",
                 "consumes": [
@@ -202,39 +229,28 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "logout"
+                    "user-actions"
                 ],
                 "summary": "Logout",
                 "operationId": "logout",
-                "parameters": [
-                    {
-                        "description": "AccessToken",
-                        "name": "input",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/handler.logoutStruct"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK"
                     },
                     "400": {
-                        "description": "Bad Request",
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Internal Server Error",
+                        "description": "Possible messages: ERR_NO_SUCH_USER - User with such id not found; ERR_INTERNAL - Error on server",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -274,14 +290,6 @@ const docTemplate = `{
                 }
             }
         },
-        "handler.logoutStruct": {
-            "type": "object",
-            "properties": {
-                "access_token": {
-                    "type": "string"
-                }
-            }
-        },
         "handler.refreshStruct": {
             "type": "object",
             "properties": {
@@ -313,8 +321,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "API Server for GoType game and website",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	//LeftDelim:        "{{",
-	//RightDelim:       "}}",
 }
 
 func init() {
