@@ -196,7 +196,10 @@ const docTemplate = `{
                 "operationId": "get-user-info",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.getUserInfoStruct"
+                        }
                     },
                     "400": {
                         "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;",
@@ -450,6 +453,26 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.getUserInfoStruct": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "integer"
+                },
+                "ban_reason": {
+                    "type": "string"
+                },
+                "ban_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }

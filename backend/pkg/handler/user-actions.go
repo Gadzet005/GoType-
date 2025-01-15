@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang.org/x/exp/slices"
 	"net/http"
+	"time"
 )
 
 //type logoutStruct struct {
@@ -48,13 +49,21 @@ func (h *Handler) logout(c *gin.Context) {
 	c.JSON(http.StatusOK, map[string]interface{}{})
 }
 
+type getUserInfoStruct struct {
+	Id        int       `json:"id"`
+	Name      string    `json:"username"`
+	Access    int       `json:"access"`
+	BanTime   time.Time `json:"ban_time"`
+	BanReason string    `json:"ban_reason"`
+}
+
 // @Summary Get User Info
 // @Tags user-actions
 // @Description Get username by id
 // @ID get-user-info
 // @Accept json
 // @Produce json
-// @Success 200
+// @Success 200 {object} getUserInfoStruct
 // @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;"
 // @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
 // @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server"
@@ -76,11 +85,11 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"id":        curId,
-		"username":  username,
-		"access":    access,
-		"banTime":   banTime,
-		"banReason": banReason,
+		"id":         curId,
+		"username":   username,
+		"access":     access,
+		"ban_time":   banTime,
+		"ban_reason": banReason,
 	})
 }
 
