@@ -17,9 +17,9 @@ import (
 // @Accept json
 // @Produce json
 // @Success 200
-// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload"
-// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token"
-// @Failure 500 {object} errorResponse "Possible messages: ERR_NO_SUCH_USER - User with such id not found; ERR_INTERNAL - Error on server"
+// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;"
+// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
+// @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server"
 // @Failure default {object} errorResponse
 // @Router /user-actions/logout [post]
 func (h *Handler) logout(c *gin.Context) {
@@ -53,15 +53,15 @@ func (h *Handler) logout(c *gin.Context) {
 // @Summary Get User Info
 // @Tags user-actions
 // @Description Get username by id
-// @ID get_user_info
+// @ID get-user-info
 // @Accept json
 // @Produce json
 // @Success 200
-// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload"
-// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token"
-// @Failure 500 {object} errorResponse "Possible messages: ERR_NO_SUCH_USER - User with such id not found; ERR_INTERNAL - Error on server"
+// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;"
+// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
+// @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server"
 // @Failure default {object} errorResponse
-// @Router /user-actions/get_user_info [get]
+// @Router /user-actions/get-user-info [get]
 func (h *Handler) getUserInfo(c *gin.Context) {
 	//var input getUserInfoStruct
 	//
