@@ -28,7 +28,7 @@ func (h *Handler) register(c *gin.Context) {
 
 	accessToken, refreshToken, err := h.services.Authorization.CreateUser(input)
 	if err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		NewErrorResponse(c, gotype.CodeErrors[err.Error()], err.Error())
 		return
 	}
 
@@ -60,7 +60,7 @@ func (h *Handler) login(c *gin.Context) {
 
 	refreshToken, accessToken, err := h.services.Authorization.GenerateToken(input.Name, input.Password)
 	if err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		NewErrorResponse(c, gotype.CodeErrors[err.Error()], err.Error())
 		return
 	}
 
@@ -97,7 +97,7 @@ func (h *Handler) refresh(c *gin.Context) {
 
 	refreshToken, accessToken, err := h.services.Authorization.GenerateTokenByToken(input.AccessToken, input.RefreshToken)
 	if err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		NewErrorResponse(c, gotype.CodeErrors[err.Error()], err.Error())
 		return
 	}
 

@@ -3,6 +3,7 @@ package handler
 import (
 	_ "github.com/Gadzet005/GoType/backend/docs"
 	"github.com/Gadzet005/GoType/backend/pkg/service"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/swaggo/files"       // swagger embed files
 	"github.com/swaggo/gin-swagger" // gin-swagger middleware
@@ -19,18 +20,19 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
+	router.Use(cors.Default())
+
 	auth := router.Group("/auth")
 	{
 		auth.POST("/register", h.register)
 		auth.POST("/login", h.login)
 		auth.POST("/refresh", h.refresh)
-		//auth.POST("/logout", h.UserIdentity, h.logout)
 	}
 
 	userActions := router.Group("/user-actions", h.UserIdentity)
 	{
 		userActions.POST("/logout", h.logout)
-		userActions.GET("/get_user_info", h.getUserInfo)
+		userActions.GET("/get-user-info", h.getUserInfo)
 	}
 
 	//stats := router.Group("/stats", h.UserIdentity)
@@ -59,7 +61,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	//}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.Run(":8080")
+	//router.Run(":8080")
 
 	return router
 }

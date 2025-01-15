@@ -39,7 +39,7 @@ func (h *Handler) logout(c *gin.Context) {
 	err := h.services.UserActions.DropRefreshToken(curId.(int))
 
 	if err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		NewErrorResponse(c, gotype.CodeErrors[err.Error()], err.Error())
 		return
 	}
 
@@ -79,7 +79,7 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 	username, access, banTime, banReason, err := h.services.UserActions.GetUserById(curId.(int))
 
 	if err != nil {
-		NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		NewErrorResponse(c, gotype.CodeErrors[err.Error()], err.Error())
 		return
 	}
 
