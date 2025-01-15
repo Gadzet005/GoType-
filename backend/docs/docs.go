@@ -48,13 +48,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json",
+                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json; ERR_NO_SUCH_USER - User with such name and password does not exist;",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Possible messages: ERR_NO_SUCH_USER - User with such name and password does not exist; ERR_INTERNAL - Error on server",
+                        "description": "Possible messages: ERR_INTERNAL - Error on server; ",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -101,13 +101,19 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json",
+                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json; ERR_NO_SUCH_USER - User with id as in access token does not exist; ERR_ACCESS_TOKEN_WRONG - Wrong access token; ERR_REFRESH_TOKEN_WRONG - Wrong refresh token;",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Refresh token expired;",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Possible messages: ERR_NO_SUCH_USER - User with id as in refresh token does not exist; ERR_INTERNAL - Error on server; ERR_ACCESS_TOKEN_WRONG - Wrong access token; ERR_REFRESH_TOKEN_WRONG - Wrong refresh token; ERR_UNAUTHORIZED - Refresh token expired; ",
+                        "description": "Possible messages: ERR_INTERNAL - Error on server; ",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -154,13 +160,13 @@ const docTemplate = `{
                         }
                     },
                     "400": {
-                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json",
+                        "description": "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json; ERR_USER_EXISTS - User with such name already exists;",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Possible messages: ERR_USER_EXISTS - User with such name already exists; ERR_INTERNAL - Error on server",
+                        "description": "Possible messages: ERR_INTERNAL - Error on server; ",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -174,7 +180,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/user-actions/get_user_info": {
+        "/user-actions/get-user-info": {
             "get": {
                 "description": "Get username by id",
                 "consumes": [
@@ -187,25 +193,25 @@ const docTemplate = `{
                     "user-actions"
                 ],
                 "summary": "Get User Info",
-                "operationId": "get_user_info",
+                "operationId": "get-user-info",
                 "responses": {
                     "200": {
                         "description": "OK"
                     },
                     "400": {
-                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload",
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "401": {
-                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token",
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Possible messages: ERR_NO_SUCH_USER - User with such id not found; ERR_INTERNAL - Error on server",
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
@@ -238,19 +244,19 @@ const docTemplate = `{
                         "description": "OK"
                     },
                     "400": {
-                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload",
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "401": {
-                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired or absent; ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token",
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
                     },
                     "500": {
-                        "description": "Possible messages: ERR_NO_SUCH_USER - User with such id not found; ERR_INTERNAL - Error on server",
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
                         "schema": {
                             "$ref": "#/definitions/handler.errorResponse"
                         }
