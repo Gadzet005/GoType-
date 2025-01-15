@@ -30,7 +30,7 @@ func (s *AuthPostgres) CreateUser(user gotype.User) (int, int, string, error) {
 	row := s.db.QueryRow(query, user.Name, user.Password, user.RefreshToken, user.ExpiresAt)
 
 	if err := row.Scan(&id, &access, &rToken); err != nil {
-		if strings.HasPrefix(err.Error(), "sql: duplicate key value violates unique constraint") {
+		if strings.HasPrefix(err.Error(), "pq: duplicate key value violates unique constraint") {
 			return -1, -1, "", errors.New(gotype.ErrUserExists)
 		}
 

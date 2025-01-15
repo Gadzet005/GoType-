@@ -18,20 +18,20 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 	header := c.GetHeader(AuthorizationHeader)
 
 	if header == "" {
-		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrUnauthorized)
+		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrUnauthorized)
 		return
 	}
 
 	headerParts := strings.Split(header, " ")
 	if len(headerParts) != 2 {
-		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrAccessToken)
+		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrAccessToken)
 		return
 	}
 
 	expTime, id, access, err := h.services.Authorization.Parse(headerParts[1])
 
 	if err != nil {
-		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrAccessToken)
+		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrAccessToken)
 		return
 	}
 
