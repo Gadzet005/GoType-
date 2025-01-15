@@ -196,7 +196,10 @@ const docTemplate = `{
                 "operationId": "get-user-info",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.getUserInfoStruct"
+                        }
                     },
                     "400": {
                         "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - There is no id in token payload/Wrong structure of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id not found;",
@@ -269,9 +272,144 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/user-actions/write-level-complaint": {
+            "post": {
+                "description": "Send level complaint to server. Possible Reason values: Offencive name, Offencive video, Offencive audio, Offencive text",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-actions"
+                ],
+                "summary": "Write Level Complaint",
+                "operationId": "write-level-complaint",
+                "parameters": [
+                    {
+                        "description": "new complaint info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/gotype.LevelComplaint"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json/Invalid Reason;",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/user-actions/write-user-complaint": {
+            "post": {
+                "description": "Send user complaint to server. Possible Reason values: Cheating, Offencive nickname, Unsportsmanlike conduct",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user-actions"
+                ],
+                "summary": "Write User Complaint",
+                "operationId": "write-user-complaint",
+                "parameters": [
+                    {
+                        "description": "new complaint info",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/gotype.UserComplaint"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json/Invalid Reason;",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "gotype.LevelComplaint": {
+            "type": "object",
+            "required": [
+                "author_id",
+                "level_id",
+                "message",
+                "reason"
+            ],
+            "properties": {
+                "author_id": {
+                    "type": "integer"
+                },
+                "level_id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                }
+            }
+        },
         "gotype.User": {
             "type": "object",
             "required": [
@@ -288,10 +426,53 @@ const docTemplate = `{
                 }
             }
         },
+        "gotype.UserComplaint": {
+            "type": "object",
+            "required": [
+                "author_id",
+                "message",
+                "reason",
+                "user_id"
+            ],
+            "properties": {
+                "author_id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "string"
+                },
+                "reason": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "handler.errorResponse": {
             "type": "object",
             "properties": {
                 "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "handler.getUserInfoStruct": {
+            "type": "object",
+            "properties": {
+                "access": {
+                    "type": "integer"
+                },
+                "ban_reason": {
+                    "type": "string"
+                },
+                "ban_time": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "username": {
                     "type": "string"
                 }
             }

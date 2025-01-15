@@ -17,6 +17,8 @@ type Authorization interface {
 type UserActions interface {
 	DropRefreshToken(id int, newTime time.Time) (int, error)
 	GetUserById(id int) (string, int, time.Time, string, error)
+	CreateUserComplaint(complaint gotype.UserComplaint) error
+	CreateLevelComplaint(complaint gotype.LevelComplaint) error
 }
 
 type Stats interface {

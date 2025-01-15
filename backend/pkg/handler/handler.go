@@ -33,6 +33,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		userActions.POST("/logout", h.logout)
 		userActions.GET("/get-user-info", h.getUserInfo)
+		userActions.POST("/write-user-complaint", h.WriteUserComplaint)
+		userActions.POST("/write-level-complaint", h.WriteLevelComplaint)
 	}
 
 	//stats := router.Group("/stats", h.UserIdentity)

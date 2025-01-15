@@ -7,6 +7,7 @@ import (
 	gotype "github.com/Gadzet005/GoType/backend"
 	"github.com/jmoiron/sqlx"
 	"github.com/redis/go-redis/v9"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -41,11 +42,12 @@ func (s *UserActionsPostgres) GetUserById(id int) (string, int, time.Time, strin
 	var banTime time.Time
 	var access int
 
-	query := fmt.Sprintf("SELECT name, access FROM %s WHERE id = $1", usersTable)
+	query := fmt.Sprintf("SELECT name, access, ban_expiration, ban_reason FROM %s WHERE id = $1", usersTable)
 
 	row := s.db.QueryRow(query, id)
 
-	if err := row.Scan(&name, &access); err != nil {
+	if err := row.Scan(&name, &access, &banTime, &banReason); err != nil {
+		logrus.Fatalf("Error getting user by id: %s", err.Error())
 		if errors.Is(err, sql.ErrNoRows) {
 			return "", -1, banTime, banReason, errors.New(gotype.ErrUserNotFound)
 		}
@@ -53,9 +55,33 @@ func (s *UserActionsPostgres) GetUserById(id int) (string, int, time.Time, strin
 		return "", -1, time.Now(), "", errors.New(gotype.ErrInternal)
 	}
 
-	//TODO: delete when migrate
-	banReason = ""
-	banTime = time.Time{}
-
 	return name, access, banTime, banReason, nil
+}
+
+func (s *UserActionsPostgres) CreateUserComplaint(complaint gotype.UserComplaint) error {
+	var id int
+
+	query := fmt.Sprintf("INSERT INTO %s (user_id, author, time, given_to, reason, message) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", userComplaintsTable)
+
+	row := s.db.QueryRow(query, complaint.UserId, complaint.AuthorId, complaint.CreationTime, complaint.AssignedTo, complaint.Reason, complaint.Message)
+
+	if err := row.Scan(&id); err != nil {
+		return errors.New(gotype.ErrInternal)
+	}
+
+	return nil
+}
+
+func (s *UserActionsPostgres) CreateLevelComplaint(complaint gotype.LevelComplaint) error {
+	var id int
+
+	query := fmt.Sprintf("INSERT INTO %s (level_id, author, time, given_to, reason, message) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", levelComplaintsTable)
+
+	row := s.db.QueryRow(query, complaint.LevelId, complaint.AuthorId, complaint.CreationTime, complaint.AssignedTo, complaint.Reason, complaint.Message)
+
+	if err := row.Scan(&id); err != nil {
+		return errors.New(gotype.ErrInternal)
+	}
+
+	return nil
 }

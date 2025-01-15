@@ -6,7 +6,9 @@ import (
 )
 
 const (
-	usersTable = "Users"
+	usersTable           = "Users"
+	userComplaintsTable  = "UserComplaint"
+	levelComplaintsTable = "LevelComplaint"
 )
 
 type PostgresConfig struct {

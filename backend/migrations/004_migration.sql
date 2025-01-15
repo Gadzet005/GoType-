@@ -8,8 +8,8 @@ CREATE TABLE Users (
     password_hash varchar(255) NOT NULL,
     refresh_token varchar(255),
     expires_at timestamp,
-    ban_expiration timestamp,
-    ban_reason timestamp,
+    ban_expiration timestamp default '2000-01-01 00:00:00',
+    ban_reason text default 'no ban',
     multiplayer_priority numeric
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE UserComplaint (
     author int NOT NULL,
     time timestamp,
     given_to int DEFAULT -1,
-    reason varchar[32],
+    reason varchar(32),
     message text
 );
 
@@ -69,18 +69,18 @@ CREATE TABLE LevelComplaint (
     author int NOT NULL,
     time timestamp,
     given_to int DEFAULT -1,
-    reason varchar[32] NOT NULL,
+    reason varchar(32) NOT NULL,
     message text
 );
 
 CREATE TABLE Tag (
-    name varchar[100] PRIMARY KEY,
+    name varchar(100) PRIMARY KEY,
     priority int
 );
 
 CREATE TABLE LevelTag (
     level_id int,
-    tag_name varchar[100],
+    tag_name varchar(100),
     PRIMARY KEY (level_id, tag_name)
 );
 
