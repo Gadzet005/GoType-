@@ -1,6 +1,7 @@
 package service
 
 import (
+	gotype "github.com/Gadzet005/GoType/backend"
 	"github.com/Gadzet005/GoType/backend/pkg/repository"
 	"time"
 )
@@ -31,4 +32,28 @@ func (s *UserActionsService) GetUserById(id int) (string, int, time.Time, string
 	} //no such user
 
 	return name, access, banTime, banReason, nil
+}
+
+func (s *UserActionsService) CreateUserComplaint(complaint gotype.UserComplaint) error {
+	complaint.CreationTime = time.Now().UTC()
+
+	err := s.repo.CreateUserComplaint(complaint)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *UserActionsService) CreateLevelComplaint(complaint gotype.LevelComplaint) error {
+	complaint.CreationTime = time.Now().UTC()
+
+	err := s.repo.CreateLevelComplaint(complaint)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
