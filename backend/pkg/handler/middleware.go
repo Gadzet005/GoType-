@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	AuthorizationHeader = "authorization"
+	AuthorizationHeader = "Authorization"
 	userIdCtx           = "id"
-	userAccessCtx       = "access"
+	userAccessCtx       = "Access"
 )
 
 func (h *Handler) UserIdentity(c *gin.Context) {
@@ -31,7 +31,7 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 	expTime, id, access, err := h.services.Authorization.Parse(headerParts[1])
 
 	if err != nil {
-		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrAccessToken)
+		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrUnauthorized)
 		return
 	}
 
