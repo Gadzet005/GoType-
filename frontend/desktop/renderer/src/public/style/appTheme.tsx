@@ -24,6 +24,7 @@ export const appTheme = createTheme({
     MuiButtonBase: {
       defaultProps: {
         LinkComponent: LinkBehavior,
+        draggable: false,
       },
     },
   },

@@ -12,6 +12,7 @@ import {
 import { BackButton } from "../other/BackButton";
 import { RoutePath } from "@/routing/routePath";
 import { useTitle } from "@/public/utils/title";
+import { unauth } from "@/public/auth/utils";
 
 export const ProfilePage = observer(() => {
   useTitle("Профиль");
@@ -19,7 +20,7 @@ export const ProfilePage = observer(() => {
   const user = useUser();
 
   const handleLogout = () => {
-    user.logout();
+    unauth(user);
   };
 
   return (
@@ -40,7 +41,7 @@ export const ProfilePage = observer(() => {
               }}
             >
               <Avatar sx={{ width: 64, height: 64 }}>
-                {user.profile!.email[0].toUpperCase()}
+                {user.profile!.name[0].toUpperCase()}
               </Avatar>
             </Box>
             <Box>
@@ -52,16 +53,6 @@ export const ProfilePage = observer(() => {
                   variant="outlined"
                   label="Имя"
                   defaultValue={user.profile!.name}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Email"
-                  defaultValue={user.profile!.email}
                   slotProps={{
                     input: {
                       readOnly: true,

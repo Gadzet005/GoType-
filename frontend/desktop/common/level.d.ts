@@ -3,7 +3,8 @@ import { Word } from "./word";
 
 export interface Level {
     id: number;
-    name: String;
+    name: string;
+    description: string;
     authorId: number;
     duration: Tick;
     words: Word[];

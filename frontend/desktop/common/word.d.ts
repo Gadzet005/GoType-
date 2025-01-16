@@ -1,6 +1,6 @@
 import { Tick, Percent } from "./types";
 
-export interface WordTemplate {
+export interface StyleClass {
     fontFamily: string;
     fontSize: number;
 }
@@ -9,7 +9,7 @@ export interface Word {
     text: string;
     showTime: Tick;
     duration: Tick;
-    template: WordTemplate;
+    style: StyleClass;
     coord: {
         x: Percent;
         y: Percent;

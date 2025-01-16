@@ -1,5 +1,5 @@
-import { Box, Button, Typography } from "@mui/material";
-import { BackButton } from "../other/BackButton";
+import { Box, Typography, Button } from "@mui/material";
+import { BackButton } from "@/components/other/BackButton";
 import { RoutePath } from "@/routing/routePath";
 import { useTitle } from "@/public/utils/title";
 import { observer } from "mobx-react";
@@ -14,19 +14,20 @@ export const LevelEditorPage = observer(() => {
       name: "Новый уровень",
       authorId: 1,
       duration: 100,
+      description: "Описание...",
       words: [
         {
           text: "Слово 1",
           showTime: 5,
           duration: 3,
-          template: { fontFamily: "Roboto", fontSize: 16 },
+          style: { fontFamily: "Roboto", fontSize: 16 },
           coord: { x: 5.5, y: 5.5 },
         },
         {
           text: "Слово 2",
           showTime: 10,
           duration: 5,
-          template: { fontFamily: "Roboto", fontSize: 16 },
+          style: { fontFamily: "Roboto", fontSize: 16 },
           coord: { x: 50, y: 50 },
         },
       ],

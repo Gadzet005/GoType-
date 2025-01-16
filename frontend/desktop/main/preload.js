@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld("storeAPI", {
+contextBridge.exposeInMainWorld("userAPI", {
     getTokens: async () => {
         return await ipcRenderer.invoke("get-tokens");
     },

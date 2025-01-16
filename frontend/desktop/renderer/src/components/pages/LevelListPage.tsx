@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { BackButton } from "../other/BackButton";
 import { RoutePath } from "@/routing/routePath";
 import { useTitle } from "@/public/utils/title";
