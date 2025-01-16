@@ -22,7 +22,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	corsDescr := cors.DefaultConfig()
 	corsDescr.AllowAllOrigins = true
-	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "Authorization")
+
+	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "**Authorization**")
+	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "X-Requested-With")
+	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "Accept")
 
 	router.Use(cors.New(corsDescr))
 
@@ -46,10 +49,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	//
 	//}
 
-	//admin := router.Group("/admin", h.UserIdentity)
-	//{
-	//
-	//}
+	admin := router.Group("/admin", h.UserIdentity)
+	{
+		admin.POST("/ban-user")
+	}
 
 	//level := router.Group("/level")
 	//{
