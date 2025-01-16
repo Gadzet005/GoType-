@@ -24,7 +24,6 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	corsDescr.AllowAllOrigins = true
 
 	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "Authorization")
-	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "authorization")
 	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "X-Requested-With")
 	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "Accept")
 

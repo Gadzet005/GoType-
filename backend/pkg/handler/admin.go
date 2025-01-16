@@ -8,9 +8,9 @@ package handler
 //	"net/http"
 //)
 //
-//// @Summary Ban user with given id if your access is greater than their one
-//// @Tags user-actions
-//// @Description Send user complaint to server. Possible Reason values: Cheating, Offencive nickname, Unsportsmanlike conduct
+//// @Summary Ban user
+//// @Tags admin
+//// @Description Ban user with given id if your access is greater than theirs. Available only for moderators and admins
 //// @ID write-user-complaint
 //// @Accept json
 //// @Produce json
