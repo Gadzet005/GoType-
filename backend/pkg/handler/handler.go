@@ -20,7 +20,11 @@ func NewHandler(services *service.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 
-	router.Use(cors.Default())
+	corsDescr := cors.DefaultConfig()
+	corsDescr.AllowAllOrigins = true
+	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "Authorization")
+
+	router.Use(cors.New(corsDescr))
 
 	auth := router.Group("/auth")
 	{
