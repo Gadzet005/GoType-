@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	gotype "github.com/Gadzet005/GoType/backend"
+	"github.com/Gadzet005/GoType/backend/entities"
 	"github.com/Gadzet005/GoType/backend/pkg/repository"
 	"github.com/golang-jwt/jwt/v5"
 	"math/rand"
@@ -34,7 +35,20 @@ func NewAuthService(repo repository.Authorization) *AuthService {
 	return &AuthService{repo: repo}
 }
 
-func (s *AuthService) CreateUser(user gotype.User) (string, string, error) {
+func (s *AuthService) CreateSeniorAdmin(username string, password string) error {
+
+	password = s.generatePasswordHash(password)
+
+	err := s.repo.CreateSeniorAdmin(username, password)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (s *AuthService) CreateUser(user entities.User) (string, string, error) {
 	user.Password = s.generatePasswordHash(user.Password)
 
 	rToken, err := s.NewRefreshToken()

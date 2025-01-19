@@ -51,13 +51,17 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	admin := router.Group("/admin", h.UserIdentity)
 	{
-		admin.POST("/ban-user")
+		admin.POST("/ban-user", h.BanUser)
+		admin.POST("/unban-user", h.UnbanUser)
+		admin.POST("/ban-level", h.BanLevel)
+		admin.POST("/unban-level")
+		admin.POST("/change-user-access", h.ChangeUserAccess)
 	}
 
-	//level := router.Group("/level")
-	//{
-	//
-	//}
+	level := router.Group("/level")
+	{
+		level.POST("/create-level")
+	}
 
 	//multGame := router.Group("/mult-game")
 	//{

@@ -12,6 +12,13 @@ import (
 	"os"
 )
 
+const (
+	saltEnvName         = "SALT"
+	signingKeyName      = "SIGNING_KEY"
+	refreshTokenTTLName = "REFRESH_TOKEN_TTL" //hours
+	accessTokenTTLName  = "ACCESS_TOKEN_TTL"  //minutes
+)
+
 // @title GoType App API
 // @version 0.0.1
 // @description API Server for GoType game and website
@@ -60,6 +67,15 @@ func main() {
 	repos := repository.NewRepository(db, redisClient)
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
+
+	admName := os.Getenv("SENIOR_ADMIN_NAME")
+	admPwd := os.Getenv("SENIOR_ADMIN_PASSWORD")
+
+	err = services.Authorization.CreateSeniorAdmin(admName, admPwd)
+
+	if err != nil && err.Error() != gotype.ErrUserExists {
+		logrus.Fatal("Failed to add Senior admin: " + err.Error())
+	}
 
 	srv := new(gotype.Server)
 	if err := srv.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {

@@ -2,6 +2,7 @@ package handler
 
 import (
 	gotype "github.com/Gadzet005/GoType/backend"
+	"github.com/Gadzet005/GoType/backend/entities"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -12,14 +13,14 @@ import (
 // @ID create-account
 // @Accept json
 // @Produce json
-// @Param input body gotype.User true "new account info"
+// @Param input body entities.User true "new account info"
 // @Success 200 {object} handler.refreshStruct
 // @Failure 400 {object} errorResponse "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json; ERR_USER_EXISTS - User with such name already exists;"
 // @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server; "
 // @Failure default {object} errorResponse
 // @Router /auth/register [post]
 func (h *Handler) register(c *gin.Context) {
-	var input gotype.User
+	var input entities.User
 
 	if err := c.BindJSON(&input); err != nil {
 		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrInvalidInput)
@@ -44,14 +45,14 @@ func (h *Handler) register(c *gin.Context) {
 // @ID login
 // @Accept json
 // @Produce json
-// @Param input body gotype.User true "login and password"
+// @Param input body entities.User true "login and password"
 // @Success 200 {object} handler.refreshStruct
 // @Failure 400 {object} errorResponse "Possible messages: ERR_INVALID_INPUT - Wrong structure of input json; ERR_NO_SUCH_USER - User with such name and password does not exist;"
 // @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server; "
 // @Failure default {object} errorResponse
 // @Router /auth/login [post]
 func (h *Handler) login(c *gin.Context) {
-	var input gotype.User
+	var input entities.User
 
 	if err := c.BindJSON(&input); err != nil {
 		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrInvalidInput)
@@ -103,7 +104,7 @@ func (h *Handler) refresh(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"access_token":  refreshToken,
-		"refresh_token": accessToken,
+		"access_token":  accessToken,
+		"refresh_token": refreshToken,
 	})
 }

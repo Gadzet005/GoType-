@@ -1,4 +1,4 @@
-package gotype
+package entities
 
 import "time"
 

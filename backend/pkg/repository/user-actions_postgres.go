@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	gotype "github.com/Gadzet005/GoType/backend"
+	"github.com/Gadzet005/GoType/backend/entities"
 	"github.com/jmoiron/sqlx"
 	"github.com/redis/go-redis/v9"
 	"github.com/sirupsen/logrus"
@@ -58,7 +59,7 @@ func (s *UserActionsPostgres) GetUserById(id int) (string, int, time.Time, strin
 	return name, access, banTime, banReason, nil
 }
 
-func (s *UserActionsPostgres) CreateUserComplaint(complaint gotype.UserComplaint) error {
+func (s *UserActionsPostgres) CreateUserComplaint(complaint entities.UserComplaint) error {
 	var id int
 
 	query := fmt.Sprintf("INSERT INTO %s (user_id, author, time, given_to, reason, message) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", userComplaintsTable)
@@ -72,7 +73,7 @@ func (s *UserActionsPostgres) CreateUserComplaint(complaint gotype.UserComplaint
 	return nil
 }
 
-func (s *UserActionsPostgres) CreateLevelComplaint(complaint gotype.LevelComplaint) error {
+func (s *UserActionsPostgres) CreateLevelComplaint(complaint entities.LevelComplaint) error {
 	var id int
 
 	query := fmt.Sprintf("INSERT INTO %s (level_id, author, time, given_to, reason, message) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id", levelComplaintsTable)
