@@ -20,7 +20,7 @@ var CodeErrors = map[string]int{
 	ErrRefreshToken:     400,
 	ErrAccessToken:      400,
 	ErrInternal:         500,
-	ErrUnauthorized:     403,
+	ErrUnauthorized:     401,
 	ErrInvalidInput:     400,
 	ErrPermissionDenied: 403,
 	ErrEntityNotFound:   400,

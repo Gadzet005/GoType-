@@ -18,7 +18,7 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 	header := c.GetHeader(AuthorizationHeader)
 
 	if header == "" {
-		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrUnauthorized)
+		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrAccessToken)
 		return
 	}
 
@@ -31,7 +31,7 @@ func (h *Handler) UserIdentity(c *gin.Context) {
 	expTime, id, access, err := h.services.Authorization.Parse(headerParts[1])
 
 	if err != nil {
-		NewErrorResponse(c, http.StatusUnauthorized, gotype.ErrUnauthorized)
+		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrAccessToken)
 		return
 	}
 
