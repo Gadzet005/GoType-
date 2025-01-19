@@ -9,10 +9,13 @@ import { GameState } from "./state";
 export class Game {
     state = new GameState();
     level: Level;
+    private isRunning: boolean = true;
+    private currentTick: Tick = 0;
 
     constructor(level: Level) {
         makeObservable(this, {
             state: observable,
+            start: action,
             tick: action,
         });
 
@@ -23,23 +26,30 @@ export class Game {
     }
 
     async start() {
+        this.isRunning = true;
         for (
-            let currentTick = 0;
-            currentTick < this.level.duration;
-            currentTick++
+            ;
+            this.currentTick < this.level.duration && this.isRunning;
+            this.currentTick++
         ) {
             const tickAwaited = wait(TICK_TIME);
-            await this.tick(currentTick);
+            await this.tick();
             await tickAwaited;
+        }
+
+        if (this.currentTick == this.level.duration) {
+            this.state.clearActiveWords();
         }
     }
 
-    async tick(currentTick: Tick) {
-        const events = this.state.getEvents(currentTick);
+    async tick() {
+        const events = this.state.getEvents(this.currentTick);
         events?.forEach((event: GameEvent) => {
             event.run(this.state);
         });
     }
 
-    stop(): void {}
+    stop(): void {
+        this.isRunning = false;
+    }
 }

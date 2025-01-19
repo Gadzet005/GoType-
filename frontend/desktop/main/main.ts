@@ -8,6 +8,8 @@ import { Level } from "../common/level";
 function createWindow(): BrowserWindow {
     let mainWindow = new BrowserWindow({
         webPreferences: {
+            contextIsolation: true,
+            nodeIntegration: false,
             preload: path.join(__dirname, "preload.js"),
         },
     });
@@ -89,6 +91,10 @@ function createStore(): { mainStore: AppStore; levelStore: LevelStore } {
 app.whenReady().then(() => {
     createStore();
     createWindow();
+
+    ipcMain.handle("quit-app", async () => {
+        app.quit();
+    });
 
     app.on("activate", () => {
         if (BrowserWindow.getAllWindows().length === 0) {

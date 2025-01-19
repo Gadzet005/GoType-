@@ -1,6 +1,7 @@
-import { Box, Typography, Button } from "@mui/material";
-import { BackButton } from "@/components/other/BackButton";
-import { RoutePath } from "@/routing/routePath";
+import { Box, Typography } from "@mui/material";
+import { Button } from "@/components/common/Button";
+import { BackButton } from "@/components/common/BackButton";
+import { RoutePath } from "@/public/navigation/routePath";
 import { useTitle } from "@/public/utils/title";
 import { observer } from "mobx-react";
 import { Level } from "@desktop-common/level";
@@ -11,24 +12,48 @@ export const LevelEditorPage = observer(() => {
   const handleCreateLevel = () => {
     const level: Level = {
       id: 1,
-      name: "Новый уровень",
+      name: "Тестовый уровень",
       authorId: 1,
-      duration: 100,
-      description: "Описание...",
+      duration: 1000,
+      description: "Какое-то описание",
       words: [
         {
-          text: "Слово 1",
-          showTime: 5,
-          duration: 3,
-          style: { fontFamily: "Roboto", fontSize: 16 },
-          coord: { x: 5.5, y: 5.5 },
+          text: "hello",
+          showTime: 0,
+          duration: 500,
+          style: {
+            fontFamily: "Roboto",
+            fontSize: 30,
+            fontWeight: "bold",
+            color: "red",
+          },
+          coord: { x: 0, y: 0 },
         },
         {
-          text: "Слово 2",
-          showTime: 10,
-          duration: 5,
-          style: { fontFamily: "Roboto", fontSize: 16 },
+          text: "world",
+          showTime: 500,
+          duration: 500,
+          style: {
+            fontFamily: "Roboto",
+            fontSize: 30,
+            fontWeight: "bold",
+            color: "red",
+          },
           coord: { x: 50, y: 50 },
+        },
+        {
+          text: "buy",
+          showTime: 300,
+          duration: 500,
+          style: {
+            fontFamily: "Arial",
+            fontSize: 100,
+            fontWeight: "normal",
+            color: "red",
+            bgcolor: "black",
+            padding: 2,
+          },
+          coord: { x: 100, y: 100 },
         },
       ],
     };

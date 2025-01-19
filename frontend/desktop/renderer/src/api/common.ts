@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import {
     getAccessToken,
     getAuthTokens,
@@ -24,14 +24,14 @@ export const authHost = axios.create({
     baseURL: backendURL,
 });
 
-const authInterceptor = async (config: any) => {
+const authInterceptor = async (config: InternalAxiosRequestConfig) => {
     const access_token = await getAccessToken();
     if (!access_token) {
         console.error("access token not found");
         return config;
     }
 
-    config.headers.authorization = `Bearer ${access_token}`;
+    config.headers.setAuthorization("Bearer " + access_token);
     return config;
 };
 
@@ -59,7 +59,7 @@ const authErrorHandler = async (error: AxiosError) => {
             return authHost.request(error.config!);
         } catch (error: any) {
             await clearAuthTokens();
-            window.location.reload();
+            // window.location.reload();
 
             return Promise.reject(error);
         }

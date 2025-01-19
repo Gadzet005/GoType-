@@ -1,6 +1,7 @@
 import { authHost, host, PromiseResult } from "./common";
 import { UserProfile } from "@/public/user";
 import { AuthTokens } from "@/public/auth";
+import { AxiosError } from "axios";
 
 export const signIn = async (
     name: string,
@@ -22,10 +23,18 @@ export const signIn = async (
             },
         };
     } catch (error: any) {
-        return {
-            ok: false,
-            error: error.response.data.message,
-        };
+        if (error instanceof AxiosError) {
+            return {
+                ok: false,
+                error: error.response?.data.message,
+            };
+        } else {
+            console.error("Uknown error: ", error);
+            return {
+                ok: false,
+                error: "Неизвестная ошибка",
+            };
+        }
     }
 };
 
@@ -49,22 +58,25 @@ export const signUp = async (
             },
         };
     } catch (error: any) {
-        return {
-            ok: false,
-            error: error.reponse.data.message,
-        };
+        if (error instanceof AxiosError) {
+            return {
+                ok: false,
+                error: error.response?.data.message,
+            };
+        } else {
+            console.error("Uknown error: ", error);
+            return {
+                ok: false,
+                error: "Неизвестная ошибка",
+            };
+        }
     }
 };
 
 export const logout = async (): Promise<void> => {
-    const response = await authHost.post("/user-actions/logout").catch(() => {
+    await authHost.post("/user-actions/logout").catch(() => {
         console.error("logout failed");
     });
-
-    console.log(response);
-
-    await window.userAPI.clearTokens();
-    localStorage.removeItem("access_token");
 };
 
 export const getUserInfo = async (): PromiseResult<UserProfile, string> => {
@@ -75,19 +87,27 @@ export const getUserInfo = async (): PromiseResult<UserProfile, string> => {
         return {
             ok: true,
             payload: {
-                id: 1, // TODO: remove this
-                name: data.name,
+                id: data.id,
+                name: data.username,
                 accessLevel: data.access,
                 banInfo: {
                     reason: data.banReason,
-                    expiresAt: data.banTime,
+                    expiresAt: Date.parse(data.banTime),
                 },
             },
         };
     } catch (error: any) {
-        return {
-            ok: false,
-            error: error.response.data.message,
-        };
+        if (error instanceof AxiosError) {
+            return {
+                ok: false,
+                error: error.response?.data.message,
+            };
+        } else {
+            console.error("Uknown error: ", error);
+            return {
+                ok: false,
+                error: "Неизвестная ошибка",
+            };
+        }
     }
 };

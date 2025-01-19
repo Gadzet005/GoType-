@@ -1,6 +1,7 @@
-import { Box, Typography, Button } from "@mui/material";
-import { BackButton } from "../other/BackButton";
-import { RoutePath } from "@/routing/routePath";
+import { Box, Typography } from "@mui/material";
+import { Button } from "@/components/common/Button";
+import { BackButton } from "../common/BackButton";
+import { RoutePath } from "@/public/navigation/routePath";
 import { useTitle } from "@/public/utils/title";
 import { observer } from "mobx-react";
 import React from "react";
@@ -35,7 +36,8 @@ export const LevelListPage = observer(() => {
                 <Typography variant="h5">{level.name}</Typography>
                 <Button
                   variant="contained"
-                  href={RoutePath.game + "/" + level.id}
+                  href={RoutePath.game}
+                  params={[level]}
                 >
                   Играть
                 </Button>

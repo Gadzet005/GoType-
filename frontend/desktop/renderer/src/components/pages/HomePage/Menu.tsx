@@ -1,54 +1,14 @@
 import { Box } from "@mui/material";
-import { RoutePath } from "@/routing/routePath";
 import { MenuItem } from "./MenuItem";
+import { menuList, AccessType } from "./menuList";
 import React from "react";
-
-enum AccessType {
-  forAnonymous,
-  forAuth,
-  forAll,
-}
-
-interface MenuItem {
-  label: string;
-  href: string;
-  accessType: AccessType;
-}
-
-const menu: MenuItem[] = [
-  {
-    label: "Вход",
-    href: RoutePath.signIn,
-    accessType: AccessType.forAnonymous,
-  },
-  {
-    label: "Регистрация",
-    href: RoutePath.signUp,
-    accessType: AccessType.forAnonymous,
-  },
-  {
-    label: "Список уровней",
-    href: RoutePath.levelList,
-    accessType: AccessType.forAuth,
-  },
-  {
-    label: "Редактор уровня",
-    href: RoutePath.editor,
-    accessType: AccessType.forAuth,
-  },
-  {
-    label: "Профиль",
-    href: RoutePath.profile,
-    accessType: AccessType.forAuth,
-  },
-];
 
 interface MenuProps {
   isUserAuth: boolean;
 }
 
 export const Menu: React.FC<MenuProps> = ({ isUserAuth }) => {
-  const items = menu
+  const items = menuList
     .filter((item) => {
       return (
         item.accessType == AccessType.forAll ||
@@ -57,7 +17,15 @@ export const Menu: React.FC<MenuProps> = ({ isUserAuth }) => {
       );
     })
     .map((item) => {
-      return <MenuItem key={item.label} label={item.label} href={item.href} />;
+      return (
+        <MenuItem
+          key={item.label}
+          label={item.label}
+          href={item.href}
+          color={item.color}
+          onClick={item.onClick}
+        />
+      );
     });
 
   return (

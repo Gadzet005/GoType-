@@ -1,10 +1,16 @@
 declare global {
     interface Window {
+        commonAPI: {
+            quitApp: () => Promise<void>;
+        };
         userAPI: {
-            getTokens: () => Promise<{
-                accessToken: string;
-                refreshToken: string;
-            }>;
+            getTokens: () => Promise<
+                | {
+                      accessToken: string;
+                      refreshToken: string;
+                  }
+                | undefined
+            >;
             storeTokens: (
                 accessToken: string,
                 refreshToken: string

@@ -18,7 +18,7 @@ export const HomePage = observer(() => {
           width: { xl: "30%", md: "50%", sm: "70%" },
         }}
       >
-        <Typography sx={{ pb: 3 }} variant="h1">
+        <Typography sx={{ pb: 3, fontWeight: "bold" }} variant="h1">
           GoType!
         </Typography>
 

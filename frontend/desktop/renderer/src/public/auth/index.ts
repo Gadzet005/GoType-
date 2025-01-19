@@ -4,17 +4,24 @@ export interface AuthTokens {
 }
 
 export async function getAccessToken(): Promise<string | undefined> {
-    let access_token = localStorage.getItem("access_token");
-    if (!access_token) {
-        const tokens = await window.userAPI.getTokens();
-        access_token = tokens.accessToken;
-        localStorage.setItem("access_token", tokens.accessToken);
+    let accessToken = localStorage.getItem("access_token");
+    if (accessToken) {
+        return accessToken;
     }
-    return access_token;
+
+    const tokens = await window.userAPI.getTokens();
+    if (!tokens) {
+        return undefined;
+    }
+
+    accessToken = tokens.accessToken;
+    localStorage.setItem("access_token", tokens.accessToken);
+    return accessToken;
 }
 
 export async function getAuthTokens(): Promise<AuthTokens | undefined> {
-    return await window.userAPI.getTokens();
+    const tokens = await window.userAPI.getTokens();
+    return tokens;
 }
 
 export async function storeAuthTokens(tokens: AuthTokens): Promise<void> {

@@ -1,20 +1,14 @@
 import { signIn } from "@/api/user";
 import { PasswordField } from "@common/components/form/PasswordField";
 import { useUser } from "@/public/user";
-import { RoutePath } from "@/routing/routePath";
-import {
-  Alert,
-  Box,
-  Button,
-  Container,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { RoutePath } from "@/public/navigation/routePath";
+import { Alert, Box, Container, TextField, Typography } from "@mui/material";
+import { Button } from "@/components/common/Button";
+import { Link } from "@/components/common/Link";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BackButton } from "../other/BackButton";
+import { useNavigate } from "@/public/navigation";
+import { BackButton } from "../common/BackButton";
 import { useTitle } from "@/public/utils/title";
 import { auth } from "@/public/auth/utils";
 
@@ -44,7 +38,9 @@ export const SignInPage = observer(() => {
       } else {
         const error = result.error!;
         if (error === "ERR_NO_SUCH_USER") {
-          setFormError("Неверное имя пользователя или пароль.");
+          setFormError("Неверное имя или пароль.");
+        } else if (error === "ERR_INVALID_INPUT") {
+          setFormError("Неверный формат имени или пароля");
         } else {
           console.error("Unknown error:", error);
           setFormError("Неизвестная ошибка.");

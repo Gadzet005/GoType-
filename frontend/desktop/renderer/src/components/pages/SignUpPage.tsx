@@ -1,22 +1,22 @@
 import { signUp } from "@/api/user";
 import { PasswordField } from "@common/components/form/PasswordField";
 import { useUser } from "@/public/user";
-import { RoutePath } from "@/routing/routePath";
+import { RoutePath } from "@/public/navigation/routePath";
 import {
   Alert,
   Box,
-  Button,
   Container,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BackButton } from "../other/BackButton";
+import { useNavigate } from "@/public/navigation";
+import { BackButton } from "../common/BackButton";
 import { useTitle } from "@/public/utils/title";
 import { auth } from "@/public/auth/utils";
+import { Button } from "@/components/common/Button";
+import { Link } from "@/components/common/Link";
 
 export const SignUpPage = observer(() => {
   useTitle("Регистрация");
@@ -51,6 +51,8 @@ export const SignUpPage = observer(() => {
         const error = result.error!;
         if (error === "ERR_USER_EXISTS") {
           setFormError("Пользователь с таким именем уже зарегистрирован.");
+        } else if (error === "ERR_INVALID_INPUT") {
+          setFormError("Неверный формат имени или пароля");
         } else {
           console.error("Unknown error:", error);
           setFormError("Неизвестная ошибка.");

@@ -3,6 +3,10 @@ import { Tick, Percent } from "./types";
 export interface StyleClass {
     fontFamily: string;
     fontSize: number;
+    fontWeight: string;
+    color: string;
+    bgcolor?: string;
+    padding?: number;
 }
 
 export interface Word {
