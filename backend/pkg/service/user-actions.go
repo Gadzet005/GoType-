@@ -1,7 +1,7 @@
 package service
 
 import (
-	gotype "github.com/Gadzet005/GoType/backend"
+	gotype "github.com/Gadzet005/GoType/backend/entities"
 	"github.com/Gadzet005/GoType/backend/pkg/repository"
 	"time"
 )

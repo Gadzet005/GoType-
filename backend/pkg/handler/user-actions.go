@@ -2,6 +2,7 @@ package handler
 
 import (
 	gotype "github.com/Gadzet005/GoType/backend"
+	"github.com/Gadzet005/GoType/backend/entities"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/exp/slices"
 	"net/http"
@@ -99,7 +100,7 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 // @ID write-user-complaint
 // @Accept json
 // @Produce json
-// @Param input body gotype.UserComplaint true "new complaint info"
+// @Param input body entities.UserComplaint true "new complaint info"
 // @Success 200
 // @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json/Invalid Reason;"
 // @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
@@ -107,14 +108,14 @@ func (h *Handler) getUserInfo(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /user-actions/write-user-complaint [post]
 func (h *Handler) WriteUserComplaint(c *gin.Context) {
-	var input gotype.UserComplaint
+	var input entities.UserComplaint
 
 	if err := c.BindJSON(&input); err != nil {
 		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrInvalidInput)
 		return
 	}
 
-	if slices.Index(gotype.UserComplaintReasons[:], input.Reason) == -1 {
+	if slices.Index(entities.UserComplaintReasons[:], input.Reason) == -1 {
 		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrInvalidInput)
 		return
 	}
@@ -134,7 +135,7 @@ func (h *Handler) WriteUserComplaint(c *gin.Context) {
 // @ID write-level-complaint
 // @Accept json
 // @Produce json
-// @Param input body gotype.LevelComplaint true "new complaint info"
+// @Param input body entities.LevelComplaint true "new complaint info"
 // @Success 200
 // @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json/Invalid Reason;"
 // @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
@@ -142,14 +143,14 @@ func (h *Handler) WriteUserComplaint(c *gin.Context) {
 // @Failure default {object} errorResponse
 // @Router /user-actions/write-level-complaint [post]
 func (h *Handler) WriteLevelComplaint(c *gin.Context) {
-	var input gotype.LevelComplaint
+	var input entities.LevelComplaint
 
 	if err := c.BindJSON(&input); err != nil {
 		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrInvalidInput)
 		return
 	}
 
-	if slices.Index(gotype.LevelComplaintReasons[:], input.Reason) == -1 {
+	if slices.Index(entities.LevelComplaintReasons[:], input.Reason) == -1 {
 		NewErrorResponse(c, http.StatusBadRequest, gotype.ErrInvalidInput)
 		return
 	}

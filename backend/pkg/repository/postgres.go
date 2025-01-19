@@ -9,6 +9,7 @@ const (
 	usersTable           = "Users"
 	userComplaintsTable  = "UserComplaint"
 	levelComplaintsTable = "LevelComplaint"
+	levelTable           = "Level"
 )
 
 type PostgresConfig struct {

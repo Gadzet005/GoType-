@@ -1,5 +1,22 @@
 definitions:
-  gotype.LevelComplaint:
+  entities.ChangeUserAccess:
+    properties:
+      id:
+        type: integer
+      new_access:
+        type: integer
+    required:
+    - id
+    - new_access
+    type: object
+  entities.LevelBan:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
+  entities.LevelComplaint:
     properties:
       author_id:
         type: integer
@@ -15,7 +32,7 @@ definitions:
     - message
     - reason
     type: object
-  gotype.User:
+  entities.User:
     properties:
       name:
         type: string
@@ -26,7 +43,20 @@ definitions:
     - name
     - password
     type: object
-  gotype.UserComplaint:
+  entities.UserBan:
+    properties:
+      ban_reason:
+        type: string
+      ban_time:
+        type: string
+      id:
+        type: integer
+    required:
+    - ban_reason
+    - ban_time
+    - id
+    type: object
+  entities.UserComplaint:
     properties:
       author_id:
         type: integer
@@ -41,6 +71,13 @@ definitions:
     - message
     - reason
     - user_id
+    type: object
+  entities.UserUnban:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
     type: object
   handler.errorResponse:
     properties:
@@ -74,6 +111,211 @@ info:
   title: GoType App API
   version: 0.0.1
 paths:
+  /admin/ban-level:
+    post:
+      consumes:
+      - application/json
+      description: Ban level with given id. Available only for moderators and admins
+      operationId: ban-level
+      parameters:
+      - description: id of level you want to ban
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LevelBan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_ENTITY_NOT_FOUND - Level with such
+            id does not exist; ERR_INVALID_INPUT - Wrong structure of input json;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Ban level
+      tags:
+      - admin
+  /admin/ban-user:
+    post:
+      consumes:
+      - application/json
+      description: Ban user with given id if your access is greater than theirs. Available
+        only for moderators and admins
+      operationId: ban-user
+      parameters:
+      - description: id of user you want to ban, duration of ban (format 10h), ban_reason
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserBan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id
+            does not exist; ERR_INVALID_INPUT - Wrong structure of input json/Wrong
+            format of ban duration;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Ban user
+      tags:
+      - admin
+  /admin/change-user-access:
+    post:
+      consumes:
+      - application/json
+      description: Change access of a user if your access is greater that theirs.
+        New value must be less than admin's one. Available only for moderators and
+        admins
+      operationId: change-user-access
+      parameters:
+      - description: id of user you want to ban, new value of access
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.ChangeUserAccess'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id
+            does not exist; ERR_INVALID_INPUT - Wrong structure of input json;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Change access level
+      tags:
+      - admin
+  /admin/unban-level:
+    post:
+      consumes:
+      - application/json
+      description: Unban level with given id. Available only for moderators and admins
+      operationId: unban-level
+      parameters:
+      - description: id of level you want to unban
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.LevelBan'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_ENTITY_NOT_FOUND - Level with such
+            id does not exist; ERR_INVALID_INPUT - Wrong structure of input json;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Unban level
+      tags:
+      - admin
+  /admin/unban-user:
+    post:
+      consumes:
+      - application/json
+      description: Unban user with given id if your access is greater than theirs.
+        Available only for moderators and admins
+      operationId: unban-user
+      parameters:
+      - description: id of user you want to unban
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/entities.UserUnban'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_NO_SUCH_USER - User with such id
+            does not exist; ERR_INVALID_INPUT - Wrong structure of input json;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Unban user
+      tags:
+      - admin
   /auth/login:
     post:
       consumes:
@@ -86,7 +328,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/gotype.User'
+          $ref: '#/definitions/entities.User'
       produces:
       - application/json
       responses:
@@ -166,7 +408,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/gotype.User'
+          $ref: '#/definitions/entities.User'
       produces:
       - application/json
       responses:
@@ -269,7 +511,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/gotype.LevelComplaint'
+          $ref: '#/definitions/entities.LevelComplaint'
       produces:
       - application/json
       responses:
@@ -309,7 +551,7 @@ paths:
         name: input
         required: true
         schema:
-          $ref: '#/definitions/gotype.UserComplaint'
+          $ref: '#/definitions/entities.UserComplaint'
       produces:
       - application/json
       responses:
