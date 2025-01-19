@@ -1,22 +1,26 @@
 import { signUp } from "@/api/user";
 import { PasswordField } from "@common/components/form/PasswordField";
 import { useUser } from "@/public/user";
-import { RoutePath } from "@/routing/routePath";
+import { RoutePath } from "@/public/navigation/routePath";
 import {
   Alert,
   Box,
-  Button,
   Container,
-  Link,
   TextField,
   Typography,
 } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BackButton } from "../other/BackButton";
+import { useNavigate } from "@/public/navigation";
+import { BackButton } from "../common/BackButton";
+import { useTitle } from "@/public/utils/title";
+import { auth } from "@/public/auth/utils";
+import { Button } from "@/components/common/Button";
+import { Link } from "@/components/common/Link";
 
 export const SignUpPage = observer(() => {
+  useTitle("Регистрация");
+
   const user = useUser();
   const navigate = useNavigate();
 
@@ -27,7 +31,6 @@ export const SignUpPage = observer(() => {
     event.preventDefault();
 
     const formData = new FormData(event.target as HTMLFormElement);
-    const email: string = formData.get("email") as string;
     const name: string = formData.get("name") as string;
     const password: string = formData.get("password") as string;
     const passwordRepeat: string = formData.get("passwordRepeat") as string;
@@ -38,13 +41,22 @@ export const SignUpPage = observer(() => {
     }
 
     setWaiting(() => true);
-    signUp(email, name, password).then((result) => {
+    signUp(name, password).then((result) => {
       setWaiting(() => false);
       if (result.ok) {
-        user.login(result.payload!);
-        navigate(RoutePath.profile);
+        auth(user, result.payload!).then(() => {
+          navigate(RoutePath.profile);
+        });
       } else {
-        setFormError(() => result.error!);
+        const error = result.error!;
+        if (error === "ERR_USER_EXISTS") {
+          setFormError("Пользователь с таким именем уже зарегистрирован.");
+        } else if (error === "ERR_INVALID_INPUT") {
+          setFormError("Неверный формат имени или пароля");
+        } else {
+          console.error("Unknown error:", error);
+          setFormError("Неизвестная ошибка.");
+        }
       }
     });
   };
@@ -86,12 +98,6 @@ export const SignUpPage = observer(() => {
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
             onSubmit={submitHandler}
           >
-            <TextField
-              name="email"
-              variant="outlined"
-              label="Email"
-              type="email"
-            />
             <TextField name="name" variant="outlined" label="Имя" type="text" />
             <PasswordField name="password" />
             <PasswordField name="passwordRepeat" label="Повторите пароль" />

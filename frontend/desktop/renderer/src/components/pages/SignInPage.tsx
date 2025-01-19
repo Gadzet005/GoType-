@@ -1,22 +1,20 @@
 import { signIn } from "@/api/user";
 import { PasswordField } from "@common/components/form/PasswordField";
 import { useUser } from "@/public/user";
-import { RoutePath } from "@/routing/routePath";
-import {
-  Alert,
-  Box,
-  Button,
-  Container,
-  Link,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { RoutePath } from "@/public/navigation/routePath";
+import { Alert, Box, Container, TextField, Typography } from "@mui/material";
+import { Button } from "@/components/common/Button";
+import { Link } from "@/components/common/Link";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { BackButton } from "../other/BackButton";
+import { useNavigate } from "@/public/navigation";
+import { BackButton } from "../common/BackButton";
+import { useTitle } from "@/public/utils/title";
+import { auth } from "@/public/auth/utils";
 
 export const SignInPage = observer(() => {
+  useTitle("Вход");
+
   const user = useUser();
   const navigate = useNavigate();
 
@@ -27,17 +25,26 @@ export const SignInPage = observer(() => {
     event.preventDefault();
 
     const formData = new FormData(event.target as HTMLFormElement);
-    const email: string = formData.get("email") as string;
+    const name: string = formData.get("name") as string;
     const password: string = formData.get("password") as string;
 
     setWaiting(() => true);
-    signIn(email, password).then((result) => {
+    signIn(name, password).then((result) => {
       setWaiting(() => false);
       if (result.ok) {
-        user.login(result.payload!);
-        navigate(RoutePath.profile);
+        auth(user, result.payload!).then(() => {
+          navigate(RoutePath.profile);
+        });
       } else {
-        setFormError(() => result.error!);
+        const error = result.error!;
+        if (error === "ERR_NO_SUCH_USER") {
+          setFormError("Неверное имя или пароль.");
+        } else if (error === "ERR_INVALID_INPUT") {
+          setFormError("Неверный формат имени или пароля");
+        } else {
+          console.error("Unknown error:", error);
+          setFormError("Неизвестная ошибка.");
+        }
       }
     });
   };
@@ -79,12 +86,7 @@ export const SignInPage = observer(() => {
             sx={{ display: "flex", flexDirection: "column", gap: 2 }}
             onSubmit={submitHandler}
           >
-            <TextField
-              name="email"
-              variant="outlined"
-              label="Email"
-              type="email"
-            />
+            <TextField name="name" variant="outlined" label="Имя" type="text" />
             <PasswordField />
             <Button
               variant="contained"

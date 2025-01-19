@@ -1,4 +1,10 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
+import {
+    getAccessToken,
+    getAuthTokens,
+    storeAuthTokens,
+    clearAuthTokens,
+} from "@/public/auth";
 
 export interface Result<T, E> {
     ok: boolean;
@@ -7,7 +13,6 @@ export interface Result<T, E> {
 }
 
 export type PromiseResult<T, E> = Promise<Result<T, E>>;
-
 
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
@@ -19,36 +24,42 @@ export const authHost = axios.create({
     baseURL: backendURL,
 });
 
-const authInterceptor = (config: any) => {
-    const access_token = localStorage.getItem("access_token");
+const authInterceptor = async (config: InternalAxiosRequestConfig) => {
+    const access_token = await getAccessToken();
     if (!access_token) {
-        console.error("Access token not found in local storage");
+        console.error("access token not found");
         return config;
     }
-    config.headers.authorization = `Bearer ${access_token}`;
+
+    config.headers.setAuthorization("Bearer " + access_token);
     return config;
 };
 
 const authErrorHandler = async (error: AxiosError) => {
     if (error.status === 401) {
-        const refresh_token = localStorage.getItem("refresh_token");
-        if (!refresh_token) {
-            console.error("Refresh token not found in local storage");
+        const tokens = await getAuthTokens();
+        if (!tokens) {
+            console.error("Tokens not found");
             return Promise.reject(error);
         }
 
+        const { accessToken, refreshToken } = tokens;
+
         try {
-            const response = await host.post("/token/refresh/", {
-                refresh: refresh_token,
+            const response = await host.post("/auth/refresh", {
+                access_token: accessToken,
+                refresh_token: refreshToken,
             });
-            const access_token = response.data["access"];
-            localStorage.setItem("access_token", access_token);
+
+            await storeAuthTokens({
+                accessToken: response.data.access_token,
+                refreshToken: response.data.refresh_token,
+            });
 
             return authHost.request(error.config!);
-        } catch (refreshError) {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("refresh_token");
-            window.location.reload();
+        } catch (error: any) {
+            await clearAuthTokens();
+            // window.location.reload();
 
             return Promise.reject(error);
         }

@@ -12,6 +12,11 @@ const appStoreSchema = {
             },
         },
     },
+    savedLevels: {
+        type: "array",
+        items: { type: "integer" },
+        default: [],
+    },
 };
 
 export class AppStore {
@@ -21,12 +26,12 @@ export class AppStore {
         this.store = new Store({ schema: appStoreSchema });
     }
 
-    storeTokens(accessToken, refreshToken) {
+    storeTokens(accessToken: string, refreshToken: string) {
         this.store.set("user.accessToken", accessToken);
         this.store.set("user.refreshToken", refreshToken);
     }
 
-    getTokens() {
+    getTokens(): { accessToken: number; refreshToken: number } | undefined {
         const accessToken = this.store.get("user.accessToken", undefined);
         const refreshToken = this.store.get("user.refreshToken", undefined);
         if (accessToken === undefined || refreshToken === undefined) {
@@ -38,5 +43,28 @@ export class AppStore {
     clearTokens() {
         this.store.delete("user.accessToken");
         this.store.delete("user.refreshToken");
+    }
+
+    getSavedLevels(): number[] {
+        return this.store.get("savedLevels");
+    }
+
+    isLevelSaved(levelId: number): boolean {
+        const levels = this.getSavedLevels();
+        return levels.includes(levelId);
+    }
+
+    addLevel(levelId: number) {
+        const levels = this.getSavedLevels();
+        if (!levels.includes(levelId)) {
+            levels.push(levelId);
+            this.store.set("savedLevels", levels);
+        }
+    }
+
+    removeLevel(levelId: number) {
+        const levels = this.getSavedLevels();
+        const newLevels = levels.filter((id) => id != levelId);
+        this.store.set("savedLevels", newLevels);
     }
 }

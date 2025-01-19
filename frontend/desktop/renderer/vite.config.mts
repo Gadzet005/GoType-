@@ -12,6 +12,10 @@ export default defineConfig({
                 find: "@common",
                 replacement: path.resolve(__dirname, "../../common"),
             },
+            {
+                find: "@desktop-common",
+                replacement: path.resolve(__dirname, "../common"),
+            },
         ],
     },
 });

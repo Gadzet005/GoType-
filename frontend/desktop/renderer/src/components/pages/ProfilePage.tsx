@@ -3,21 +3,33 @@ import { observer } from "mobx-react-lite";
 import {
   Avatar,
   Box,
-  Button,
   Container,
   Stack,
   TextField,
   Typography,
 } from "@mui/material";
-import { BackButton } from "../other/BackButton";
-import { RoutePath } from "@/routing/routePath";
+import { Button } from "@/components/common/Button";
+import { BackButton } from "../common/BackButton";
+import { RoutePath } from "@/public/navigation/routePath";
+import { useTitle } from "@/public/utils/title";
+import { unauth } from "@/public/auth/utils";
+import { useNavigate } from "@/public/navigation";
 
 export const ProfilePage = observer(() => {
+  useTitle("Профиль");
+
   const user = useUser();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
-    user.logout();
+    unauth(user).then(() => {
+      navigate(RoutePath.home);
+    });
   };
+
+  if (!user.profile) {
+    return <></>;
+  }
 
   return (
     <Box>
@@ -36,8 +48,8 @@ export const ProfilePage = observer(() => {
                 justifyContent: "center",
               }}
             >
-              <Avatar sx={{ width: 64, height: 64 }}>
-                {user.profile!.email[0].toUpperCase()}
+              <Avatar sx={{ width: 64, height: 64, bgcolor: "orange" }}>
+                {user.profile.name[0].toUpperCase()}
               </Avatar>
             </Box>
             <Box>
@@ -48,17 +60,7 @@ export const ProfilePage = observer(() => {
                 <TextField
                   variant="outlined"
                   label="Имя"
-                  defaultValue={user.profile!.name}
-                  slotProps={{
-                    input: {
-                      readOnly: true,
-                    },
-                  }}
-                />
-                <TextField
-                  variant="outlined"
-                  label="Email"
-                  defaultValue={user.profile!.email}
+                  defaultValue={user.profile.name}
                   slotProps={{
                     input: {
                       readOnly: true,

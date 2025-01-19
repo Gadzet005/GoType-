@@ -56,3 +56,5 @@ sketch
 .ionide
 
 .env
+
+postgres-data/

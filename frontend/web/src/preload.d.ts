@@ -1,6 +1,6 @@
 declare global {
     interface Window {
-        storeAPI: {
+        userAPI: {
             getTokens: () => Promise<{
                 accessToken: string;
                 refreshToken: string;
