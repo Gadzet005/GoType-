@@ -16,8 +16,14 @@ export class Game {
     private tickInterval: NodeJS.Timeout | null = null;
     private currentTick: Tick = 0;
 
-    constructor(level: Level) {
+    private loopPromise?: Promise<void>;
+    private shouldStop: boolean = false;
+    private _currentTick: Tick = 0;
+    private gameEndCallback?: () => void;
+
+    constructor(level: Level, gameEndCallback?: () => void) {
         makeObservable(this, {
+            // @ts-ignore
             state: observable,
             statistics: observable,
             // @ts-ignore
