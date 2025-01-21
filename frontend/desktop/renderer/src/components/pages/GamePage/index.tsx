@@ -16,18 +16,36 @@ interface GamePageProps {
 export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   useTitle("Игра");
 
+  const onGameEnd = () => {
+    navigate(RoutePath.gameResults, level);
+  };
+
   const navigate = useNavigate();
-  const [game] = React.useState<Game>(new Game(level));
+  const [game, setGame] = React.useState<Game | null>(null);
 
   React.useEffect(() => {
-    game.start().then(() => {
-      game.stop();
-      navigate(RoutePath.gameResults, level);
-    });
+    const game = new Game(level, onGameEnd);
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key.length != 1) {
+        return;
+      }
+      game.onInput(event.key);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+
+    setGame(game);
+    game.run();
+
     return () => {
-      game.stop();
+      game.pause().then(() => game.setInitialState());
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  if (!game) {
+    return null;
+  }
 
   return (
     <Box>
@@ -47,7 +65,7 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
           sx={{ justifySelf: "center", fontWeight: "bold" }}
           variant="h4"
         >
-          {game.level.name}
+          {level.name}
         </Typography>
         <Box sx={{ width: "15%" }}></Box>
       </Box>

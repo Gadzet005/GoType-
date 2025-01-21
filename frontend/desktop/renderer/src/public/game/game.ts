@@ -2,54 +2,89 @@ import { Level } from "@desktop-common/level";
 import { Tick } from "@desktop-common/types";
 import { action, makeObservable, observable } from "mobx";
 import { TICK_TIME } from "./consts";
-import { wait } from "./utils";
+import { wait } from "@desktop-common/utils";
 import { AddWordEvent, GameEvent } from "./event";
 import { GameState } from "./state";
+import { GameLevel } from "./level";
 
 export class Game {
-    state = new GameState();
-    level: Level;
-    private isRunning: boolean = true;
-    private currentTick: Tick = 0;
+    readonly state = new GameState();
+    private level: GameLevel;
 
-    constructor(level: Level) {
+    private loopPromise?: Promise<void>;
+    private shouldStop: boolean = false;
+    private _currentTick: Tick = 0;
+    private gameEndCallback?: () => void;
+
+    constructor(level: Level, gameEndCallback?: () => void) {
         makeObservable(this, {
+            // @ts-ignore
             state: observable,
-            start: action,
-            tick: action,
+            run: action,
+            onTick: action,
+            setInitialState: action,
         });
 
-        this.level = level;
-        for (let word of level.words) {
-            this.state.addEvent(word.showTime, new AddWordEvent(word));
+        this.gameEndCallback = gameEndCallback;
+        this.level = new GameLevel(level);
+        this.setInitialState();
+    }
+
+    setInitialState() {
+        this.state.reset();
+        this._currentTick = 0;
+        for (let word of this.level.game.words) {
+            this.state.events.addEvent(word.showTime, new AddWordEvent(word));
         }
     }
 
-    async start() {
-        this.isRunning = true;
+    private async loop(): Promise<void> {
         for (
             ;
-            this.currentTick < this.level.duration && this.isRunning;
-            this.currentTick++
+            this._currentTick < this.level.durationInTicks && !this.shouldStop;
+            this._currentTick++
         ) {
             const tickAwaited = wait(TICK_TIME);
-            await this.tick();
+            await this.onTick();
             await tickAwaited;
-        }
-
-        if (this.currentTick == this.level.duration) {
-            this.state.clearActiveWords();
         }
     }
 
-    async tick() {
-        const events = this.state.getEvents(this.currentTick);
+    async run(): Promise<void> {
+        this.loopPromise = this.loop();
+        await this.loopPromise;
+        this.loopPromise = undefined;
+        if (
+            this.currentTick == this.level.durationInTicks &&
+            this.gameEndCallback
+        ) {
+            this.gameEndCallback();
+        }
+    }
+
+    async pause(): Promise<void> {
+        this.shouldStop = true;
+        await this.loopPromise;
+        this.loopPromise = undefined;
+        this.shouldStop = false;
+    }
+
+    async onTick() {
+        const events = this.state.events.getEvents(this.currentTick);
         events?.forEach((event: GameEvent) => {
             event.run(this.state);
         });
     }
 
-    stop(): void {
-        this.isRunning = false;
+    get currentTick() {
+        return this._currentTick;
+    }
+
+    get isRunning() {
+        return this.loopPromise !== undefined;
+    }
+
+    onInput(letter: string): boolean {
+        return this.state.activeWords.advancePosition(letter);
     }
 }

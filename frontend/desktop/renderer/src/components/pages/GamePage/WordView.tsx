@@ -1,42 +1,52 @@
-import { Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
-import { Word } from "@desktop-common/word";
 import { useSize } from "@/public/utils/size";
+import { ActiveWord } from "@/public/game/activeWord";
+import { LetterView } from "./LetterView";
+import { getLetterStyle } from "@desktop-common/utils";
+import { observer } from "mobx-react";
 
-interface WordProps {
-  word: Word;
+interface WordViewProps {
+  word: ActiveWord;
   fieldHeight: number;
   fieldWidth: number;
 }
 
-export const WordView: React.FC<WordProps> = ({
-  word,
-  fieldHeight,
-  fieldWidth,
-}) => {
-  const ref = React.useRef(null);
-  const { width, height } = useSize(ref);
+export const WordView: React.FC<WordViewProps> = observer(
+  ({ word, fieldHeight, fieldWidth }) => {
+    const ref = React.useRef(null);
+    const { width, height } = useSize(ref);
 
-  const x = (word.coord.x / 100) * (fieldWidth - width);
-  const y = (word.coord.y / 100) * (fieldHeight - height);
+    const x = (word.coord.x / 100) * (fieldWidth - width);
+    const y = (word.coord.y / 100) * (fieldHeight - height);
 
-  return (
-    <Typography
-      sx={{
-        position: "absolute",
-        left: String(x) + "px",
-        top: String(y) + "px",
-        fontFamily: word.style.fontFamily,
-        fontSize: String(word.style.fontSize) + "px",
-        fontWeight: word.style.fontWeight,
-        color: word.style.color,
-        bgcolor: word.style.bgcolor,
-        padding: word.style.padding || 0,
-      }}
-      variant="h4"
-      ref={ref}
-    >
-      {word.text}
-    </Typography>
-  );
-};
+    const letterViews = [];
+    for (let i = 0; i < word.text.length; i++) {
+      const letter = word.text[i];
+      const styleClass = word.state[i];
+
+      letterViews.push(
+        <LetterView
+          key={i}
+          letter={letter}
+          style={getLetterStyle(word, styleClass)}
+        />
+      );
+    }
+
+    return (
+      <Box
+        sx={{
+          position: "absolute",
+          left: String(x) + "px",
+          top: String(y) + "px",
+          p: word.style.word.padding,
+          bgcolor: word.style.word.bgcolor,
+        }}
+        ref={ref}
+      >
+        {letterViews}
+      </Box>
+    );
+  }
+);

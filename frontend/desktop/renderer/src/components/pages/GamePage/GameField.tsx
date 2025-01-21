@@ -24,7 +24,7 @@ export const GameField: React.FC<GameFieldProps> = observer(
         height={_height}
         width={_width}
       >
-        {game.state.activeWords.map((word) => {
+        {game.state.activeWords.getWords().map((word) => {
           return (
             <WordView
               key={word.id}

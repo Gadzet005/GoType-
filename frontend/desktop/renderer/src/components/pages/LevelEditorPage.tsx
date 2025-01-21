@@ -13,49 +13,95 @@ export const LevelEditorPage = observer(() => {
     const level: Level = {
       id: 1,
       name: "Тестовый уровень",
-      authorId: 1,
-      duration: 1000,
       description: "Какое-то описание",
-      words: [
-        {
-          text: "hello",
-          showTime: 0,
-          duration: 500,
-          style: {
-            fontFamily: "Roboto",
-            fontSize: 30,
-            fontWeight: "bold",
-            color: "red",
+      authorId: 1,
+      duration: 10,
+      previewType: "png",
+      tags: ["тест"],
+
+      game: {
+        audioType: "mp3",
+        backgroundType: "png",
+        words: [
+          {
+            text: "hello",
+            showTime: 0,
+            duration: 500,
+            style: {
+              word: {},
+              default: {
+                fontFamily: "Roboto",
+                fontSize: 30,
+                fontWeight: "bold",
+                color: "black",
+              },
+              current: {
+                color: "blue",
+                fontSize: 40,
+              },
+              mistake: {
+                color: "red",
+              },
+              success: {
+                color: "green",
+              },
+            },
+            coord: { x: 0, y: 0 },
           },
-          coord: { x: 0, y: 0 },
-        },
-        {
-          text: "world",
-          showTime: 500,
-          duration: 500,
-          style: {
-            fontFamily: "Roboto",
-            fontSize: 30,
-            fontWeight: "bold",
-            color: "red",
+          {
+            text: "world",
+            showTime: 500,
+            duration: 500,
+            style: {
+              word: {},
+              default: {
+                fontFamily: "Roboto",
+                fontSize: 30,
+                fontWeight: "bold",
+                color: "black",
+              },
+              current: {
+                color: "blue",
+                fontSize: 40,
+              },
+              mistake: {
+                color: "red",
+              },
+              success: {
+                color: "green",
+              },
+            },
+            coord: { x: 50, y: 50 },
           },
-          coord: { x: 50, y: 50 },
-        },
-        {
-          text: "buy",
-          showTime: 300,
-          duration: 500,
-          style: {
-            fontFamily: "Arial",
-            fontSize: 100,
-            fontWeight: "normal",
-            color: "red",
-            bgcolor: "black",
-            padding: 2,
+          {
+            text: "beautiful",
+            showTime: 300,
+            duration: 500,
+            style: {
+              word: {
+                padding: 2,
+                bgcolor: "gray",
+              },
+              default: {
+                fontFamily: "Arial",
+                fontSize: 70,
+                fontWeight: "normal",
+                color: "black",
+              },
+              current: {
+                color: "blue",
+              },
+              mistake: {
+                color: "red",
+              },
+              success: {
+                color: "green",
+              },
+            },
+            coord: { x: 100, y: 100 },
           },
-          coord: { x: 100, y: 100 },
-        },
-      ],
+        ],
+      },
     };
     window.levelAPI.addLevel(level);
   };

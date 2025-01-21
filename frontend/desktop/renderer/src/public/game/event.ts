@@ -13,7 +13,7 @@ export class RemoveWordEvent implements GameEvent {
     }
 
     run(state: GameState) {
-        state.removeWord(this.wordId);
+        state.activeWords.removeWord(this.wordId);
     }
 }
 
@@ -26,8 +26,8 @@ export class AddWordEvent implements GameEvent {
     }
 
     run(state: GameState) {
-        const wordId = state.addWord(this.word);
-        state.addEvent(
+        const wordId = state.activeWords.addWord(this.word);
+        state.events.addEvent(
             this.word.showTime + this.word.duration,
             new RemoveWordEvent(wordId)
         );
