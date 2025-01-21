@@ -109,7 +109,7 @@ func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (st
 	_, id, _, err := s.Parse(accessToken)
 
 	if err != nil {
-		return "", "", errors.New(gotype.ErrAccessToken)
+		return "", "", errors.New(gotype.ErrUnauthorized)
 	}
 
 	user, err := s.repo.GetUserById(id)
