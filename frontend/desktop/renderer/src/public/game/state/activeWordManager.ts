@@ -3,7 +3,7 @@ import { action, makeObservable, observable } from "mobx";
 import { ActiveWord } from "../activeWord";
 import { LetterState } from "@desktop-common/word";
 
-enum AdvanceResult {
+export enum AdvanceResult {
     success,
     mistake,
     ignore,

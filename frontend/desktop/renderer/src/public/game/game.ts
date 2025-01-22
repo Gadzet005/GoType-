@@ -19,9 +19,8 @@ export class Game {
     private loopPromise?: Promise<void>;
     private shouldStop: boolean = false;
     private _currentTick: Tick = 0;
-    private gameEndCallback?: () => void;
 
-    constructor(level: Level, gameEndCallback?: () => void) {
+    constructor(level: Level) {
         makeObservable(this, {
             // @ts-ignore
             state: observable,
@@ -93,6 +92,10 @@ export class Game {
         }
         this.tickInterval = null;
         this._isRunning = false;
+    }
+
+    private setCurrentTick(newTick: number) {
+        this._currentTick = newTick;
     }
 
     get isRunning() {
