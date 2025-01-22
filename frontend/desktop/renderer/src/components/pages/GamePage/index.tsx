@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 import { BackButton } from "../../common/BackButton";
 import { RoutePath } from "@/public/navigation/routePath";
 import { useTitle } from "@/public/utils/title";
@@ -7,7 +7,8 @@ import React from "react";
 import { Game } from "@/public/game/game";
 import { GameField } from "./GameField";
 import { Level } from "@desktop-common/level";
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
+import { when } from "mobx";
 
 interface GamePageProps {
   level: Level;
@@ -16,15 +17,12 @@ interface GamePageProps {
 export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   useTitle("Игра");
 
-  const onGameEnd = () => {
-    navigate(RoutePath.gameResults, level);
-  };
-
+  const OUTRO_DELAY = 1000;
   const navigate = useNavigate();
   const [game, setGame] = React.useState<Game | null>(null);
 
   React.useEffect(() => {
-    const game = new Game(level, onGameEnd);
+    const game = new Game(level);
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key.length != 1) {
@@ -37,8 +35,22 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
     setGame(game);
     game.run();
 
+    let exitTimer: NodeJS.Timeout;
+    when(
+      () => game.progress === 100,
+      () => {
+        game.state.activeWords.clearWords();
+        exitTimer = setTimeout(() => {
+          navigate(RoutePath.gameStatistics, level, game.statistics);
+        }, OUTRO_DELAY);
+      }
+    );
+
     return () => {
-      game.pause().then(() => game.setInitialState());
+      if (exitTimer) {
+        clearTimeout(exitTimer);
+      }
+      game.pause();
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
@@ -48,36 +60,43 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   }
 
   return (
-    <Box>
+    <Stack sx={{ display: "flex", height: "100%", width: "100%" }}>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
           gap: 3,
-          mb: 5,
+          pb: 2,
         }}
       >
-        <Box sx={{ width: "15%" }}>
+        <Box sx={{ width: "25%" }}>
           <BackButton href={RoutePath.levelList} />
         </Box>
-        <Typography
-          sx={{ justifySelf: "center", fontWeight: "bold" }}
-          variant="h4"
+        <Box sx={{ width: "50%" }}>
+          <LinearProgress
+            sx={{
+              height: 15,
+              borderRadius: 10,
+              bgcolor: "lightgrey",
+            }}
+            color="primary"
+            variant="determinate"
+            value={game.progress}
+          />
+        </Box>
+        <Box
+          sx={{
+            width: "25%",
+            display: "flex",
+            justifyContent: "end",
+          }}
         >
-          {level.name}
-        </Typography>
-        <Box sx={{ width: "15%" }}></Box>
+          <Typography variant="h3">
+            {String(game.statistics.score).padStart(7, "0")}
+          </Typography>
+        </Box>
       </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        <GameField width={"90%"} height={"90vh"} game={game} />
-      </Box>
-    </Box>
+      <GameField width={"100%"} height={"100%"} game={game} />
+    </Stack>
   );
 });

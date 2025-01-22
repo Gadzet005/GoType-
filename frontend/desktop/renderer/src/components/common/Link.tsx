@@ -1,4 +1,4 @@
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
 import { Link as MUILink, LinkProps as MUILinkProps } from "@mui/material";
 import React from "react";
 

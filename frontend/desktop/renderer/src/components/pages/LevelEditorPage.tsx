@@ -25,19 +25,19 @@ export const LevelEditorPage = observer(() => {
         words: [
           {
             text: "hello",
-            showTime: 0,
-            duration: 500,
+            showTime: 100,
+            duration: 400,
             style: {
               word: {},
               default: {
                 fontFamily: "Roboto",
-                fontSize: 30,
+                fontSize: 50,
                 fontWeight: "bold",
                 color: "black",
               },
               current: {
                 color: "blue",
-                fontSize: 40,
+                fontSize: 60,
               },
               mistake: {
                 color: "red",
@@ -51,18 +51,20 @@ export const LevelEditorPage = observer(() => {
           {
             text: "world",
             showTime: 500,
-            duration: 500,
+            duration: 400,
             style: {
-              word: {},
+              word: {
+                rotate: 45,
+              },
               default: {
                 fontFamily: "Roboto",
-                fontSize: 30,
+                fontSize: 50,
                 fontWeight: "bold",
                 color: "black",
               },
               current: {
                 color: "blue",
-                fontSize: 40,
+                fontSize: 60,
               },
               mistake: {
                 color: "red",
@@ -80,7 +82,6 @@ export const LevelEditorPage = observer(() => {
             style: {
               word: {
                 padding: 2,
-                bgcolor: "gray",
               },
               default: {
                 fontFamily: "Arial",
@@ -90,6 +91,7 @@ export const LevelEditorPage = observer(() => {
               },
               current: {
                 color: "blue",
+                fontSize: 80,
               },
               mistake: {
                 color: "red",

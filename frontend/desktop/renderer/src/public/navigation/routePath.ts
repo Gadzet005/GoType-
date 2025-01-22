@@ -8,5 +8,5 @@ export enum RoutePath {
     levelList = "level-list",
     editor = "editor",
     game = "game",
-    gameResults = "game-results",
+    gameStatistics = "game-statistics",
 }

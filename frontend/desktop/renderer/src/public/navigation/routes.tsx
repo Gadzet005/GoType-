@@ -1,5 +1,5 @@
 import { GamePage } from "@/components/pages/GamePage";
-import { GameResultsPage } from "@/components/pages/GameResultsPage";
+import { GameStatisticsPage } from "@/components/pages/GameStatistics.tsx";
 import { HomePage } from "@/components/pages/HomePage";
 import { LevelEditorPage } from "@/components/pages/LevelEditorPage";
 import { LevelListPage } from "@/components/pages/LevelListPage";
@@ -9,6 +9,7 @@ import { SignUpPage } from "@/components/pages/SignUpPage";
 import { Level } from "@desktop-common/level";
 import React from "react";
 import { RoutePath } from "./routePath";
+import { GameStatistics } from "../game/statistics";
 
 type ComponentGetter = (...params: any[]) => React.ReactNode;
 
@@ -20,6 +21,11 @@ export const routes = new Map<string, ComponentGetter>([
   [RoutePath.profile, () => <ProfilePage />],
   [RoutePath.levelList, () => <LevelListPage />],
   [RoutePath.game, (level: Level) => <GamePage level={level} />],
-  [RoutePath.gameResults, (level: Level) => <GameResultsPage level={level} />],
+  [
+    RoutePath.gameStatistics,
+    (level: Level, statistics: GameStatistics) => (
+      <GameStatisticsPage level={level} statistics={statistics} />
+    ),
+  ],
   [RoutePath.editor, () => <LevelEditorPage />],
 ]);

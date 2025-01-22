@@ -42,6 +42,7 @@ export const WordView: React.FC<WordViewProps> = observer(
           top: String(y) + "px",
           p: word.style.word.padding,
           bgcolor: word.style.word.bgcolor,
+          rotate: String(word.style.word.rotate) + "deg",
         }}
         ref={ref}
       >

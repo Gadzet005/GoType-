@@ -7,7 +7,7 @@ import { Button } from "@/components/common/Button";
 import { Link } from "@/components/common/Link";
 import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
 import { BackButton } from "../common/BackButton";
 import { useTitle } from "@/public/utils/title";
 import { auth } from "@/public/auth/utils";

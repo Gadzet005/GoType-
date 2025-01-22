@@ -20,7 +20,7 @@ export const GameField: React.FC<GameFieldProps> = observer(
     return (
       <Box
         ref={ref}
-        sx={{ bgcolor: "lightgray", position: "relative" }}
+        sx={{ position: "relative", overflow: "hidden" }}
         height={_height}
         width={_width}
       >

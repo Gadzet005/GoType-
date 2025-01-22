@@ -1,4 +1,4 @@
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
 import {
   Button as MUIButton,
   ButtonProps as MUIButtonProps,

@@ -1,31 +1,38 @@
 import { Level } from "@desktop-common/level";
 import { Tick } from "@desktop-common/types";
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { TICK_TIME } from "./consts";
 import { wait } from "@desktop-common/utils";
 import { AddWordEvent, GameEvent } from "./event";
 import { GameState } from "./state";
 import { GameLevel } from "./level";
+import { GameStatistics } from "./statistics";
+import { AdvanceResult } from "./state/activeWordManager";
 
 export class Game {
     readonly state = new GameState();
+    readonly statistics = new GameStatistics();
     private level: GameLevel;
 
     private loopPromise?: Promise<void>;
     private shouldStop: boolean = false;
     private _currentTick: Tick = 0;
-    private gameEndCallback?: () => void;
 
-    constructor(level: Level, gameEndCallback?: () => void) {
+    constructor(level: Level) {
         makeObservable(this, {
             // @ts-ignore
             state: observable,
+            // @ts-ignore
+            _currentTick: observable,
+            currentTick: computed,
+            progress: computed,
+            setCurrentTick: action,
+            loop: action,
             run: action,
             onTick: action,
             setInitialState: action,
         });
 
-        this.gameEndCallback = gameEndCallback;
         this.level = new GameLevel(level);
         this.setInitialState();
     }
@@ -41,8 +48,8 @@ export class Game {
     private async loop(): Promise<void> {
         for (
             ;
-            this._currentTick < this.level.durationInTicks && !this.shouldStop;
-            this._currentTick++
+            this.currentTick < this.level.durationInTicks && !this.shouldStop;
+            this.setCurrentTick(this.currentTick + 1)
         ) {
             const tickAwaited = wait(TICK_TIME);
             await this.onTick();
@@ -54,12 +61,6 @@ export class Game {
         this.loopPromise = this.loop();
         await this.loopPromise;
         this.loopPromise = undefined;
-        if (
-            this.currentTick == this.level.durationInTicks &&
-            this.gameEndCallback
-        ) {
-            this.gameEndCallback();
-        }
     }
 
     async pause(): Promise<void> {
@@ -80,11 +81,32 @@ export class Game {
         return this._currentTick;
     }
 
+    private setCurrentTick(newTick: number) {
+        this._currentTick = newTick;
+    }
+
     get isRunning() {
         return this.loopPromise !== undefined;
     }
 
-    onInput(letter: string): boolean {
-        return this.state.activeWords.advancePosition(letter);
+    // progress from 0 to 100
+    get progress() {
+        if (this.level.durationInTicks === 0) {
+            return 100;
+        }
+        return (this.currentTick / this.level.durationInTicks) * 100;
+    }
+
+    onInput(letter: string): void {
+        const result = this.state.activeWords.advancePosition(letter);
+        if (result !== AdvanceResult.ignore) {
+            this.statistics.addLetter(result === AdvanceResult.success);
+        }
+
+        // if there are no more words, then stop tracking
+        // time speed (until next word appears)
+        if (this.state.activeWords.position === undefined) {
+            this.statistics.resetLastLetterTime();
+        }
     }
 }

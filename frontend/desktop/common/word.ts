@@ -10,6 +10,7 @@ export interface LetterStyle {
 export interface WordStyle {
     padding?: number;
     bgcolor?: string;
+    rotate?: number;
 }
 
 export enum LetterState {
