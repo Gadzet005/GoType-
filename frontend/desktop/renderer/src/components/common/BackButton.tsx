@@ -1,7 +1,7 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button, ButtonProps } from "@/components/common/Button";
-import React, { useEffect } from "react";
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
+import { useKeyboard } from "@/hooks/keyboard";
 
 interface BackButtonProps extends ButtonProps {
   href: string;
@@ -17,18 +17,7 @@ export const BackButton: React.FC<BackButtonProps> = ({
 }) => {
   const navigate = useNavigate();
 
-  const handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === "Escape") {
-      navigate(other.href, other.params);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("keydown", handleKeydown);
-    return () => {
-      document.removeEventListener("keydown", handleKeydown);
-    };
-  }, []);
+  useKeyboard("Escape", () => navigate(other.href, other.params));
 
   return (
     <Button variant={variant} startIcon={startIcon} color={color} {...other}>

@@ -1,4 +1,3 @@
-import { createContext, useContext } from "react";
 import { makeObservable, computed, observable, action } from "mobx";
 
 export interface UserProfile {
@@ -42,6 +41,3 @@ export class User {
         return this.profile.banInfo.expiresAt > Date.now();
     }
 }
-
-export const UserContext = createContext<User>(new User());
-export const useUser = () => useContext(UserContext);

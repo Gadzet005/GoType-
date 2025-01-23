@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { useUser } from "@/public/user";
+import { useUser } from "@/hooks/user";
 import { observer } from "mobx-react";
 import { useTitle } from "@/public/utils/title";
 import { Menu } from "./Menu";

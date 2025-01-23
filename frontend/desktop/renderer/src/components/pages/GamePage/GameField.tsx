@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Game } from "@/public/game/game";
 import { useSize } from "@/public/utils/size";
-import { WordView } from "./WordView";
+import { WordGroupView } from "./WordGroupView";
 
 interface GameFieldProps {
   width: number | string;
@@ -20,15 +20,15 @@ export const GameField: React.FC<GameFieldProps> = observer(
     return (
       <Box
         ref={ref}
-        sx={{ bgcolor: "lightgray", position: "relative" }}
+        sx={{ position: "relative", overflow: "hidden" }}
         height={_height}
         width={_width}
       >
-        {game.state.activeWords.map((word) => {
+        {game.state.words.getAllGroups().map((group) => {
           return (
-            <WordView
-              key={word.id}
-              word={word}
+            <WordGroupView
+              key={group.id}
+              group={group}
               fieldHeight={height}
               fieldWidth={width}
             />

@@ -4,30 +4,40 @@ import { routes } from "./routes";
 
 interface NavigationContextData {
   navigate: (path: string, ...params: any[]) => void;
+  path: string;
+  params: any[];
 }
 
 export const NavigationContext = React.createContext<NavigationContextData>({
   navigate: () => {},
+  path: RoutePath.default,
+  params: [],
 });
 
 export const AppNavigation: React.FC = () => {
-  const [page, setPage] = React.useState<React.ReactNode>(null);
+  const [path, setPath] = React.useState<string>(RoutePath.default);
+  const [params, setParams] = React.useState<any[]>([]);
 
   const navigate = (path: string, ...params: any[]) => {
     const pageGetter = routes.get(path);
     if (pageGetter) {
-      setPage(pageGetter(...params));
+      setPath(path);
+      setParams(params);
     } else {
-      navigate(RoutePath.default);
+      setPath(RoutePath.default);
+      setParams([]);
     }
   };
 
-  React.useEffect(() => {
-    navigate(RoutePath.default);
-  }, []);
+  const componentFactory =
+    routes.get(path) ||
+    routes.get(RoutePath.default) ||
+    ((..._: any[]) => null);
+
+  const page = componentFactory(...params);
 
   return (
-    <NavigationContext.Provider value={{ navigate }}>
+    <NavigationContext.Provider value={{ navigate, path, params }}>
       {page}
     </NavigationContext.Provider>
   );

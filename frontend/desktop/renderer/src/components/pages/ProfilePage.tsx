@@ -1,4 +1,4 @@
-import { useUser } from "../../public/user";
+import { useUser } from "@/hooks/user";
 import { observer } from "mobx-react-lite";
 import {
   Avatar,
@@ -13,7 +13,7 @@ import { BackButton } from "../common/BackButton";
 import { RoutePath } from "@/public/navigation/routePath";
 import { useTitle } from "@/public/utils/title";
 import { unauth } from "@/public/auth/utils";
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
 
 export const ProfilePage = observer(() => {
   useTitle("Профиль");

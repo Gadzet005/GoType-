@@ -1,55 +1,113 @@
 import { Level } from "@desktop-common/level";
 import { Tick } from "@desktop-common/types";
-import { action, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable } from "mobx";
 import { TICK_TIME } from "./consts";
-import { wait } from "./utils";
-import { AddWordEvent, GameEvent } from "./event";
+import { AddWordGroupEvent, GameEvent } from "./event";
+import { GameLevel } from "./level";
 import { GameState } from "./state";
+import { GameStatistics } from "./statistics";
 
 export class Game {
-    state = new GameState();
-    level: Level;
-    private isRunning: boolean = true;
+    readonly state;
+    readonly statistics = new GameStatistics();
+    readonly level: GameLevel;
+
+    private _isRunning = false;
+    private tickInterval: NodeJS.Timeout | null = null;
     private currentTick: Tick = 0;
 
     constructor(level: Level) {
         makeObservable(this, {
             state: observable,
+            statistics: observable,
+            // @ts-ignore
+            currentTick: observable,
+            // @ts-ignore
+            _isRunning: observable,
+
+            isRunning: computed,
+            progress: computed,
+
+            init: action,
             start: action,
             tick: action,
+            pause: action,
+            onInput: action,
         });
 
-        this.level = level;
-        for (let word of level.words) {
-            this.state.addEvent(word.showTime, new AddWordEvent(word));
+        this.state = new GameState(level.language);
+        this.level = new GameLevel(level);
+        this.init();
+    }
+
+    // set initial game state
+    init() {
+        this.state.reset();
+        this.statistics.reset();
+        this.currentTick = 0;
+        this._isRunning = false;
+        this.tickInterval = null;
+        for (let group of this.level.game.groups) {
+            this.state.events.addEvent(
+                group.showTime,
+                new AddWordGroupEvent(group)
+            );
         }
     }
 
-    async start() {
-        this.isRunning = true;
-        for (
-            ;
-            this.currentTick < this.level.duration && this.isRunning;
-            this.currentTick++
-        ) {
-            const tickAwaited = wait(TICK_TIME);
-            await this.tick();
-            await tickAwaited;
+    private tick() {
+        if (this.currentTick === this.level.durationInTicks) {
+            this.state.words.reset();
+            this.pause();
+            return;
         }
 
-        if (this.currentTick == this.level.duration) {
-            this.state.clearActiveWords();
-        }
-    }
-
-    async tick() {
-        const events = this.state.getEvents(this.currentTick);
+        const events = this.state.events.getEvents(this.currentTick);
         events?.forEach((event: GameEvent) => {
             event.run(this.state);
         });
+        this.currentTick++;
     }
 
-    stop(): void {
-        this.isRunning = false;
+    // run game if it's not already running
+    start() {
+        if (this.isRunning) return;
+        this._isRunning = true;
+
+        this.tickInterval = setInterval(() => {
+            this.tick();
+        }, TICK_TIME);
+    }
+
+    // pause game if it's running
+    pause() {
+        if (!this.isRunning) return;
+        if (this.tickInterval) {
+            clearInterval(this.tickInterval);
+        }
+        this.tickInterval = null;
+        this._isRunning = false;
+    }
+
+    get isRunning() {
+        return this._isRunning;
+    }
+
+    // progress in percent
+    get progress() {
+        if (this.level.durationInTicks === 0) {
+            return 100;
+        }
+        return (this.currentTick / this.level.durationInTicks) * 100;
+    }
+
+    // on user input
+    onInput(letter: string): void {
+        const result = this.state.words.advancePosition(letter);
+        if (!result) {
+            return;
+        }
+
+        this.statistics.addInputResult(result);
     }
 }

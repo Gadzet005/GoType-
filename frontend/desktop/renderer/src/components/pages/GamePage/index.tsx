@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import { BackButton } from "../../common/BackButton";
+import { Box, LinearProgress, Stack, Typography } from "@mui/material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { RoutePath } from "@/public/navigation/routePath";
 import { useTitle } from "@/public/utils/title";
 import { observer } from "mobx-react";
@@ -7,7 +7,13 @@ import React from "react";
 import { Game } from "@/public/game/game";
 import { GameField } from "./GameField";
 import { Level } from "@desktop-common/level";
-import { useNavigate } from "@/public/navigation";
+import { useNavigate } from "@/hooks/navigation";
+import { when } from "mobx";
+import { Button } from "@/components/common/Button";
+import PauseMenu from "./PauseMenu";
+import { useKeyboard } from "@/hooks/keyboard";
+
+const OUTRO_DELAY = 1000;
 
 interface GamePageProps {
   level: Level;
@@ -18,48 +24,115 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
 
   const navigate = useNavigate();
   const [game] = React.useState<Game>(new Game(level));
+  const [isPaused, setIsPaused] = React.useState(false);
+
+  const handleKeyDown = (event: KeyboardEvent) => {
+    if (game.isRunning) {
+      game.onInput(event.key);
+    }
+  };
+
+  const handleResume = () => {
+    setIsPaused(false);
+    game.start();
+  };
+
+  const handlePause = () => {
+    setIsPaused(true);
+    game.pause();
+  };
+
+  const handleRestart = () => {
+    setIsPaused(false);
+    game.init();
+    game.start();
+  };
+
+  const handleTogglePause = () => {
+    if (isPaused) {
+      handleResume();
+    } else {
+      handlePause();
+    }
+  };
+
+  useKeyboard("Escape", handleTogglePause);
+  useKeyboard(null, handleKeyDown);
 
   React.useEffect(() => {
-    game.start().then(() => {
-      game.stop();
-      navigate(RoutePath.gameResults, level);
-    });
+    game.init();
+    game.start();
     return () => {
-      game.stop();
+      game.pause();
+    };
+  }, []);
+
+  React.useEffect(() => {
+    let exitTimer: NodeJS.Timeout;
+    when(
+      () => game.progress === 100,
+      () => {
+        exitTimer = setTimeout(() => {
+          navigate(RoutePath.gameStatistics, level, game.statistics);
+        }, OUTRO_DELAY);
+      }
+    );
+    return () => {
+      if (exitTimer) {
+        clearTimeout(exitTimer);
+      }
     };
   }, []);
 
   return (
-    <Box>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          gap: 3,
-          mb: 5,
-        }}
-      >
-        <Box sx={{ width: "15%" }}>
-          <BackButton href={RoutePath.levelList} />
-        </Box>
-        <Typography
-          sx={{ justifySelf: "center", fontWeight: "bold" }}
-          variant="h4"
+    <Box sx={{ height: "100%" }}>
+      <Stack sx={{ display: "flex", height: "100%", width: "100%" }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 3,
+            pb: 2,
+          }}
         >
-          {game.level.name}
-        </Typography>
-        <Box sx={{ width: "15%" }}></Box>
-      </Box>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          flexDirection: "column",
-        }}
-      >
-        <GameField width={"90%"} height={"90vh"} game={game} />
-      </Box>
+          <Box sx={{ width: "25%" }}>
+            <Button variant="outlined" onClick={handlePause}>
+              <MenuIcon />
+            </Button>
+          </Box>
+          <Box sx={{ width: "50%" }}>
+            <LinearProgress
+              sx={{
+                height: 15,
+                borderRadius: 10,
+                bgcolor: "lightgrey",
+              }}
+              color="primary"
+              variant="determinate"
+              value={game.progress}
+            />
+          </Box>
+          <Box
+            sx={{
+              width: "25%",
+              display: "flex",
+              justifyContent: "end",
+            }}
+          >
+            <Typography variant="h3">
+              {String(game.statistics.score).padStart(7, "0")}
+            </Typography>
+          </Box>
+        </Box>
+        <GameField width={"100%"} height={"100%"} game={game} />
+      </Stack>
+      <PauseMenu
+        open={isPaused}
+        onClose={handleResume}
+        onContinue={handleResume}
+        onRestart={handleRestart}
+        onExit={() => navigate(RoutePath.levelList)}
+      />
     </Box>
   );
 });

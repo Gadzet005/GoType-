@@ -1,8 +1,10 @@
 import React from "react";
-import { User, UserContext } from "./index";
+import { User } from "./index";
 import { getAuthTokens } from "../auth";
 import { auth } from "../auth/utils";
 import { observer } from "mobx-react";
+
+export const UserContext = React.createContext<User>(new User());
 
 export const UserProvider = observer(
   ({ children }: { children: React.ReactNode }) => {
