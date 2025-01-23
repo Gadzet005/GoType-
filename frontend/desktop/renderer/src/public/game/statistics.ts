@@ -35,27 +35,20 @@ export class GameStatistics {
         makeObservable(this, {
             // @ts-ignore
             _score: observable,
-            // @ts-ignore
-            successLetters: observable,
-            // @ts-ignore
-            typeSpeedSum: observable,
-            // @ts-ignore
-            totalLetters: observable,
-            // @ts-ignore
-            lastLetterTime: observable,
-
+            score: computed,
             reset: action,
-            addLetter: action,
-            resetLastLetterTime: action,
+            addInputResult: action,
         });
     }
 
     reset() {
         this._score = 0;
-        this.successLetters = 0;
+        this._successfulLetters = 0;
+        this._successfulWords = 0;
+        this.lastWordSuccess = true;
         this.typeSpeedSum = 0;
         this.totalLetters = 0;
-        this.lastLetterTime = undefined;
+        this.lastLetterTime = null;
     }
 
     get score(): number {
