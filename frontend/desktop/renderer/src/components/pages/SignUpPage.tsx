@@ -1,6 +1,6 @@
 import { signUp } from "@/api/user";
 import { PasswordField } from "@common/components/form/PasswordField";
-import { useUser } from "@/public/user";
+import { useUser } from "@/hooks/user";
 import { RoutePath } from "@/public/navigation/routePath";
 import { Alert, Box, Container, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";

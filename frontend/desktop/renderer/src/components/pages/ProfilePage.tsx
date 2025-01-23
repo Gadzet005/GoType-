@@ -1,4 +1,4 @@
-import { useUser } from "../../public/user";
+import { useUser } from "@/hooks/user";
 import { observer } from "mobx-react-lite";
 import {
   Avatar,
