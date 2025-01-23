@@ -28,7 +28,7 @@ export class ActiveWordsManager {
             position: observable,
             addWord: action,
             removeWord: action,
-            clearWords: action,
+            reset: action,
             advancePosition: action,
         });
     }
@@ -69,8 +69,9 @@ export class ActiveWordsManager {
         this.words.delete(wordId);
     }
 
-    clearWords() {
+    reset() {
         this.words.clear();
+        this.position = undefined;
     }
 
     advancePosition(letter: string): AdvanceResult {

@@ -1,11 +1,5 @@
 import { Word, LetterState } from "./word";
 
-export function wait(delay: number) {
-    return new Promise(function (resolve) {
-        setTimeout(resolve, delay);
-    });
-}
-
 export function getLetterStyle(word: Word, state: LetterState) {
     switch (state) {
         case LetterState.default:

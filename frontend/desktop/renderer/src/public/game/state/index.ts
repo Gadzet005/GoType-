@@ -16,6 +16,6 @@ export class GameState {
 
     reset() {
         this.events.clearAllEvents();
-        this.activeWords.clearWords();
+        this.activeWords.reset();
     }
 }

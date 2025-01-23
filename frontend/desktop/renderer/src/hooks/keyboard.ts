@@ -1,9 +1,12 @@
 import React from "react";
 
-export function useKeyboard(key: string, callback: () => void) {
+export function useKeyboard(
+    key: string | null,
+    callback: (event: KeyboardEvent) => void
+) {
     const handleKeydown = (event: KeyboardEvent) => {
-        if (event.key === key) {
-            callback();
+        if (key === null || event.key === key) {
+            callback(event);
         }
     };
 
