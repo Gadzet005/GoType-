@@ -1,35 +1,38 @@
-import { Word } from "@desktop-common/word";
+import { WordGroup } from "@desktop-common/wordGroup";
 import { GameState } from "./state";
 
 export interface GameEvent {
     run(state: GameState): void;
 }
 
-export class RemoveWordEvent implements GameEvent {
-    private wordId: number;
+export class RemoveWordGroupEvent implements GameEvent {
+    private groupId: number;
 
-    constructor(wordId: number) {
-        this.wordId = wordId;
+    constructor(groupId: number) {
+        this.groupId = groupId;
     }
 
     run(state: GameState) {
-        state.activeWords.removeWord(this.wordId);
+        state.words.removeGroup(this.groupId);
     }
 }
 
-export class AddWordEvent implements GameEvent {
-    private word: Word;
+export class AddWordGroupEvent implements GameEvent {
+    private group: WordGroup;
 
-    constructor(word: Word) {
-        console.assert(word.duration > 0 && word.showTime >= 0, "invalid word");
-        this.word = word;
+    constructor(group: WordGroup) {
+        console.assert(
+            group.duration > 0 && group.showTime >= 0,
+            "invalid group"
+        );
+        this.group = group;
     }
 
     run(state: GameState) {
-        const wordId = state.activeWords.addWord(this.word);
+        const groupId = state.words.addGroup(this.group);
         state.events.addEvent(
-            this.word.showTime + this.word.duration,
-            new RemoveWordEvent(wordId)
+            this.group.showTime + this.group.duration,
+            new RemoveWordGroupEvent(groupId)
         );
     }
 }

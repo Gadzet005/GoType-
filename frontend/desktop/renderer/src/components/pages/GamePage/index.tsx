@@ -27,11 +27,9 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   const [isPaused, setIsPaused] = React.useState(false);
 
   const handleKeyDown = (event: KeyboardEvent) => {
-    // ignore input if it's special keys or game paused
-    if (event.key.length != 1 || !game.isRunning) {
-      return;
+    if (game.isRunning) {
+      game.onInput(event.key);
     }
-    game.onInput(event.key);
   };
 
   const handleResume = () => {

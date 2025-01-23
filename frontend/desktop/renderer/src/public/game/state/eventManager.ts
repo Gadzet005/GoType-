@@ -2,7 +2,7 @@ import { Tick } from "@desktop-common/types";
 import { GameEvent } from "../event";
 import { action, makeObservable, observable } from "mobx";
 
-export class EventsManager {
+export class EventManager {
     private events = new Map<Tick, GameEvent[]>();
 
     constructor() {

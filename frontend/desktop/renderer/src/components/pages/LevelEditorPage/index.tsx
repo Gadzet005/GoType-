@@ -11,24 +11,25 @@ export const LevelEditorPage = observer(() => {
 
   const handleCreateLevel = () => {
     const level: Level = {
-      id: 1,
-      name: "Тестовый уровень",
-      description: "Какое-то описание",
+      id: 3,
+      name: "Walk on Water",
+      description: "Имба",
       authorId: 1,
-      duration: 10,
+      duration: 25,
       previewType: "png",
-      tags: ["тест"],
+      tags: ["имба"],
+      language: "eng",
 
       game: {
         audioType: "mp3",
         backgroundType: "png",
-        words: [
+        groups: [
           {
-            text: "hello",
-            showTime: 100,
-            duration: 400,
+            text: "Can you even see what you're fighting for?",
+            showTime: 0,
+            duration: 1000,
             style: {
-              word: {},
+              group: {},
               default: {
                 fontFamily: "Roboto",
                 fontSize: 50,
@@ -46,14 +47,14 @@ export const LevelEditorPage = observer(() => {
                 color: "green",
               },
             },
-            coord: { x: 0, y: 0 },
+            coord: { x: 5, y: 5 },
           },
           {
-            text: "world",
-            showTime: 500,
-            duration: 400,
+            text: "Bloodlust and a holy war",
+            showTime: 1000,
+            duration: 700,
             style: {
-              word: {
+              group: {
                 rotate: 45,
               },
               default: {
@@ -76,17 +77,17 @@ export const LevelEditorPage = observer(() => {
             coord: { x: 50, y: 50 },
           },
           {
-            text: "beautiful",
-            showTime: 300,
-            duration: 500,
+            text: "Listen up, hear the patriots shout",
+            showTime: 1700,
+            duration: 800,
             style: {
-              word: {
+              group: {
                 padding: 2,
               },
               default: {
-                fontFamily: "Arial",
+                fontFamily: "Roboto",
                 fontSize: 70,
-                fontWeight: "normal",
+                fontWeight: "bold",
                 color: "black",
               },
               current: {
@@ -100,7 +101,7 @@ export const LevelEditorPage = observer(() => {
                 color: "green",
               },
             },
-            coord: { x: 100, y: 100 },
+            coord: { x: 10, y: 90 },
           },
         ],
       },

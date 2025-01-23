@@ -1,2 +1,6 @@
 export const TICK_TIME = 10; // ms
-export const LETTER_TYPED_SCORE = 10;
+
+export enum GameScore {
+    letter = 10,
+    word = 100,
+}

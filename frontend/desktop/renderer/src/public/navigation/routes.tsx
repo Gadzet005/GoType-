@@ -1,5 +1,5 @@
 import { GamePage } from "@/components/pages/GamePage";
-import { GameStatisticsPage } from "@/components/pages/GameStatistics.tsx";
+import { GameStatisticsPage } from "@/components/pages/GameStatisticsPage.tsx";
 import { HomePage } from "@/components/pages/HomePage";
 import { LevelEditorPage } from "@/components/pages/LevelEditorPage";
 import { LevelListPage } from "@/components/pages/LevelListPage";

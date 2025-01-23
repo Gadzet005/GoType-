@@ -2,16 +2,15 @@ import { Level } from "@desktop-common/level";
 import { Tick } from "@desktop-common/types";
 import { action, computed, makeObservable, observable } from "mobx";
 import { TICK_TIME } from "./consts";
-import { AddWordEvent, GameEvent } from "./event";
+import { AddWordGroupEvent, GameEvent } from "./event";
 import { GameLevel } from "./level";
 import { GameState } from "./state";
-import { AdvanceResult } from "./state/activeWordManager";
 import { GameStatistics } from "./statistics";
 
 export class Game {
-    readonly state = new GameState();
+    readonly state;
     readonly statistics = new GameStatistics();
-    private level: GameLevel;
+    readonly level: GameLevel;
 
     private _isRunning = false;
     private tickInterval: NodeJS.Timeout | null = null;
@@ -36,6 +35,7 @@ export class Game {
             onInput: action,
         });
 
+        this.state = new GameState(level.language);
         this.level = new GameLevel(level);
         this.init();
     }
@@ -47,14 +47,17 @@ export class Game {
         this.currentTick = 0;
         this._isRunning = false;
         this.tickInterval = null;
-        for (let word of this.level.game.words) {
-            this.state.events.addEvent(word.showTime, new AddWordEvent(word));
+        for (let group of this.level.game.groups) {
+            this.state.events.addEvent(
+                group.showTime,
+                new AddWordGroupEvent(group)
+            );
         }
     }
 
     private tick() {
         if (this.currentTick === this.level.durationInTicks) {
-            this.state.activeWords.reset();
+            this.state.words.reset();
             this.pause();
             return;
         }
@@ -100,15 +103,11 @@ export class Game {
 
     // on user input
     onInput(letter: string): void {
-        const result = this.state.activeWords.advancePosition(letter);
-        if (result !== AdvanceResult.ignore) {
-            this.statistics.addLetter(result === AdvanceResult.success);
+        const result = this.state.words.advancePosition(letter);
+        if (!result) {
+            return;
         }
 
-        // if there are no more words, then stop tracking
-        // time speed (until next word appears)
-        if (this.state.activeWords.position === undefined) {
-            this.statistics.resetLastLetterTime();
-        }
+        this.statistics.addInputResult(result);
     }
 }

@@ -1,5 +1,5 @@
 import { Level } from "@desktop-common/level";
-import { Word } from "@desktop-common/word";
+import { WordGroup } from "@desktop-common/wordGroup";
 import { TICK_TIME } from "./consts";
 import {
     AUDIO_FILENAME,
@@ -9,6 +9,7 @@ import {
     PictureType,
     VideoType,
 } from "@desktop-common/consts";
+import { Language } from "@desktop-common/language";
 
 export class GameLevel implements Level {
     id: number;
@@ -18,10 +19,11 @@ export class GameLevel implements Level {
     duration: number;
     previewType: PictureType;
     tags: string[];
+    language: Language;
     game: {
         audioType: AudioType;
         backgroundType: VideoType | PictureType;
-        words: Word[];
+        groups: WordGroup[];
     };
 
     constructor(level: Level) {
@@ -33,6 +35,7 @@ export class GameLevel implements Level {
         this.previewType = level.previewType;
         this.tags = level.tags;
         this.game = level.game;
+        this.language = level.language;
     }
 
     get durationInTicks() {

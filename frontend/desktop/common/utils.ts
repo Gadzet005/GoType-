@@ -1,14 +1,14 @@
-import { Word, LetterState } from "./word";
+import { WordGroup, LetterState } from "./wordGroup";
 
-export function getLetterStyle(word: Word, state: LetterState) {
+export function getLetterStyle(group: WordGroup, state: LetterState) {
     switch (state) {
         case LetterState.default:
-            return word.style.default;
+            return group.style.default;
         case LetterState.current:
-            return { ...word.style.default, ...word.style.current };
+            return { ...group.style.default, ...group.style.current };
         case LetterState.mistake:
-            return { ...word.style.default, ...word.style.mistake };
+            return { ...group.style.default, ...group.style.mistake };
         case LetterState.success:
-            return { ...word.style.default, ...word.style.success };
+            return { ...group.style.default, ...group.style.success };
     }
 }

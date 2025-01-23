@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import { LetterStyle } from "@desktop-common/word";
+import { LetterStyle } from "@desktop-common/wordGroup";
 
 interface LetterViewProps {
   letter: string;

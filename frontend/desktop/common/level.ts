@@ -1,5 +1,6 @@
-import { Word } from "./word";
+import { WordGroup } from "./wordGroup";
 import { AudioType, PictureType, VideoType } from "./consts";
+import { Language } from "./language";
 
 export interface Level {
     // General information
@@ -10,11 +11,12 @@ export interface Level {
     duration: number; // in seconds
     previewType: PictureType;
     tags: string[];
+    language: Language;
 
     // Game information
     game: {
         audioType: AudioType;
         backgroundType: VideoType | PictureType;
-        words: Word[]; // words to display in the game
+        groups: WordGroup[]; // group groups to display in the game
     };
 }

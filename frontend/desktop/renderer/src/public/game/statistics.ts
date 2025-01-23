@@ -1,42 +1,50 @@
-import { action, observable, makeObservable } from "mobx";
-import { LETTER_TYPED_SCORE } from "./consts";
+import { action, observable, makeObservable, computed } from "mobx";
+import { GameScore } from "./consts";
+import { InputResult } from "./state/wordManager";
 
 export class GameStatistics {
     private _score: number = 0;
-    private successLetters: number = 0;
+    private _successfulLetters: number = 0;
+    private _successfulWords: number = 0;
     private typeSpeedSum: number = 0;
     private totalLetters: number = 0;
-    private lastLetterTime?: number;
+    private lastLetterTime: number | null = null;
+    private lastWordSuccess = true;
 
     constructor() {
         makeObservable(this, {
             // @ts-ignore
             _score: observable,
-            // @ts-ignore
-            successLetters: observable,
-            // @ts-ignore
-            typeSpeedSum: observable,
-            // @ts-ignore
-            totalLetters: observable,
-            // @ts-ignore
-            lastLetterTime: observable,
-
+            score: computed,
             reset: action,
-            addLetter: action,
-            resetLastLetterTime: action,
+            addInputResult: action,
         });
     }
 
     reset() {
         this._score = 0;
-        this.successLetters = 0;
+        this._successfulLetters = 0;
+        this._successfulWords = 0;
+        this.lastWordSuccess = true;
         this.typeSpeedSum = 0;
         this.totalLetters = 0;
-        this.lastLetterTime = undefined;
+        this.lastLetterTime = null;
     }
 
     get score(): number {
         return this._score;
+    }
+
+    get successfulLetters(): number {
+        return this._successfulLetters;
+    }
+
+    get successfulWords(): number {
+        return this._successfulWords;
+    }
+
+    get mistakenLetters(): number {
+        return this.totalLetters - this.successfulLetters;
     }
 
     // accuracy from 0 to 100
@@ -44,7 +52,7 @@ export class GameStatistics {
         if (this.totalLetters === 0) {
             return 0;
         }
-        return (this.successLetters / this.totalLetters) * 100;
+        return (this.successfulLetters / this.totalLetters) * 100;
     }
 
     get averageSpeed(): number {
@@ -55,21 +63,26 @@ export class GameStatistics {
     }
 
     // Add to statistics that letter was typed
-    addLetter(success: boolean) {
+    addInputResult(result: InputResult) {
         const currentTime = Date.now();
         if (this.lastLetterTime) {
             this.typeSpeedSum += currentTime - this.lastLetterTime;
         }
-        this.lastLetterTime = currentTime;
+        this.lastLetterTime = result.isEndOfGroup ? null : currentTime;
 
-        if (success) {
-            this.successLetters++;
-            this._score += LETTER_TYPED_SCORE;
+        if (result.letterResult) {
+            this._successfulLetters++;
+            this._score += GameScore.letter;
         }
         this.totalLetters++;
-    }
 
-    resetLastLetterTime() {
-        this.lastLetterTime = undefined;
+        this.lastWordSuccess = this.lastWordSuccess && result.letterResult;
+        if (result.isEndOfWord) {
+            if (this.lastWordSuccess) {
+                this._successfulWords++;
+                this._score += GameScore.word;
+            }
+            this.lastWordSuccess = true;
+        }
     }
 }

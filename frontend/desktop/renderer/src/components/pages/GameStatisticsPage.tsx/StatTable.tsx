@@ -14,8 +14,23 @@ export const StatTable: React.FC<StatTableProps> = ({ statistics }) => {
         Статистика
       </Typography>
 
-      <StatRow label="Очки" value={String(statistics.score)} />
+      <StatRow label="Очки" value={statistics.score} />
       <StatRow label="Точность" value={statistics.accuracy.toFixed(2) + "%"} />
+      <StatRow
+        label="Буквы"
+        value={statistics.successfulLetters}
+        valueColor="green"
+      />
+      <StatRow
+        label="Слова"
+        value={statistics.successfulWords}
+        valueColor="blue"
+      />
+      <StatRow
+        label="Ошибки"
+        value={statistics.mistakenLetters}
+        valueColor="red"
+      />
       <StatRow
         label="Скорость печати"
         value={statistics.averageSpeed.toFixed(2) + " мс."}
