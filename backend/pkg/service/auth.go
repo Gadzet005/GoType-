@@ -106,10 +106,11 @@ func (s *AuthService) GenerateToken(username, password string) (string, string, 
 }
 
 func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (string, string, error) {
-	_, id, _, err := s.Parse(accessToken)
+	_, id, _, err := s.ParseWithoutValidation(accessToken)
 
 	if err != nil {
-		return "", "", errors.New(gotype.ErrUnauthorized)
+		fmt.Println(err.Error())
+		return "", "", errors.New(gotype.ErrAccessToken)
 	}
 
 	user, err := s.repo.GetUserById(id)
@@ -120,10 +121,6 @@ func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (st
 
 	if user.RefreshToken != refreshToken {
 		return "", "", errors.New(gotype.ErrRefreshToken)
-	}
-
-	if user.ExpiresAt.Before(time.Now()) {
-		return "", "", errors.New(gotype.ErrUnauthorized)
 	}
 
 	newRefreshToken, err := s.NewRefreshToken()
@@ -236,6 +233,38 @@ func (s *AuthService) Parse(accessToken string) (time.Time, int, int, error) {
 
 	claims, ok := token.Claims.(*tokenClaims)
 	if !ok || !token.Valid {
+		return time.Time{}, -1, -1, errors.New("invalid token")
+	}
+
+	expirationTime, err := claims.GetExpirationTime()
+
+	if err != nil {
+		return time.Time{}, -1, -1, err
+	}
+
+	userId := claims.Id
+	accessLevel := claims.Access
+
+	return expirationTime.Time, userId, accessLevel, nil
+}
+
+func (s *AuthService) ParseWithoutValidation(accessToken string) (time.Time, int, int, error) {
+	//fmt.Printf("Token: %s \n", accessToken)
+
+	token, err := jwt.ParseWithClaims(accessToken, new(tokenClaims), func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return []byte(signingKey), nil
+	})
+
+	if err != nil && !errors.Is(err, jwt.ErrTokenExpired) {
+		return time.Time{}, -1, -1, fmt.Errorf("failed to parse token: %w", err)
+	}
+
+	claims, ok := token.Claims.(*tokenClaims)
+	if !ok {
 		return time.Time{}, -1, -1, errors.New("invalid token")
 	}
 
