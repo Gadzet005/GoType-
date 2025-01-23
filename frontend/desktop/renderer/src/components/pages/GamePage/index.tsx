@@ -22,7 +22,6 @@ interface GamePageProps {
 export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   useTitle("Игра");
 
-  const OUTRO_DELAY = 1000;
   const navigate = useNavigate();
   const [game] = React.useState<Game>(new Game(level));
   const [isPaused, setIsPaused] = React.useState(false);
@@ -84,10 +83,6 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
       }
     };
   }, []);
-
-  if (!game) {
-    return null;
-  }
 
   return (
     <Box sx={{ height: "100%" }}>

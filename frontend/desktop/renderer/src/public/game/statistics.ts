@@ -31,6 +31,33 @@ export class GameStatistics {
         this.lastLetterTime = null;
     }
 
+    constructor() {
+        makeObservable(this, {
+            // @ts-ignore
+            _score: observable,
+            // @ts-ignore
+            successLetters: observable,
+            // @ts-ignore
+            typeSpeedSum: observable,
+            // @ts-ignore
+            totalLetters: observable,
+            // @ts-ignore
+            lastLetterTime: observable,
+
+            reset: action,
+            addLetter: action,
+            resetLastLetterTime: action,
+        });
+    }
+
+    reset() {
+        this._score = 0;
+        this.successLetters = 0;
+        this.typeSpeedSum = 0;
+        this.totalLetters = 0;
+        this.lastLetterTime = undefined;
+    }
+
     get score(): number {
         return this._score;
     }

@@ -16,13 +16,12 @@ export class Game {
     private tickInterval: NodeJS.Timeout | null = null;
     private currentTick: Tick = 0;
 
-    private loopPromise?: Promise<void>;
-    private shouldStop: boolean = false;
-    private _currentTick: Tick = 0;
+    private _isRunning = false;
+    private tickInterval: NodeJS.Timeout | null = null;
+    private currentTick: Tick = 0;
 
     constructor(level: Level) {
         makeObservable(this, {
-            // @ts-ignore
             state: observable,
             statistics: observable,
             // @ts-ignore
@@ -94,8 +93,14 @@ export class Game {
         this._isRunning = false;
     }
 
-    private setCurrentTick(newTick: number) {
-        this._currentTick = newTick;
+    // pause game if it's running
+    pause() {
+        if (!this.isRunning) return;
+        if (this.tickInterval) {
+            clearInterval(this.tickInterval);
+        }
+        this.tickInterval = null;
+        this._isRunning = false;
     }
 
     get isRunning() {
