@@ -4,11 +4,11 @@ export function useKeyboard(
     key: string | null,
     callback: (event: KeyboardEvent) => void
 ) {
-    const handleKeydown = (event: KeyboardEvent) => {
+    const handleKeydown = React.useCallback((event: KeyboardEvent) => {
         if (key === null || event.key === key) {
             callback(event);
         }
-    };
+    }, []);
 
     React.useEffect(() => {
         document.addEventListener("keydown", handleKeydown);

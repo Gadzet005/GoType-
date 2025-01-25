@@ -13,7 +13,7 @@ import { Button } from "@/components/common/Button";
 import PauseMenu from "./PauseMenu";
 import { useKeyboard } from "@/hooks/keyboard";
 
-const OUTRO_DELAY = 1000;
+import "./index.css";
 
 interface GamePageProps {
   level: Level;
@@ -24,7 +24,6 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
 
   const navigate = useNavigate();
   const [game] = React.useState<Game>(new Game(level));
-  const [isPaused, setIsPaused] = React.useState(false);
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (game.isRunning) {
@@ -33,23 +32,20 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   };
 
   const handleResume = () => {
-    setIsPaused(false);
     game.start();
   };
 
   const handlePause = () => {
-    setIsPaused(true);
     game.pause();
   };
 
   const handleRestart = () => {
-    setIsPaused(false);
     game.init();
     game.start();
   };
 
   const handleTogglePause = () => {
-    if (isPaused) {
+    if (game.isPaused) {
       handleResume();
     } else {
       handlePause();
@@ -68,20 +64,12 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   }, []);
 
   React.useEffect(() => {
-    let exitTimer: NodeJS.Timeout;
     when(
-      () => game.progress === 100,
+      () => game.isFinished,
       () => {
-        exitTimer = setTimeout(() => {
-          navigate(RoutePath.gameStatistics, level, game.statistics);
-        }, OUTRO_DELAY);
+        navigate(RoutePath.gameStatistics, level, game.statistics);
       }
     );
-    return () => {
-      if (exitTimer) {
-        clearTimeout(exitTimer);
-      }
-    };
   }, []);
 
   return (
@@ -127,7 +115,7 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
         <GameField width={"100%"} height={"100%"} game={game} />
       </Stack>
       <PauseMenu
-        open={isPaused}
+        open={game.isPaused}
         onClose={handleResume}
         onContinue={handleResume}
         onRestart={handleRestart}

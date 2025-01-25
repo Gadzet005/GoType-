@@ -20,29 +20,30 @@ export const WordGroupView: React.FC<WordGroupViewProps> = observer(
     const x = (group.coord.x / 100) * (fieldWidth - width);
     const y = (group.coord.y / 100) * (fieldHeight - height);
 
-    const letterViews = [];
-    for (let i = 0; i < group.text.length; i++) {
-      const letter = group.text[i];
-      const styleClass = group.state[i];
+    const letterAppearanceDuration =
+      group.appearanceDuration / group.text.length;
 
-      letterViews.push(
+    const letterViews = group.text.split("").map((letter, i) => {
+      const styleClass = group.state[i];
+      return (
         <LetterView
           key={i}
           letter={letter}
           style={getLetterStyle(group, styleClass)}
+          appearanceTime={i * letterAppearanceDuration}
         />
       );
-    }
+    });
 
     return (
       <Box
         sx={{
           position: "absolute",
-          left: String(x) + "px",
-          top: String(y) + "px",
+          left: `${x}px`,
+          top: `${y}px`,
           p: group.style.group.padding,
           bgcolor: group.style.group.bgcolor,
-          rotate: String(group.style.group.rotate) + "deg",
+          rotate: `${group.style.group.rotate}deg`,
         }}
         ref={ref}
       >

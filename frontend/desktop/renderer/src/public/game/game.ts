@@ -7,12 +7,19 @@ import { GameLevel } from "./level";
 import { GameState } from "./state";
 import { GameStatistics } from "./statistics";
 
+enum GameStatus {
+    idle,
+    running,
+    paused,
+    finished,
+}
+
 export class Game {
     readonly state;
     readonly statistics = new GameStatistics();
     readonly level: GameLevel;
 
-    private _isRunning = false;
+    private status = GameStatus.idle;
     private tickInterval: NodeJS.Timeout | null = null;
     private currentTick: Tick = 0;
 
@@ -27,10 +34,12 @@ export class Game {
             // @ts-ignore
             currentTick: observable,
             // @ts-ignore
-            _isRunning: observable,
+            status: observable,
 
-            isRunning: computed,
             progress: computed,
+            isFinished: computed,
+            isPaused: computed,
+            isRunning: computed,
 
             init: action,
             start: action,
@@ -49,7 +58,7 @@ export class Game {
         this.state.reset();
         this.statistics.reset();
         this.currentTick = 0;
-        this._isRunning = false;
+        this.status = GameStatus.idle;
         this.tickInterval = null;
         for (let group of this.level.game.groups) {
             this.state.events.addEvent(
@@ -61,8 +70,7 @@ export class Game {
 
     private tick() {
         if (this.currentTick === this.level.durationInTicks) {
-            this.state.words.reset();
-            this.pause();
+            this.finish();
             return;
         }
 
@@ -73,24 +81,31 @@ export class Game {
         this.currentTick++;
     }
 
-    // run game if it's not already running
     start() {
         if (this.isRunning) return;
-        this._isRunning = true;
+        this.status = GameStatus.running;
 
         this.tickInterval = setInterval(() => {
             this.tick();
         }, TICK_TIME);
     }
 
-    // pause game if it's running
-    pause() {
-        if (!this.isRunning) return;
+    private stop() {
         if (this.tickInterval) {
             clearInterval(this.tickInterval);
         }
         this.tickInterval = null;
-        this._isRunning = false;
+    }
+
+    finish() {
+        this.status = GameStatus.finished;
+        this.state.words.reset();
+        this.stop();
+    }
+
+    pause() {
+        this.status = GameStatus.paused;
+        this.stop();
     }
 
     // pause game if it's running
@@ -104,7 +119,15 @@ export class Game {
     }
 
     get isRunning() {
-        return this._isRunning;
+        return this.status === GameStatus.running;
+    }
+
+    get isPaused() {
+        return this.status === GameStatus.paused;
+    }
+
+    get isFinished() {
+        return this.status === GameStatus.finished;
     }
 
     // progress in percent

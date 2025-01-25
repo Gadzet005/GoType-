@@ -24,6 +24,7 @@ export interface WordGroup {
     text: string; // words (space is delimiter)
     showTime: Tick; // time for group to appear in ticks
     duration: Tick; // time for group to disappear in ticks
+    appearanceDuration: number; // ms
     style: {
         group: WordGroupStyle;
         default: LetterStyle;

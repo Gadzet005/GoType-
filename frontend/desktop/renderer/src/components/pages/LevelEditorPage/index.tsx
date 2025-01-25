@@ -15,7 +15,7 @@ export const LevelEditorPage = observer(() => {
       name: "Walk on Water",
       description: "Имба",
       authorId: 1,
-      duration: 25,
+      duration: 26,
       previewType: "png",
       tags: ["имба"],
       language: "eng",
@@ -28,6 +28,7 @@ export const LevelEditorPage = observer(() => {
             text: "Can you even see what you're fighting for?",
             showTime: 0,
             duration: 1000,
+            appearanceDuration: 1000,
             style: {
               group: {},
               default: {
@@ -53,6 +54,7 @@ export const LevelEditorPage = observer(() => {
             text: "Bloodlust and a holy war",
             showTime: 1000,
             duration: 700,
+            appearanceDuration: 1000,
             style: {
               group: {
                 rotate: 45,
@@ -80,6 +82,7 @@ export const LevelEditorPage = observer(() => {
             text: "Listen up, hear the patriots shout",
             showTime: 1700,
             duration: 800,
+            appearanceDuration: 1000,
             style: {
               group: {
                 padding: 2,
