@@ -28,9 +28,19 @@ export const LevelEditorPage = observer(() => {
             text: "Can you even see what you're fighting for?",
             showTime: 0,
             duration: 1000,
-            appearanceDuration: 1000,
             style: {
-              group: {},
+              group: {
+                fadeIn: {
+                  duration: 1000,
+                  letterDuration: 500,
+                  easing: "ease-in-out",
+                },
+                fadeOut: {
+                  duration: 1000,
+                  letterDuration: 500,
+                  easing: "ease-in-out",
+                },
+              },
               default: {
                 fontFamily: "Roboto",
                 fontSize: 50,
@@ -52,12 +62,21 @@ export const LevelEditorPage = observer(() => {
           },
           {
             text: "Bloodlust and a holy war",
-            showTime: 1000,
+            showTime: 800,
             duration: 700,
-            appearanceDuration: 1000,
             style: {
               group: {
-                rotate: 45,
+                rotate: 30,
+                fadeIn: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
+                fadeOut: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
               },
               default: {
                 fontFamily: "Roboto",
@@ -82,10 +101,19 @@ export const LevelEditorPage = observer(() => {
             text: "Listen up, hear the patriots shout",
             showTime: 1700,
             duration: 800,
-            appearanceDuration: 1000,
             style: {
               group: {
                 padding: 2,
+                fadeIn: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
+                fadeOut: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
               },
               default: {
                 fontFamily: "Roboto",

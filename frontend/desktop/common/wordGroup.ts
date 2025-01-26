@@ -7,7 +7,22 @@ export interface LetterStyle {
     color: string;
 }
 
+export type AnimationEasing =
+    | "linear"
+    | "ease"
+    | "ease-out"
+    | "ease-in"
+    | "ease-in-out";
+
+export interface FadeAnimation {
+    duration: number; // ms
+    letterDuration: number; // ms
+    easing?: AnimationEasing;
+}
+
 export interface WordGroupStyle {
+    fadeIn: FadeAnimation;
+    fadeOut: FadeAnimation;
     padding?: number;
     bgcolor?: string;
     rotate?: number;
@@ -24,7 +39,6 @@ export interface WordGroup {
     text: string; // words (space is delimiter)
     showTime: Tick; // time for group to appear in ticks
     duration: Tick; // time for group to disappear in ticks
-    appearanceDuration: number; // ms
     style: {
         group: WordGroupStyle;
         default: LetterStyle;

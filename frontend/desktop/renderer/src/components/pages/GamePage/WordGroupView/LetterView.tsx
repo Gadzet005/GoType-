@@ -2,22 +2,34 @@ import { Typography } from "@mui/material";
 import React from "react";
 import { LetterStyle } from "@desktop-common/wordGroup";
 import { useIsPaused } from "../pause";
+import { AnimationEasing } from "@desktop-common/wordGroup";
 
 import "./letter.css";
+
+interface LetterFadeAnimation {
+  time: number;
+  duration: number;
+  easing?: AnimationEasing;
+}
 
 interface LetterViewProps {
   letter: string;
   style: LetterStyle;
-  appearanceTime: number;
-  appearanceDuration?: number;
+  fadeIn: LetterFadeAnimation;
+  fadeOut: LetterFadeAnimation;
+  useUnderline?: boolean;
 }
 
 export const LetterView: React.FC<LetterViewProps> = React.memo(function ({
   letter,
   style,
-  appearanceTime,
-  appearanceDuration = 0.5,
+  fadeIn,
+  fadeOut,
+  useUnderline = false,
 }) {
+  fadeIn.easing = fadeIn.easing || "ease-in";
+  fadeOut.easing = fadeOut.easing || "ease-in";
+
   const isPaused = useIsPaused();
 
   return (
@@ -29,8 +41,13 @@ export const LetterView: React.FC<LetterViewProps> = React.memo(function ({
         fontWeight: style.fontWeight,
         color: style.color,
         opacity: 0,
-        animation: `fadeIn ${appearanceDuration}s ease-out ${appearanceTime}ms forwards`,
+        animation: `
+          fadeIn ${fadeIn.duration}ms ${fadeIn.easing} ${fadeIn.time}ms forwards, 
+          fadeIn ${fadeOut.duration}ms ${fadeOut.easing} ${fadeOut.time}ms forwards reverse
+          `,
+
         animationPlayState: isPaused ? "paused" : "running",
+        textDecoration: useUnderline ? "underline" : "none",
       }}
     >
       {letter}
