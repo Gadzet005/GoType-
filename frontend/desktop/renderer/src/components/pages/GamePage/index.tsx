@@ -91,16 +91,15 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
           <Box
             sx={{
               display: "flex",
-              alignItems: "center",
               gap: 3,
               pb: 2,
             }}
           >
-            <Box sx={{ width: "25%" }}>
+            <Box sx={{ width: "20%" }}>
               <Button
                 sx={{
-                  bgcolor: "lightgrey",
-                  color: "black",
+                  bgcolor: "background.paper",
+                  color: "text.primary",
                 }}
                 variant="contained"
                 onClick={handlePause}
@@ -108,12 +107,12 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
                 <MenuIcon />
               </Button>
             </Box>
-            <Box sx={{ width: "50%" }}>
+            <Box sx={{ width: "60%" }}>
               <LinearProgress
                 sx={{
                   height: 15,
                   borderRadius: 10,
-                  bgcolor: "lightgrey",
+                  bgcolor: "background.paper",
                 }}
                 color="primary"
                 variant="determinate"
@@ -122,13 +121,13 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
             </Box>
             <Box
               sx={{
-                width: "25%",
+                width: "20%",
                 display: "flex",
                 justifyContent: "end",
               }}
             >
-              <Box sx={{ bgcolor: "lightgrey", p: 1, borderRadius: 4 }}>
-                <Typography variant="h3">
+              <Box sx={{ bgcolor: "background.paper", p: 2, borderRadius: 4 }}>
+                <Typography color="text.secondary" variant="h3">
                   {String(game.statistics.score).padStart(7, "0")}
                 </Typography>
               </Box>

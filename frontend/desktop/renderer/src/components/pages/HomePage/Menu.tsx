@@ -24,6 +24,7 @@ export const Menu: React.FC<MenuProps> = ({ isUserAuth }) => {
           href={item.href}
           color={item.color}
           onClick={item.onClick}
+          icon={item.icon}
         />
       );
     });

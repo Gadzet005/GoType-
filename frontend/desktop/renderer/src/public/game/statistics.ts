@@ -31,26 +31,6 @@ export class GameStatistics {
         this.lastLetterTime = null;
     }
 
-    constructor() {
-        makeObservable(this, {
-            // @ts-ignore
-            _score: observable,
-            score: computed,
-            reset: action,
-            addInputResult: action,
-        });
-    }
-
-    reset() {
-        this._score = 0;
-        this._successfulLetters = 0;
-        this._successfulWords = 0;
-        this.lastWordSuccess = true;
-        this.typeSpeedSum = 0;
-        this.totalLetters = 0;
-        this.lastLetterTime = null;
-    }
-
     get score(): number {
         return this._score;
     }

@@ -20,7 +20,13 @@ export const BackButton: React.FC<BackButtonProps> = ({
   useKeyboard("Escape", () => navigate(other.href, other.params));
 
   return (
-    <Button variant={variant} startIcon={startIcon} color={color} {...other}>
+    <Button
+      sx={{ py: 2, px: 4, fontSize: "1rem", fontWeight: 500 }}
+      variant={variant}
+      startIcon={startIcon}
+      color={color}
+      {...other}
+    >
       {children}
     </Button>
   );

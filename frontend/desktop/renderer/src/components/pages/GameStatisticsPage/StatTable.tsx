@@ -19,17 +19,17 @@ export const StatTable: React.FC<StatTableProps> = ({ statistics }) => {
       <StatRow
         label="Буквы"
         value={statistics.successfulLetters}
-        valueColor="green"
+        valueColor="success"
       />
       <StatRow
         label="Слова"
         value={statistics.successfulWords}
-        valueColor="blue"
+        valueColor="info"
       />
       <StatRow
         label="Ошибки"
         value={statistics.mistakenLetters}
-        valueColor="red"
+        valueColor="error"
       />
       <StatRow
         label="Скорость печати"

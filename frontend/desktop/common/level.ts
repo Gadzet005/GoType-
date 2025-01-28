@@ -7,7 +7,10 @@ export interface Level {
     id: number;
     name: string;
     description: string;
-    authorId: number;
+    author: {
+        id: number;
+        name: string;
+    };
     duration: number; // in seconds
     tags: string[];
     language: Language;

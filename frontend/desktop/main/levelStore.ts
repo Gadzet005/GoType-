@@ -17,7 +17,10 @@ interface StoredLevel {
     id: number;
     name: string;
     description: string;
-    authorId: number;
+    author: {
+        id: number;
+        name: string;
+    };
     duration: number;
     tags: string[];
     language: Language;
@@ -53,7 +56,7 @@ export class LevelStore {
             id: level.id,
             name: level.name,
             description: level.description,
-            authorId: level.authorId,
+            author: level.author,
             duration: level.duration,
             tags: level.tags,
             language: level.language,
@@ -69,7 +72,7 @@ export class LevelStore {
             id: stored.id,
             name: stored.name,
             description: stored.description,
-            authorId: stored.authorId,
+            author: stored.author,
             duration: stored.duration,
             tags: stored.tags,
             language: stored.language,
