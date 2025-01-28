@@ -1,9 +1,15 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, net, protocol } from "electron";
 import path from "path";
 import url from "url";
 import { AppStore } from "./store";
 import { LevelStore } from "./levelStore";
 import { Level } from "../common/level";
+import {
+    installExtension,
+    REACT_DEVELOPER_TOOLS,
+} from "electron-devtools-installer";
+
+const isDev = process.env.ELECTRON_IS_DEV || false;
 
 function createWindow(): BrowserWindow {
     let mainWindow = new BrowserWindow({
@@ -15,13 +21,11 @@ function createWindow(): BrowserWindow {
         autoHideMenuBar: true,
     });
 
-    const startUrl =
-        process.env.ELECTRON_START_URL ||
-        url.format({
-            pathname: path.join(__dirname, "../dist/index.html"),
-            protocol: "file:",
-            slashes: true,
-        });
+    const startUrl = isDev
+        ? process.env.ELECTRON_START_URL || ""
+        : url
+              .pathToFileURL(path.join(__dirname, "../dist/index.html"))
+              .toString();
 
     mainWindow.maximize();
     mainWindow.loadURL(startUrl);
@@ -90,8 +94,23 @@ function createStore(): { mainStore: AppStore; levelStore: LevelStore } {
 }
 
 app.whenReady().then(() => {
-    createStore();
+    if (isDev) {
+        installExtension(REACT_DEVELOPER_TOOLS)
+            .then((ext) => console.log(`Added Extension:  ${ext.name}`))
+            .catch((err) => console.log("An error occurred: ", err));
+    }
+
+    const { levelStore } = createStore();
     createWindow();
+
+    protocol.handle("level-file", (request) => {
+        const filePath = request.url.slice("level-file://".length);
+        return net.fetch(
+            url
+                .pathToFileURL(path.join(levelStore.getPath(), filePath))
+                .toString()
+        );
+    });
 
     ipcMain.handle("quit-app", async () => {
         app.quit();

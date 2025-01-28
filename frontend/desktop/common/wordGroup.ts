@@ -1,16 +1,32 @@
 import { Tick, Percent } from "./types";
 
 export interface LetterStyle {
-    fontFamily: string;
-    fontSize: number;
-    fontWeight: string;
-    color: string;
+    fontFamily?: string;
+    fontSize?: number;
+    fontWeight?: string;
+    color?: string;
+}
+
+export type AnimationEasing =
+    | "linear"
+    | "ease"
+    | "ease-out"
+    | "ease-in"
+    | "ease-in-out";
+
+export interface FadeAnimation {
+    duration: number;
+    letterDuration: number;
+    easing?: AnimationEasing;
 }
 
 export interface WordGroupStyle {
+    fadeIn: FadeAnimation;
+    fadeOut: FadeAnimation;
     padding?: number;
     bgcolor?: string;
     rotate?: number;
+    borderRadius?: number;
 }
 
 export enum LetterState {

@@ -25,6 +25,7 @@ export const GameStatisticsPage: React.FC<GameStatisticsPageProps> = ({
       sx={{
         display: "flex",
         justifyContent: "center",
+        p: 2,
       }}
     >
       <Box
@@ -47,13 +48,13 @@ export const GameStatisticsPage: React.FC<GameStatisticsPageProps> = ({
           <Typography
             sx={{
               fontWeight: "bold",
-              color: "green",
             }}
+            color="success"
             variant="h4"
           >
             Уровень завершен
           </Typography>
-          <Typography sx={{ fontWeight: "bold" }} variant="h4">
+          <Typography color="primary" sx={{ fontWeight: "bold" }} variant="h4">
             {level.name}
           </Typography>
         </Box>
@@ -72,7 +73,7 @@ export const GameStatisticsPage: React.FC<GameStatisticsPageProps> = ({
             Пройти снова
           </Button>
           <Button
-            color="secondary"
+            color="primary"
             variant="contained"
             size="large"
             href={RoutePath.levelList}

@@ -50,7 +50,7 @@ export const SignInPage = observer(() => {
   };
 
   return (
-    <Box>
+    <Box sx={{ p: 2 }}>
       <BackButton href={RoutePath.home} />
       <Box
         sx={{

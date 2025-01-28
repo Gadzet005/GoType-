@@ -32,22 +32,19 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
       onClose={onClose}
       PaperProps={{
         sx: {
-          bgcolor: "rgba(255, 255, 255, 0.95)",
-          backdropFilter: "blur(5px)",
           borderRadius: 4,
-          minWidth: 500,
+          bgcolor: "black",
         },
       }}
     >
       <DialogContent>
         <Box sx={{ textAlign: "center", py: 2 }}>
           <Typography
-            variant="h4"
-            component="h2"
+            color="primary"
+            variant="h3"
             gutterBottom
             sx={{
               fontWeight: "bold",
-              color: "#2c3e50",
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               mb: 4,
@@ -58,12 +55,14 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
 
           <Stack spacing={2} sx={{ width: "100%" }}>
             <Button
+              color="success"
               variant="contained"
               startIcon={<Play />}
               onClick={onContinue}
               sx={{
-                bgcolor: "#4CAF50",
-                "&:hover": { bgcolor: "#45a049" },
+                "&:hover": { bgcolor: "success.dark" },
+                fontSize: "1.25rem",
+                fontWeight: "bold",
                 py: 1.5,
               }}
             >
@@ -71,12 +70,14 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
             </Button>
 
             <Button
+              color="info"
               variant="contained"
               startIcon={<RotateCcw />}
               onClick={onRestart}
               sx={{
-                bgcolor: "#2196F3",
-                "&:hover": { bgcolor: "#1976D2" },
+                "&:hover": { bgcolor: "info.dark" },
+                fontSize: "1.25rem",
+                fontWeight: "bold",
                 py: 1.5,
               }}
             >
@@ -84,12 +85,14 @@ const PauseMenu: React.FC<PauseMenuProps> = ({
             </Button>
 
             <Button
+              color="error"
               variant="contained"
               startIcon={<LogOut />}
               onClick={onExit}
               sx={{
-                bgcolor: "#f44336",
-                "&:hover": { bgcolor: "#d32f2f" },
+                "&:hover": { bgcolor: "error.dark" },
+                fontSize: "1.25rem",
+                fontWeight: "bold",
                 py: 1.5,
               }}
             >

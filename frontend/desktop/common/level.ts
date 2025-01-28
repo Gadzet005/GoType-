@@ -1,5 +1,5 @@
 import { WordGroup } from "./wordGroup";
-import { AudioType, PictureType, VideoType } from "./consts";
+import { Asset, AudioType, PictureType, VideoType } from "./consts";
 import { Language } from "./language";
 
 export interface Level {
@@ -7,16 +7,19 @@ export interface Level {
     id: number;
     name: string;
     description: string;
-    authorId: number;
+    author: {
+        id: number;
+        name: string;
+    };
     duration: number; // in seconds
-    previewType: PictureType;
     tags: string[];
     language: Language;
+    preview: Asset<PictureType>;
 
     // Game information
     game: {
-        audioType: AudioType;
-        backgroundType: VideoType | PictureType;
+        audio: Asset<AudioType>;
+        background: Asset<VideoType | PictureType>;
         groups: WordGroup[]; // group groups to display in the game
     };
 }

@@ -6,12 +6,13 @@
     "scripts": {
         "dev": "yarn concurrently -k --success first \"yarn run dev:main\" \"yarn run dev:renderer\"",
         "dev:renderer": "yarn vite renderer --host='localhost' --port='5173' --strictPort",
-        "dev:main": "ELECTRON_START_URL='http://localhost:5173' NODE_OPTIONS='--import tsx' yarn electron . 2>/dev/null",
+        "dev:main": "ELECTRON_IS_DEV=1 ELECTRON_START_URL='http://localhost:5173' NODE_OPTIONS='--import tsx' yarn electron . 2>/dev/null",
         "build": "tsc -b renderer && vite build renderer && electron-builder"
     },
     "dependencies": {
         "@emotion/react": "^11.14.0",
         "@emotion/styled": "^11.14.0",
+        "@fontsource/onest": "^5.1.1",
         "@fontsource/roboto": "^5.1.1",
         "@mui/icons-material": "^6.3.0",
         "@mui/material": "^6.3.0",
@@ -31,6 +32,7 @@
         "concurrently": "^9.1.2",
         "electron": "^33.2.1",
         "electron-builder": "^25.1.8",
+        "electron-devtools-installer": "^4.0.0",
         "globals": "^15.14.0",
         "tsx": "^4.19.2",
         "typescript": "~5.6.2",

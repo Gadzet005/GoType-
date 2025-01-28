@@ -9,27 +9,55 @@ import { Level } from "@desktop-common/level";
 export const LevelEditorPage = observer(() => {
   useTitle("Редактор уровня");
 
+  // TODO remove this!!!
   const handleCreateLevel = () => {
     const level: Level = {
       id: 3,
       name: "Walk on Water",
-      description: "Имба",
-      authorId: 1,
-      duration: 25,
-      previewType: "png",
+      description:
+        "«Walk on Water» — первый сингл группы 30 Seconds to Mars из пятого студийного альбома группы America. Песня была написана солистом группы Джаредом Лето. Сингл вышел в продажу 22 августа 2017 года.",
+      author: {
+        id: 1,
+        name: "John Doe",
+      },
+      duration: 26,
+      preview: {
+        type: "jpg",
+        url: "",
+      },
       tags: ["имба"],
       language: "eng",
 
       game: {
-        audioType: "mp3",
-        backgroundType: "png",
+        audio: {
+          type: "mp3",
+          url: "",
+        },
+        background: {
+          type: "jpg",
+          url: "",
+        },
         groups: [
           {
             text: "Can you even see what you're fighting for?",
             showTime: 0,
             duration: 1000,
             style: {
-              group: {},
+              group: {
+                bgcolor: "lightgrey",
+                padding: 1,
+                borderRadius: 4,
+                fadeIn: {
+                  duration: 1000,
+                  letterDuration: 500,
+                  easing: "ease-in-out",
+                },
+                fadeOut: {
+                  duration: 1000,
+                  letterDuration: 500,
+                  easing: "ease-in-out",
+                },
+              },
               default: {
                 fontFamily: "Roboto",
                 fontSize: 50,
@@ -51,11 +79,24 @@ export const LevelEditorPage = observer(() => {
           },
           {
             text: "Bloodlust and a holy war",
-            showTime: 1000,
+            showTime: 800,
             duration: 700,
             style: {
               group: {
-                rotate: 45,
+                bgcolor: "lightgrey",
+                padding: 1,
+                borderRadius: 4,
+                rotate: 30,
+                fadeIn: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
+                fadeOut: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
               },
               default: {
                 fontFamily: "Roboto",
@@ -82,7 +123,19 @@ export const LevelEditorPage = observer(() => {
             duration: 800,
             style: {
               group: {
-                padding: 2,
+                bgcolor: "lightgrey",
+                padding: 1,
+                borderRadius: 4,
+                fadeIn: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
+                fadeOut: {
+                  duration: 500,
+                  letterDuration: 200,
+                  easing: "ease-in-out",
+                },
               },
               default: {
                 fontFamily: "Roboto",
@@ -110,7 +163,7 @@ export const LevelEditorPage = observer(() => {
   };
 
   return (
-    <Box>
+    <Box sx={{ p: 2 }}>
       <BackButton href={RoutePath.home} />
       <Box
         sx={{
@@ -121,7 +174,12 @@ export const LevelEditorPage = observer(() => {
       >
         <Typography variant="h3">Редактор уровней</Typography>
         <Button
-          sx={{ textAlign: "center", mt: 2, width: "400px" }}
+          sx={{
+            textAlign: "center",
+            mt: 5,
+            width: "400px",
+            fontSize: "1.25rem",
+          }}
           variant="contained"
           onClick={handleCreateLevel}
         >

@@ -4,6 +4,7 @@ import React from "react";
 import { Game } from "@/public/game/game";
 import { useSize } from "@/public/utils/size";
 import { WordGroupView } from "./WordGroupView";
+import { PauseContext } from "./pause";
 
 interface GameFieldProps {
   width: number | string;
@@ -17,6 +18,17 @@ export const GameField: React.FC<GameFieldProps> = observer(
     // width and height in pixels
     const { width, height } = useSize(ref);
 
+    const WordGroupViews = game.state.words.getAllGroups().map((group) => {
+      return (
+        <WordGroupView
+          key={group.id}
+          group={group}
+          fieldHeight={height}
+          fieldWidth={width}
+        />
+      );
+    });
+
     return (
       <Box
         ref={ref}
@@ -24,16 +36,9 @@ export const GameField: React.FC<GameFieldProps> = observer(
         height={_height}
         width={_width}
       >
-        {game.state.words.getAllGroups().map((group) => {
-          return (
-            <WordGroupView
-              key={group.id}
-              group={group}
-              fieldHeight={height}
-              fieldWidth={width}
-            />
-          );
-        })}
+        <PauseContext.Provider value={game.isPaused}>
+          {WordGroupViews}
+        </PauseContext.Provider>
       </Box>
     );
   }

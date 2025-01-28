@@ -21,11 +21,12 @@ export const StatRow: React.FC<StatRowProps> = ({
         alignItems: "center",
       }}
     >
-      <Typography sx={{ width: "100%", color: labelColor }} variant="h5">
+      <Typography color={labelColor} sx={{ width: "100%" }} variant="h5">
         {label}
       </Typography>
       <Typography
-        sx={{ textAlign: "center", width: "100%", color: valueColor }}
+        color={valueColor}
+        sx={{ textAlign: "center", width: "100%" }}
         variant="h6"
       >
         {value}
