@@ -16,13 +16,22 @@ export const LevelEditorPage = observer(() => {
       description: "Имба",
       authorId: 1,
       duration: 26,
-      previewType: "png",
+      preview: {
+        type: "jpg",
+        url: "",
+      },
       tags: ["имба"],
       language: "eng",
 
       game: {
-        audioType: "mp3",
-        backgroundType: "png",
+        audio: {
+          type: "mp3",
+          url: "",
+        },
+        background: {
+          type: "jpg",
+          url: "",
+        },
         groups: [
           {
             text: "Can you even see what you're fighting for?",
@@ -30,6 +39,9 @@ export const LevelEditorPage = observer(() => {
             duration: 1000,
             style: {
               group: {
+                bgcolor: "lightgrey",
+                padding: 1,
+                borderRadius: 4,
                 fadeIn: {
                   duration: 1000,
                   letterDuration: 500,
@@ -66,6 +78,9 @@ export const LevelEditorPage = observer(() => {
             duration: 700,
             style: {
               group: {
+                bgcolor: "lightgrey",
+                padding: 1,
+                borderRadius: 4,
                 rotate: 30,
                 fadeIn: {
                   duration: 500,
@@ -103,7 +118,9 @@ export const LevelEditorPage = observer(() => {
             duration: 800,
             style: {
               group: {
-                padding: 2,
+                bgcolor: "lightgrey",
+                padding: 1,
+                borderRadius: 4,
                 fadeIn: {
                   duration: 500,
                   letterDuration: 200,
@@ -141,7 +158,7 @@ export const LevelEditorPage = observer(() => {
   };
 
   return (
-    <Box>
+    <Box sx={{ p: 2 }}>
       <BackButton href={RoutePath.home} />
       <Box
         sx={{

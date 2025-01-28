@@ -9,6 +9,8 @@ import { TICK_TIME } from "@/public/game/consts";
 import { useIsPaused } from "../pause";
 import { FadeAnimation } from "@desktop-common/wordGroup";
 
+import "./fade.css";
+
 interface WordGroupViewProps {
   group: ActiveWordGroup;
   fieldHeight: number;
@@ -29,6 +31,8 @@ function getAbsoluteCoord(
 
 export const WordGroupView: React.FC<WordGroupViewProps> = observer(
   ({ group, fieldHeight, fieldWidth }) => {
+    const style = group.style.group;
+
     const ref = React.useRef(null);
     const { width, height } = useSize(ref);
     const x = getAbsoluteCoord(group.coord.x, fieldWidth, width);
@@ -51,7 +55,6 @@ export const WordGroupView: React.FC<WordGroupViewProps> = observer(
       return () => clearInterval(intervalId);
     }, [isPaused]);
 
-    const style = group.style.group;
     const fadeInStep = getFadeStep(style.fadeIn, group.text.length);
     const fadeOutStep = getFadeStep(style.fadeOut, group.text.length);
 
@@ -80,15 +83,25 @@ export const WordGroupView: React.FC<WordGroupViewProps> = observer(
       );
     });
 
+    const groupFadeOutDelay =
+      group.duration * TICK_TIME - style.fadeOut.duration;
+
     return (
       <Box
         sx={{
           position: "absolute",
           left: `${x}px`,
           top: `${y}px`,
-          p: group.style.group.padding,
-          bgcolor: group.style.group.bgcolor,
-          rotate: `${group.style.group.rotate}deg`,
+          opacity: 0,
+          p: style.padding,
+          bgcolor: style.bgcolor,
+          borderRadius: style.borderRadius,
+          rotate: `${style.rotate}deg`,
+          animation: `
+            fadeIn ${style.fadeIn.duration}ms ${style.fadeIn.easing} 0ms forwards,
+            fadeIn ${style.fadeIn.duration}ms ${style.fadeOut.easing} ${groupFadeOutDelay}ms forwards reverse
+          `,
+          animationPlayState: isPaused ? "paused" : "running",
         }}
         ref={ref}
       >

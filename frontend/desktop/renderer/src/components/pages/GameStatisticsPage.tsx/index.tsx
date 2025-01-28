@@ -25,6 +25,7 @@ export const GameStatisticsPage: React.FC<GameStatisticsPageProps> = ({
       sx={{
         display: "flex",
         justifyContent: "center",
+        p: 2,
       }}
     >
       <Box

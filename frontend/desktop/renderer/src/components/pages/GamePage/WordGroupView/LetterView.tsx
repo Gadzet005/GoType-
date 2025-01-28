@@ -4,7 +4,7 @@ import { LetterStyle } from "@desktop-common/wordGroup";
 import { useIsPaused } from "../pause";
 import { AnimationEasing } from "@desktop-common/wordGroup";
 
-import "./letter.css";
+import "./fade.css";
 
 interface LetterFadeAnimation {
   time: number;

@@ -73,54 +73,77 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
   }, []);
 
   return (
-    <Box sx={{ height: "100%" }}>
-      <Stack sx={{ display: "flex", height: "100%", width: "100%" }}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 3,
-            pb: 2,
-          }}
-        >
-          <Box sx={{ width: "25%" }}>
-            <Button variant="outlined" onClick={handlePause}>
-              <MenuIcon />
-            </Button>
-          </Box>
-          <Box sx={{ width: "50%" }}>
-            <LinearProgress
-              sx={{
-                height: 15,
-                borderRadius: 10,
-                bgcolor: "lightgrey",
-              }}
-              color="primary"
-              variant="determinate"
-              value={game.progress}
-            />
-          </Box>
+    <Box
+      sx={{
+        height: "100%",
+        backgroundImage: `url(${level.game.background.url})`,
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
+      }}
+    >
+      <Box
+        sx={{
+          height: "100%",
+          p: 2,
+        }}
+      >
+        <Stack sx={{ display: "flex", height: "100%", width: "100%" }}>
           <Box
             sx={{
-              width: "25%",
               display: "flex",
-              justifyContent: "end",
+              alignItems: "center",
+              gap: 3,
+              pb: 2,
             }}
           >
-            <Typography variant="h3">
-              {String(game.statistics.score).padStart(7, "0")}
-            </Typography>
+            <Box sx={{ width: "25%" }}>
+              <Button
+                sx={{
+                  bgcolor: "lightgrey",
+                  color: "black",
+                }}
+                variant="contained"
+                onClick={handlePause}
+              >
+                <MenuIcon />
+              </Button>
+            </Box>
+            <Box sx={{ width: "50%" }}>
+              <LinearProgress
+                sx={{
+                  height: 15,
+                  borderRadius: 10,
+                  bgcolor: "lightgrey",
+                }}
+                color="primary"
+                variant="determinate"
+                value={game.progress}
+              />
+            </Box>
+            <Box
+              sx={{
+                width: "25%",
+                display: "flex",
+                justifyContent: "end",
+              }}
+            >
+              <Box sx={{ bgcolor: "lightgrey", p: 1, borderRadius: 4 }}>
+                <Typography variant="h3">
+                  {String(game.statistics.score).padStart(7, "0")}
+                </Typography>
+              </Box>
+            </Box>
           </Box>
-        </Box>
-        <GameField width={"100%"} height={"100%"} game={game} />
-      </Stack>
-      <PauseMenu
-        open={game.isPaused}
-        onClose={handleResume}
-        onContinue={handleResume}
-        onRestart={handleRestart}
-        onExit={() => navigate(RoutePath.levelList)}
-      />
+          <GameField width={"100%"} height={"100%"} game={game} />
+        </Stack>
+        <PauseMenu
+          open={game.isPaused}
+          onClose={handleResume}
+          onContinue={handleResume}
+          onRestart={handleRestart}
+          onExit={() => navigate(RoutePath.levelList)}
+        />
+      </Box>
     </Box>
   );
 });

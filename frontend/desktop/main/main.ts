@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, net, protocol } from "electron";
 import path from "path";
 import url from "url";
 import { AppStore } from "./store";
@@ -23,11 +23,9 @@ function createWindow(): BrowserWindow {
 
     const startUrl = isDev
         ? process.env.ELECTRON_START_URL || ""
-        : url.format({
-              pathname: path.join(__dirname, "../dist/index.html"),
-              protocol: "file:",
-              slashes: true,
-          });
+        : url
+              .pathToFileURL(path.join(__dirname, "../dist/index.html"))
+              .toString();
 
     mainWindow.maximize();
     mainWindow.loadURL(startUrl);
@@ -102,8 +100,17 @@ app.whenReady().then(() => {
             .catch((err) => console.log("An error occurred: ", err));
     }
 
-    createStore();
+    const { levelStore } = createStore();
     createWindow();
+
+    protocol.handle("level-file", (request) => {
+        const filePath = request.url.slice("level-file://".length);
+        return net.fetch(
+            url
+                .pathToFileURL(path.join(levelStore.getPath(), filePath))
+                .toString()
+        );
+    });
 
     ipcMain.handle("quit-app", async () => {
         app.quit();

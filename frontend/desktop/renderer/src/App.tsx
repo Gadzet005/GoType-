@@ -7,7 +7,7 @@ export const App = () => {
   return (
     <UserProvider>
       <ThemeProvider theme={appTheme}>
-        <Box sx={{ height: "100%", p: 2 }}>
+        <Box sx={{ height: "100%" }}>
           <AppNavigation />
         </Box>
       </ThemeProvider>
