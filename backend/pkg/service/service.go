@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/Gadzet005/GoType/backend/entities"
 	"github.com/Gadzet005/GoType/backend/pkg/repository"
+	"mime/multipart"
 	"time"
 )
 
@@ -39,12 +40,19 @@ type SinglePlayerGame interface {
 }
 
 type Level interface {
+	CreateLevel(userId int, levelFile, infoFile, previewFile *multipart.FileHeader) (int, error)
+	UpdateLevel(userId int, levelFile, infoFile, previewFile *multipart.FileHeader) (int, error)
+	DeleteLevel(levelId int) error
+	GetLevelById(levelId int) (entities.Level, error)
+	GetLevelList(fetchStruct entities.FetchLevelStruct) ([]entities.Level, error)
+	CheckLevelExists(levInfo entities.GetLevelInfoStruct) (string, error)
 }
 
 type Service struct {
 	Authorization Authorization
 	UserActions   UserActions
 	Admin         Admin
+	Level         Level
 }
 
 func NewService(repos *repository.Repository) *Service {
@@ -52,5 +60,6 @@ func NewService(repos *repository.Repository) *Service {
 		Authorization: NewAuthService(repos.Authorization),
 		UserActions:   NewUserActionsService(repos.UserActions),
 		Admin:         NewAdminService(repos.AdminActions),
+		Level:         NewLevelService(repos.Level),
 	}
 }
