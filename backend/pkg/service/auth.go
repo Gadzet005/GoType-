@@ -109,7 +109,6 @@ func (s *AuthService) GenerateTokenByToken(accessToken, refreshToken string) (st
 	_, id, _, err := s.ParseWithoutValidation(accessToken)
 
 	if err != nil {
-		fmt.Println(err.Error())
 		return "", "", errors.New(gotype.ErrAccessToken)
 	}
 

@@ -9,6 +9,13 @@ definitions:
     - id
     - new_access
     type: object
+  entities.GetLevelInfoStruct:
+    properties:
+      id:
+        type: integer
+    required:
+    - id
+    type: object
   entities.LevelBan:
     properties:
       id:
@@ -432,6 +439,108 @@ paths:
       summary: Register
       tags:
       - auth
+  /level/create-level:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create level with given structure
+      operationId: create-level
+      parameters:
+      - description: Archive with level.
+        in: formData
+        name: level
+        required: true
+        type: file
+      - description: JSON file with level description.
+        in: formData
+        name: info
+        required: true
+        type: file
+      - description: File with preview image of the level
+        in: formData
+        name: preview
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.GetLevelInfoStruct'
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of
+            input json;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Create level
+      tags:
+      - level
+  /level/update-level:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Update level with given structure
+      operationId: update-level
+      parameters:
+      - description: Archive with level.
+        in: formData
+        name: level
+        required: true
+        type: file
+      - description: JSON file with level description.
+        in: formData
+        name: info
+        required: true
+        type: file
+      - description: File with preview image of the level
+        in: formData
+        name: preview
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/entities.GetLevelInfoStruct'
+        "400":
+          description: 'Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure
+            of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of
+            input json;'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "401":
+          description: 'Possible messages: ERR_UNAUTHORIZED - Access Token expired;
+            ERR_PERMISSION_DENIED - Not enough rights to perform the action'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        "500":
+          description: 'Possible messages: ERR_INTERNAL - Error on server'
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+        default:
+          description: ""
+          schema:
+            $ref: '#/definitions/handler.errorResponse'
+      summary: Update level
+      tags:
+      - level
   /user-actions/get-user-info:
     get:
       consumes:

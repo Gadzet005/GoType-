@@ -41,12 +41,19 @@ type SinglePlayerGame interface {
 }
 
 type Level interface {
+	CreateLevel(level entities.Level) (string, string, int, error)
+	DeleteLevel(levelId int) error
+	UpdateLevel(levelInfo entities.LevelUpdateStruct) (string, string, int, error)
+	GetLevelById(levelId int) (entities.Level, error)
+	FetchLevels(map[string]interface{}) ([]entities.Level, error)
+	GetPathsById(levelId int) (int, string, string, error)
 }
 
 type Repository struct {
 	Authorization Authorization
 	UserActions   UserActions
 	AdminActions  Admin
+	Level         Level
 }
 
 func NewRepository(db *sqlx.DB, client *redis.Client) *Repository {
@@ -54,6 +61,7 @@ func NewRepository(db *sqlx.DB, client *redis.Client) *Repository {
 		Authorization: NewAuthPostgres(db, client),
 		UserActions:   NewUserActionsPostgres(db, client),
 		AdminActions:  NewAdminPostgres(db, client),
+		Level:         NewLevelPostgres(db),
 	}
 
 	return &repo
