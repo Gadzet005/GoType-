@@ -524,6 +524,183 @@
                 }
             }
         },
+        "/level/download-level": {
+            "get": {
+                "description": "Download level with given id from server",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/octet-stream"
+                ],
+                "tags": [
+                    "level"
+                ],
+                "summary": "Download level",
+                "operationId": "download-level",
+                "parameters": [
+                    {
+                        "description": "id of level you want to download",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetLevelInfoStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Archive with level.",
+                        "schema": {
+                            "type": "file"
+                        }
+                    },
+                    "400": {
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json; ERR_ENTITY_NOT_FOUND - no such level on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/level/get-level-info": {
+            "get": {
+                "description": "Get level info about level with given id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "level"
+                ],
+                "summary": "Get level info",
+                "operationId": "get-level-info",
+                "parameters": [
+                    {
+                        "description": "id of level you want to find out about",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.GetLevelInfoStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.LevelInfo"
+                        }
+                    },
+                    "400": {
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json;",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/level/get-level-list": {
+            "get": {
+                "description": "Get level list with given params",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "level"
+                ],
+                "summary": "Get level list",
+                "operationId": "get-level-list",
+                "parameters": [
+                    {
+                        "description": "search and filter params",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entities.FetchLevelStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/entities.LevelsList"
+                        }
+                    },
+                    "400": {
+                        "description": "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json;",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Possible messages: ERR_UNAUTHORIZED - Access Token expired",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Possible messages: ERR_INTERNAL - Error on server",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    },
+                    "default": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/handler.errorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/level/update-level": {
             "post": {
                 "description": "Update level with given structure",
@@ -817,6 +994,32 @@
                 }
             }
         },
+        "entities.FetchLevelStruct": {
+            "type": "object",
+            "required": [
+                "filter_params",
+                "page_info",
+                "sort_params",
+                "tags"
+            ],
+            "properties": {
+                "filter_params": {
+                    "$ref": "#/definitions/entities.LevelFilterParams"
+                },
+                "page_info": {
+                    "$ref": "#/definitions/entities.PageInfo"
+                },
+                "sort_params": {
+                    "$ref": "#/definitions/entities.LevelSortParams"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "entities.GetLevelInfoStruct": {
             "type": "object",
             "required": [
@@ -825,6 +1028,62 @@
             "properties": {
                 "id": {
                     "type": "integer"
+                }
+            }
+        },
+        "entities.Level": {
+            "type": "object",
+            "required": [
+                "author",
+                "author_name",
+                "description",
+                "difficulty",
+                "duration",
+                "image_type",
+                "language",
+                "name",
+                "tags",
+                "type"
+            ],
+            "properties": {
+                "author": {
+                    "type": "integer"
+                },
+                "author_name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "difficulty": {
+                    "type": "integer"
+                },
+                "duration": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "image_type": {
+                    "type": "string"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "preview_path": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "type": {
+                    "type": "string"
                 }
             }
         },
@@ -859,6 +1118,65 @@
                 },
                 "reason": {
                     "type": "string"
+                }
+            }
+        },
+        "entities.LevelFilterParams": {
+            "type": "object",
+            "properties": {
+                "difficulty": {
+                    "type": "integer"
+                },
+                "language": {
+                    "type": "string"
+                },
+                "level_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.LevelInfo": {
+            "type": "object",
+            "properties": {
+                "level_info": {
+                    "$ref": "#/definitions/entities.Level"
+                }
+            }
+        },
+        "entities.LevelSortParams": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "popularity": {
+                    "type": "string"
+                }
+            }
+        },
+        "entities.LevelsList": {
+            "type": "object",
+            "properties": {
+                "levels": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/entities.Level"
+                    }
+                }
+            }
+        },
+        "entities.PageInfo": {
+            "type": "object",
+            "required": [
+                "offset",
+                "page_size"
+            ],
+            "properties": {
+                "offset": {
+                    "type": "integer"
+                },
+                "page_size": {
+                    "type": "integer"
                 }
             }
         },

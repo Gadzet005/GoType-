@@ -86,7 +86,7 @@ func (s *LevelService) UpdateLevel(userId int, levelFile, infoFile, previewFile 
 		return -1, err
 	}
 
-	if realAuthorId != userId || realAuthorId != levelInfo.Id {
+	if realAuthorId != userId || realAuthorId != levelInfo.Author {
 		return -1, errors.New(gotype.ErrPermissionDenied)
 	}
 

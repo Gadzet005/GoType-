@@ -3,7 +3,6 @@ package gotype
 import (
 	"context"
 	"net/http"
-	"os"
 	"time"
 )
 
@@ -29,8 +28,8 @@ func (s *Server) Run(port string, handler http.Handler) error {
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
-	_ = os.RemoveAll("levels")
-	_ = os.RemoveAll("previews")
+	//_ = os.RemoveAll("levels")
+	//_ = os.RemoveAll("previews")
 
 	return s.httpServer.Shutdown(ctx)
 }
