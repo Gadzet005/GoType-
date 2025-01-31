@@ -4,7 +4,6 @@ import (
 	gotype "github.com/Gadzet005/GoType/backend"
 	"github.com/Gadzet005/GoType/backend/entities"
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"net/http"
 	"strings"
 )
@@ -47,7 +46,7 @@ func (h *Handler) CreateLevel(c *gin.Context) {
 	if !ok {
 		c.String(http.StatusBadRequest, gotype.ErrAccessToken)
 	}
-	logrus.Printf("lol: %v", userId.(int))
+
 	levelId, err := h.services.Level.CreateLevel(userId.(int), levelFile, infoFile, previewFile)
 
 	if err != nil {
@@ -60,6 +59,19 @@ func (h *Handler) CreateLevel(c *gin.Context) {
 	})
 }
 
+// @Summary Download level
+// @Tags level
+// @Description Download level with given id from server
+// @ID download-level
+// @Accept json
+// @Produce      application/octet-stream
+// @Param input body entities.GetLevelInfoStruct true "id of level you want to download"
+// @Success 200 {file}  file "Archive with level."
+// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json; ERR_ENTITY_NOT_FOUND - no such level on server"
+// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
+// @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server"
+// @Failure default {object} errorResponse
+// @Router /level/download-level [get]
 func (h *Handler) GetLevel(c *gin.Context) {
 	var levInfo entities.GetLevelInfoStruct
 
@@ -80,6 +92,19 @@ func (h *Handler) GetLevel(c *gin.Context) {
 	c.FileAttachment(filePath, parts[len(parts)-1])
 }
 
+// @Summary Get level info
+// @Tags level
+// @Description Get level info about level with given id
+// @ID get-level-info
+// @Accept json
+// @Produce json
+// @Param input body entities.GetLevelInfoStruct true "id of level you want to find out about"
+// @Success 200 {object} entities.LevelInfo
+// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json;"
+// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
+// @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server"
+// @Failure default {object} errorResponse
+// @Router /level/get-level-info [get]
 func (h *Handler) GetLevelInfoById(c *gin.Context) {
 	var levId entities.GetLevelInfoStruct
 
@@ -153,6 +178,19 @@ func (h *Handler) UpdateLevel(c *gin.Context) {
 	})
 }
 
+// @Summary Get level list
+// @Tags level
+// @Description Get level list with given params
+// @ID get-level-list
+// @Accept json
+// @Produce json
+// @Param input body entities.FetchLevelStruct true "search and filter params"
+// @Success 200 {object} entities.LevelsList
+// @Failure 400 {object} errorResponse "Possible messages: ERR_ACCESS_TOKEN_WRONG - Wrong structure of Access Token/No Access Token; ERR_INVALID_INPUT - Wrong structure of input json;"
+// @Failure 401 {object} errorResponse "Possible messages: ERR_UNAUTHORIZED - Access Token expired"
+// @Failure 500 {object} errorResponse "Possible messages: ERR_INTERNAL - Error on server"
+// @Failure default {object} errorResponse
+// @Router /level/get-level-list [get]
 func (h *Handler) GetLevelList(c *gin.Context) {
 	var fetchParams entities.FetchLevelStruct
 	err := c.BindJSON(&fetchParams)
@@ -169,7 +207,5 @@ func (h *Handler) GetLevelList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, map[string]interface{}{
-		"levels": levelList,
-	})
+	c.JSON(http.StatusOK, entities.LevelsList{Levels: levelList})
 }

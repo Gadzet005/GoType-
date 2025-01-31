@@ -68,3 +68,11 @@ type LevelTag struct {
 	LevelID int    `db:"level_id"`
 	TagName string `db:"tag_name"`
 }
+
+type LevelsList struct {
+	Levels []Level `json:"levels"`
+}
+
+type LevelInfo struct {
+	MainInfo Level `json:"level_info"`
+}
