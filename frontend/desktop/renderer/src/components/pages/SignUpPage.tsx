@@ -1,13 +1,13 @@
 import { signUp } from "@/api/user";
 import { PasswordField } from "@common/components/form/PasswordField";
 import { useUser } from "@/hooks/user";
-import { RoutePath } from "@/public/navigation/routePath";
+import { RoutePath } from "@/navigation/routePath";
 import { Alert, Box, Container, TextField, Typography } from "@mui/material";
 import { observer } from "mobx-react-lite";
 import React from "react";
 import { useNavigate } from "@/hooks/navigation";
 import { BackButton } from "../common/BackButton";
-import { useTitle } from "@/public/utils/title";
+import { useTitle } from "@/hooks/title";
 import { auth } from "@/public/auth/utils";
 import { Button } from "@/components/common/Button";
 import { Link } from "@/components/common/Link";

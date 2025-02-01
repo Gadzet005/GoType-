@@ -11,7 +11,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonIcon from "@mui/icons-material/Person";
 import { Button } from "@/components/common/Button";
 import React from "react";
-import { RoutePath } from "@/public/navigation/routePath";
+import { RoutePath } from "@/navigation/routePath";
 
 interface LevelListItemProps {
   level: Level;

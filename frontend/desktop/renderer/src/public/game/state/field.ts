@@ -123,10 +123,7 @@ export class GameField {
 
         this.skipNoAlphabetLetters();
 
-        const sentence = this.getCurrentSentence();
-        if (!sentence) {
-            return null;
-        }
+        const sentence = this.getCurrentSentence()!;
 
         const result: CursorMoveResult = {
             isRight:

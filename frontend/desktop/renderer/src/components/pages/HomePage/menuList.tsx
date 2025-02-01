@@ -1,4 +1,4 @@
-import { RoutePath } from "@/public/navigation/routePath";
+import { RoutePath } from "@/navigation/routePath";
 import { MenuItemProps } from "./MenuItem";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import PersonIcon from "@mui/icons-material/Person2";

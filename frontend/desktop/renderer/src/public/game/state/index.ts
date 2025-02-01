@@ -3,7 +3,7 @@ import { GameField } from "./field";
 import { action, makeObservable, observable } from "mobx";
 import { Language } from "@desktop-common/language";
 import { Sentence } from "@desktop-common/sentence";
-import { addSentenceEvent } from "./event";
+import { AddSentenceEvent } from "./event";
 
 export class GameState {
     readonly events = new EventStorage();
@@ -24,7 +24,7 @@ export class GameState {
         sentences.forEach((sentence) => {
             this.events.addEvent(
                 sentence.showTime,
-                new addSentenceEvent(sentence)
+                new AddSentenceEvent(sentence)
             );
         });
     }

@@ -1,6 +1,6 @@
 import { Box } from "@mui/material";
 import React from "react";
-import { useSize } from "@/public/utils/size";
+import { useSize } from "@/hooks/size";
 import { ActiveWordGroup } from "@/public/game/activeWordGroup";
 import { LetterView } from "./LetterView";
 import { getLetterStyle } from "@desktop-common/utils";

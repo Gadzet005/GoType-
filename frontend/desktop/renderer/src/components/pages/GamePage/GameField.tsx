@@ -2,7 +2,7 @@ import { Box } from "@mui/material";
 import { observer } from "mobx-react";
 import React from "react";
 import { Game } from "@/public/game/game";
-import { useSize } from "@/public/utils/size";
+import { useSize } from "@/hooks/size";
 import { SentenceView } from "./SentenceView";
 import { PauseContext } from "./pause";
 

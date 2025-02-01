@@ -1,6 +1,6 @@
 import { TICK_TIME } from "@/public/game/consts";
 import { GameFieldSentence } from "@/public/game/state/sentence";
-import { useSize } from "@/public/utils/size";
+import { useSize } from "@/hooks/size";
 import { FadeAnimation } from "@desktop-common/sentence/style";
 import { Box } from "@mui/material";
 import { observer } from "mobx-react";

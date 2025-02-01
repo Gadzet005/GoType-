@@ -1,14 +1,13 @@
-import { expect, test } from "vitest";
-import { createExampleSentence } from "./exampleSentence";
+import { createDummySentence } from "../dummy/sentence";
 import { GameField } from "@/public/game/state/field";
 import { Language } from "@desktop-common/language";
 
-const engLang = Language.byCode("eng")!;
+const eng = Language.byCode("eng")!;
 
 test("GameField.addSentence", () => {
-    const field = new GameField(engLang);
-    const sentence1 = createExampleSentence("foo");
-    const sentence2 = createExampleSentence("bar");
+    const field = new GameField(eng);
+    const sentence1 = createDummySentence("foo");
+    const sentence2 = createDummySentence("bar");
 
     expect(field.hasActiveSentences).toBe(false);
     expect(field.getAllSentences().length).toBe(0);
@@ -27,12 +26,13 @@ test("GameField.addSentence", () => {
 });
 
 test("GameField.removeSentence", () => {
-    const field = new GameField(engLang);
-    const sentence1 = createExampleSentence("foo");
-    const sentence2 = createExampleSentence("bar");
+    const field = new GameField(eng);
+    const sentence1 = createDummySentence("foo");
+    const sentence2 = createDummySentence("bar");
 
     field.addSentence(sentence1);
     field.addSentence(sentence2);
+    field.completeCurrentSentence();
 
     expect(field.getAllSentences().length).toBe(2);
 
@@ -47,9 +47,9 @@ test("GameField.removeSentence", () => {
 });
 
 test("GameField.removeAllSentences", () => {
-    const field = new GameField(engLang);
-    const sentence1 = createExampleSentence("foo");
-    const sentence2 = createExampleSentence("bar");
+    const field = new GameField(eng);
+    const sentence1 = createDummySentence("foo");
+    const sentence2 = createDummySentence("bar");
 
     field.addSentence(sentence1);
     field.addSentence(sentence2);
@@ -60,8 +60,8 @@ test("GameField.removeAllSentences", () => {
 });
 
 test("GameField.completeCurrentSentence", () => {
-    const field = new GameField(engLang);
-    const sentence = createExampleSentence("foo");
+    const field = new GameField(eng);
+    const sentence = createDummySentence("foo");
 
     field.addSentence(sentence);
     field.completeCurrentSentence();
@@ -71,12 +71,16 @@ test("GameField.completeCurrentSentence", () => {
 });
 
 test("GameField.moveCursor 1", () => {
-    const field = new GameField(engLang);
-    const sentence1 = createExampleSentence("foo");
-    const sentence2 = createExampleSentence("bar");
+    const field = new GameField(eng);
+    const sentence1 = createDummySentence("foo");
+    const sentence2 = createDummySentence("bar");
+    const emptySentence = createDummySentence("");
 
+    field.addSentence(emptySentence);
     field.addSentence(sentence1);
+    field.addSentence(emptySentence);
     field.addSentence(sentence2);
+    field.addSentence(emptySentence);
 
     expect(field.moveCursor("f")).toEqual({
         isRight: true,
@@ -108,8 +112,8 @@ test("GameField.moveCursor 1", () => {
 });
 
 test("GameField.moveCursor 2", () => {
-    const field = new GameField(engLang);
-    const sentence1 = createExampleSentence("!?!f!o.!.o!...!");
+    const field = new GameField(eng);
+    const sentence1 = createDummySentence("!?!f!o.!.o!...!");
     field.addSentence(sentence1);
 
     expect(field.moveCursor("!")).toEqual(null);
@@ -129,4 +133,5 @@ test("GameField.moveCursor 2", () => {
         isEndOfSentence: true,
     });
     expect(field.getCurrentSentence()).toBeNull();
+    expect(field.moveCursor("o")).toBeNull();
 });

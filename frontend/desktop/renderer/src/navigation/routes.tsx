@@ -1,3 +1,4 @@
+import { RouteList, ComponentGetter } from "@/components/navigation/common";
 import { GamePage } from "@/components/pages/GamePage";
 import { GameStatisticsPage } from "@/components/pages/GameStatisticsPage";
 import { HomePage } from "@/components/pages/HomePage";
@@ -7,13 +8,10 @@ import { ProfilePage } from "@/components/pages/ProfilePage";
 import { SignInPage } from "@/components/pages/SignInPage";
 import { SignUpPage } from "@/components/pages/SignUpPage";
 import { Level } from "@desktop-common/level";
-import React from "react";
+import { GameStatistics } from "../public/game/statistics";
 import { RoutePath } from "./routePath";
-import { GameStatistics } from "../game/statistics";
 
-type ComponentGetter = (...params: any[]) => React.ReactNode;
-
-export const routes = new Map<string, ComponentGetter>([
+export const routes: RouteList = new Map<string, ComponentGetter>([
   [RoutePath.default, () => <HomePage />],
   [RoutePath.home, () => <HomePage />],
   [RoutePath.signIn, () => <SignInPage />],

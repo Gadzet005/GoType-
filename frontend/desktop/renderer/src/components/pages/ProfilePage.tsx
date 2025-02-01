@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { Button } from "@/components/common/Button";
 import { BackButton } from "../common/BackButton";
-import { RoutePath } from "@/public/navigation/routePath";
-import { useTitle } from "@/public/utils/title";
+import { RoutePath } from "@/navigation/routePath";
+import { useTitle } from "@/hooks/title";
 import { unauth } from "@/public/auth/utils";
 import { useNavigate } from "@/hooks/navigation";
 import LogoutIcon from "@mui/icons-material/Logout";

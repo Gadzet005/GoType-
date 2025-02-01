@@ -1,7 +1,7 @@
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { RoutePath } from "@/public/navigation/routePath";
-import { useTitle } from "@/public/utils/title";
+import { RoutePath } from "@/navigation/routePath";
+import { useTitle } from "@/hooks/title";
 import { observer } from "mobx-react";
 import React from "react";
 import { Game } from "@/public/game/game";

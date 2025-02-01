@@ -11,7 +11,7 @@ export class RemoveSentenceEvent implements GameEvent {
     }
 }
 
-export class addSentenceEvent implements GameEvent {
+export class AddSentenceEvent implements GameEvent {
     private sentence: Sentence;
 
     constructor(sentence: Sentence) {

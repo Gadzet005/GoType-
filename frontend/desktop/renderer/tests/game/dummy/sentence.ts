@@ -1,9 +1,9 @@
 import { Sentence } from "@desktop-common/sentence";
 
-export function createExampleSentence(text: string): Sentence {
+export function createDummySentence(text: string, showTime = 1000): Sentence {
     return {
         content: text,
-        showTime: 1000,
+        showTime: showTime,
         duration: 2000,
         style: {
             animations: {

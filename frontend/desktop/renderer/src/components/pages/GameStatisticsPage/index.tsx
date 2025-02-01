@@ -2,7 +2,7 @@ import { Level } from "@desktop-common/level";
 import { Box, Container, Typography } from "@mui/material";
 import React from "react";
 import { Button } from "../../common/Button";
-import { RoutePath } from "@/public/navigation/routePath";
+import { RoutePath } from "@/navigation/routePath";
 import { GameStatistics } from "@/public/game/statistics";
 import { StatTable } from "./StatTable";
 import { useKeyboard } from "@/hooks/keyboard";

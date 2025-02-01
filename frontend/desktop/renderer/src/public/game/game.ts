@@ -15,7 +15,7 @@ enum GameStatus {
 
 export class Game {
     readonly state;
-    readonly statistics = new GameStatistics();
+    readonly statistics;
     readonly level: GameLevel;
 
     private status = GameStatus.idle;
@@ -45,6 +45,7 @@ export class Game {
 
         this.level = new GameLevel(level);
         this.state = new GameState(this.level.language);
+        this.statistics = new GameStatistics(this.level.language);
         this.init();
     }
 
@@ -124,6 +125,6 @@ export class Game {
             return;
         }
 
-        this.statistics.addInputResult(result.isRight, result.isEndOfSentence);
+        this.statistics.addInputResult(letter, result.isRight);
     }
 }

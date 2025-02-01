@@ -6,14 +6,6 @@ import {
     clearAuthTokens,
 } from "@/public/auth";
 
-export interface Result<T, E> {
-    ok: boolean;
-    payload?: T;
-    error?: E;
-}
-
-export type PromiseResult<T, E> = Promise<Result<T, E>>;
-
 const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 export const host = axios.create({
@@ -59,7 +51,6 @@ const authErrorHandler = async (error: AxiosError) => {
             return authHost.request(error.config!);
         } catch (error: any) {
             await clearAuthTokens();
-            // window.location.reload();
 
             return Promise.reject(error);
         }

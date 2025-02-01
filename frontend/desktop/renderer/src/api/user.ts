@@ -1,4 +1,5 @@
-import { authHost, host, PromiseResult } from "./common";
+import { authHost, host } from "./host";
+import { PromiseResult } from "./types";
 import { UserProfile } from "@/public/user";
 import { AuthTokens } from "@/public/auth";
 import { AxiosError } from "axios";

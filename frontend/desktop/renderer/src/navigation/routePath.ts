@@ -1,5 +1,5 @@
 export enum RoutePath {
-    default = "default",
+    default = "",
     error = "error",
     home = "home",
     signIn = "sign-in",

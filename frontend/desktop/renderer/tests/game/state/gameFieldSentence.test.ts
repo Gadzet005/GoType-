@@ -1,10 +1,9 @@
-import { expect, test } from "vitest";
 import {
     GameFieldSentence,
     LetterState,
     SentenceCursor,
 } from "@/public/game/state/sentence";
-import { createExampleSentence } from "./exampleSentence";
+import { createDummySentence } from "../dummy/sentence";
 
 test("SentenceCursor.isInited", () => {
     const cursor = new SentenceCursor(10);
@@ -46,13 +45,18 @@ test("SentenceCursor.isOnEnd", () => {
     expect(cursor.isOnEnd).toBe(true);
 });
 
-const sentence = createExampleSentence("hello");
+const sentence = createDummySentence("hello");
 
 test("GameFieldSentence.getLetterStyle", () => {
     const gameFieldSentence = new GameFieldSentence(1, sentence);
     gameFieldSentence.setLetterState(0, LetterState.mistake);
     gameFieldSentence.setLetterState(1, LetterState.success);
 
+    const states = [
+        LetterState.mistake,
+        LetterState.success,
+        LetterState.default,
+    ];
     const steps = [
         ["red", "green", "black"],
         ["blue", "green", "black"],
@@ -66,6 +70,7 @@ test("GameFieldSentence.getLetterStyle", () => {
             expect(gameFieldSentence.getLetterStyle(j)).toEqual({
                 color: steps[i][j],
             });
+            expect(gameFieldSentence.getLetterState(j)).toEqual(states[j]);
         }
         gameFieldSentence.cursor.move();
     }
