@@ -1,11 +1,10 @@
 import { Level } from "@desktop-common/level";
-import { Tick } from "@desktop-common/types";
+import { tick } from "@desktop-common/types";
 import { action, computed, makeObservable, observable } from "mobx";
 import { TICK_TIME } from "./consts";
-import { AddWordGroupEvent, GameEvent } from "./event";
-import { GameLevel } from "./level";
 import { GameState } from "./state";
 import { GameStatistics } from "./statistics";
+import { GameLevel } from "./level";
 
 enum GameStatus {
     idle,
@@ -21,7 +20,7 @@ export class Game {
 
     private status = GameStatus.idle;
     private tickInterval: NodeJS.Timeout | null = null;
-    private currentTick: Tick = 0;
+    private currentTick: tick = 0;
 
     constructor(level: Level) {
         makeObservable(this, {
@@ -41,27 +40,21 @@ export class Game {
             start: action,
             tick: action,
             pause: action,
-            onInput: action,
+            input: action,
         });
 
-        this.state = new GameState(level.language);
         this.level = new GameLevel(level);
+        this.state = new GameState(this.level.language);
         this.init();
     }
 
     // set initial game state
     init() {
-        this.state.reset();
+        this.state.init(this.level.game.sentences);
         this.statistics.reset();
         this.currentTick = 0;
         this.status = GameStatus.idle;
         this.tickInterval = null;
-        for (let group of this.level.game.groups) {
-            this.state.events.addEvent(
-                group.showTime,
-                new AddWordGroupEvent(group)
-            );
-        }
     }
 
     private tick() {
@@ -71,7 +64,7 @@ export class Game {
         }
 
         const events = this.state.events.getEvents(this.currentTick);
-        events?.forEach((event: GameEvent) => {
+        events?.forEach((event) => {
             event.run(this.state);
         });
         this.currentTick++;
@@ -96,7 +89,7 @@ export class Game {
 
     finish() {
         this.status = GameStatus.finished;
-        this.state.words.reset();
+        this.state.field.removeAllSentences();
         this.stop();
     }
 
@@ -125,13 +118,12 @@ export class Game {
         return (this.currentTick / this.level.durationInTicks) * 100;
     }
 
-    // on user input
-    onInput(letter: string): void {
-        const result = this.state.words.advancePosition(letter);
+    input(letter: string): void {
+        const result = this.state.field.moveCursor(letter);
         if (!result) {
             return;
         }
 
-        this.statistics.addInputResult(result);
+        this.statistics.addInputResult(result.isRight, result.isEndOfSentence);
     }
 }

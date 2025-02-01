@@ -1,26 +1,31 @@
-import { EventManager } from "./eventManager";
-import { WordManager } from "./wordManager";
+import { EventStorage } from "./eventStorage";
+import { GameField } from "./field";
 import { action, makeObservable, observable } from "mobx";
-import { Language, getLanguageInfo } from "@desktop-common/language";
+import { Language } from "@desktop-common/language";
+import { Sentence } from "@desktop-common/sentence";
+import { addSentenceEvent } from "./event";
 
 export class GameState {
-    readonly events = new EventManager();
-    readonly words;
+    readonly events = new EventStorage();
+    readonly field: GameField;
 
-    constructor(language: Language) {
+    constructor(lang: Language) {
         makeObservable(this, {
+            field: observable,
             events: observable,
-            words: observable,
-            reset: action,
+            init: action,
         });
-
-        const languageInfo =
-            getLanguageInfo(language) || getLanguageInfo("eng")!;
-        this.words = new WordManager(languageInfo.alphabet);
+        this.field = new GameField(lang);
     }
 
-    reset() {
-        this.events.clearAllEvents();
-        this.words.reset();
+    init(sentences: Sentence[]) {
+        this.events.removeAllEvents();
+        this.field.removeAllSentences();
+        sentences.forEach((sentence) => {
+            this.events.addEvent(
+                sentence.showTime,
+                new addSentenceEvent(sentence)
+            );
+        });
     }
 }

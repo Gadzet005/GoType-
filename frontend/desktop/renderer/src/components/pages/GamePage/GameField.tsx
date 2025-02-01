@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import React from "react";
 import { Game } from "@/public/game/game";
 import { useSize } from "@/public/utils/size";
-import { WordGroupView } from "./WordGroupView";
+import { SentenceView } from "./SentenceView";
 import { PauseContext } from "./pause";
 
 interface GameFieldProps {
@@ -18,11 +18,11 @@ export const GameField: React.FC<GameFieldProps> = observer(
     // width and height in pixels
     const { width, height } = useSize(ref);
 
-    const WordGroupViews = game.state.words.getAllGroups().map((group) => {
+    const SentenceViews = game.state.field.getAllSentences().map((sentence) => {
       return (
-        <WordGroupView
-          key={group.id}
-          group={group}
+        <SentenceView
+          key={sentence.id}
+          sentence={sentence}
           fieldHeight={height}
           fieldWidth={width}
         />
@@ -37,7 +37,7 @@ export const GameField: React.FC<GameFieldProps> = observer(
         width={_width}
       >
         <PauseContext.Provider value={game.isPaused}>
-          {WordGroupViews}
+          {SentenceViews}
         </PauseContext.Provider>
       </Box>
     );

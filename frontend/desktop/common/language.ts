@@ -1,33 +1,27 @@
-const languages = ["eng", "ru"] as const;
+const languageCodes = ["eng", "ru"] as const;
+export type LanguageCode = (typeof languageCodes)[number];
 
-export type Language = (typeof languages)[number];
+export class Language {
+    private static languages: Record<LanguageCode, Language> = {
+        eng: new Language("eng", "English", "abcdefghijklmnopqrstuvwxyz"),
+        ru: new Language("ru", "Русский", "абвгдеёжзийклмнопрстуфхцчшщъыьэюя"),
+    };
 
-export interface LanguageInfo {
-    name: string;
-    flag: string;
-    alphabet: string;
-}
+    static byCode(code: LanguageCode): Language | undefined {
+        return Language.languages[code];
+    }
 
-const languageInfo: Record<Language, LanguageInfo> = {
-    eng: {
-        name: "English",
-        flag: "",
-        alphabet: "abcdefghijklmnopqrstuvwxyz",
-    },
-    ru: {
-        name: "Русский",
-        flag: "",
-        alphabet: "абвгдеёжзийклмнопрстуфхцчшщъыьэюя",
-    },
-};
+    readonly code: LanguageCode;
+    readonly name: string;
+    readonly alphabet: string;
 
-export function getLanguageInfo(language: Language): LanguageInfo | undefined {
-    return languageInfo[language];
-}
+    constructor(code: LanguageCode, name: string, alphabet: string) {
+        this.code = code;
+        this.name = name;
+        this.alphabet = alphabet;
+    }
 
-export function isAlphabetIncludesLetter(
-    alphabet: string,
-    letter: string
-): boolean {
-    return alphabet.includes(letter.toLowerCase());
+    includes(letter: string): boolean {
+        return this.alphabet.includes(letter.toLowerCase());
+    }
 }

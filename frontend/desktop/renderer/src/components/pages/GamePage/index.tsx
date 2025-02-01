@@ -27,7 +27,7 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if (game.isRunning) {
-      game.onInput(event.key);
+      game.input(event.key);
     }
   };
 

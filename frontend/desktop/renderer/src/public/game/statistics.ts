@@ -1,15 +1,12 @@
 import { action, observable, makeObservable, computed } from "mobx";
 import { GameScore } from "./consts";
-import { InputResult } from "./state/wordManager";
 
 export class GameStatistics {
     private _score: number = 0;
     private _successfulLetters: number = 0;
-    private _successfulWords: number = 0;
     private typeSpeedSum: number = 0;
     private totalLetters: number = 0;
     private lastLetterTime: number | null = null;
-    private lastWordSuccess = true;
 
     constructor() {
         makeObservable(this, {
@@ -24,8 +21,6 @@ export class GameStatistics {
     reset() {
         this._score = 0;
         this._successfulLetters = 0;
-        this._successfulWords = 0;
-        this.lastWordSuccess = true;
         this.typeSpeedSum = 0;
         this.totalLetters = 0;
         this.lastLetterTime = null;
@@ -37,10 +32,6 @@ export class GameStatistics {
 
     get successfulLetters(): number {
         return this._successfulLetters;
-    }
-
-    get successfulWords(): number {
-        return this._successfulWords;
     }
 
     get mistakenLetters(): number {
@@ -63,26 +54,17 @@ export class GameStatistics {
     }
 
     // Add to statistics that letter was typed
-    addInputResult(result: InputResult) {
+    addInputResult(isRight: boolean, isEndOfGroup: boolean) {
         const currentTime = Date.now();
         if (this.lastLetterTime) {
             this.typeSpeedSum += currentTime - this.lastLetterTime;
         }
-        this.lastLetterTime = result.isEndOfGroup ? null : currentTime;
+        this.lastLetterTime = isEndOfGroup ? null : currentTime;
 
-        if (result.letterResult) {
+        if (isRight) {
             this._successfulLetters++;
             this._score += GameScore.letter;
         }
         this.totalLetters++;
-
-        this.lastWordSuccess = this.lastWordSuccess && result.letterResult;
-        if (result.isEndOfWord) {
-            if (this.lastWordSuccess) {
-                this._successfulWords++;
-                this._score += GameScore.word;
-            }
-            this.lastWordSuccess = true;
-        }
     }
 }
