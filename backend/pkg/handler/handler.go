@@ -1,6 +1,7 @@
 package handler
 
 import (
+	gotype "github.com/Gadzet005/GoType/backend"
 	_ "github.com/Gadzet005/GoType/backend/docs"
 	"github.com/Gadzet005/GoType/backend/pkg/service"
 	"github.com/gin-contrib/cors"
@@ -28,6 +29,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	corsDescr.AllowHeaders = append(corsDescr.AllowHeaders, "Accept")
 
 	router.Use(cors.New(corsDescr))
+
+	router.Static("/previews", "./"+gotype.PreviewDirName)
 
 	auth := router.Group("/auth")
 	{
@@ -58,9 +61,13 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		admin.POST("/change-user-access", h.ChangeUserAccess)
 	}
 
-	level := router.Group("/level")
+	level := router.Group("/level", h.UserIdentity)
 	{
-		level.POST("/create-level")
+		level.POST("/create-level", h.CreateLevel)
+		level.GET("/download-level", h.GetLevel)
+		level.GET("/get-level-info", h.GetLevelInfoById)
+		level.POST("/update-level", h.UpdateLevel)
+		level.GET("/get-level-list", h.GetLevelList)
 	}
 
 	//multGame := router.Group("/mult-game")

@@ -6,6 +6,11 @@ import (
 	"time"
 )
 
+const (
+	PreviewDirName = "previews"
+	LevelDirName   = "levels"
+)
+
 type Server struct {
 	httpServer *http.Server
 }
@@ -23,5 +28,8 @@ func (s *Server) Run(port string, handler http.Handler) error {
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
+	//_ = os.RemoveAll("levels")
+	//_ = os.RemoveAll("previews")
+
 	return s.httpServer.Shutdown(ctx)
 }

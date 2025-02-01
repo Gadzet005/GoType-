@@ -165,6 +165,7 @@ const level: Level = {
 export const LevelEditorPage = observer(() => {
   useTitle("Редактор уровня");
 
+  // TODO remove this!!!
   const handleCreateLevel = () => {
     window.levelAPI.addLevel(level);
   };
