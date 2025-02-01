@@ -22,11 +22,6 @@ export const StatTable: React.FC<StatTableProps> = ({ statistics }) => {
         valueColor="success"
       />
       <StatRow
-        label="Слова"
-        value={statistics.successfulWords}
-        valueColor="info"
-      />
-      <StatRow
         label="Ошибки"
         value={statistics.mistakenLetters}
         valueColor="error"

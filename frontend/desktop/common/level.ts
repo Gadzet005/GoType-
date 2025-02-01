@@ -1,9 +1,8 @@
-import { WordGroup } from "./wordGroup";
-import { Asset, AudioType, PictureType, VideoType } from "./consts";
-import { Language } from "./language";
+import { LanguageCode } from "./language";
+import { Sentence } from "./sentence";
+import { Asset, AudioType, PictureType, second, VideoType } from "./types";
 
-export interface Level {
-    // General information
+export interface GeneralLevelInfo {
     id: number;
     name: string;
     description: string;
@@ -11,15 +10,18 @@ export interface Level {
         id: number;
         name: string;
     };
-    duration: number; // in seconds
+    duration: second;
     tags: string[];
-    language: Language;
+    languageCode: LanguageCode;
     preview: Asset<PictureType>;
+}
 
-    // Game information
-    game: {
-        audio: Asset<AudioType>;
-        background: Asset<VideoType | PictureType>;
-        groups: WordGroup[]; // group groups to display in the game
-    };
+export interface GameLevelInfo {
+    audio: Asset<AudioType>;
+    background: Asset<VideoType | PictureType>;
+    sentences: Sentence[]; // sentences to display in the game
+}
+
+export interface Level extends GeneralLevelInfo {
+    game: GameLevelInfo;
 }

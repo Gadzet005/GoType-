@@ -1,21 +1,21 @@
-import { Tick } from "@desktop-common/types";
-import { GameEvent } from "../event";
+import { tick } from "@desktop-common/types";
+import { GameEvent } from "./event";
 import { action, makeObservable, observable } from "mobx";
 
-export class EventManager {
-    private events = new Map<Tick, GameEvent[]>();
+export class EventStorage {
+    private events = new Map<tick, GameEvent[]>();
 
     constructor() {
         makeObservable(this, {
             // @ts-ignore
             events: observable.shallow,
             addEvent: action,
-            clearTickEvents: action,
-            clearAllEvents: action,
+            removeTickEvents: action,
+            removeAllEvents: action,
         });
     }
 
-    addEvent(tick: Tick, event: GameEvent) {
+    addEvent(tick: tick, event: GameEvent) {
         let tickEvents = this.events.get(tick);
         if (tickEvents) {
             tickEvents.push(event);
@@ -24,15 +24,15 @@ export class EventManager {
         }
     }
 
-    getEvents(tick: Tick) {
-        return this.events.get(tick);
+    getEvents(tick: tick): GameEvent[] {
+        return this.events.get(tick) || [];
     }
 
-    clearTickEvents(tick: Tick) {
+    removeTickEvents(tick: tick) {
         this.events.delete(tick);
     }
 
-    clearAllEvents() {
+    removeAllEvents() {
         this.events.clear();
     }
 }

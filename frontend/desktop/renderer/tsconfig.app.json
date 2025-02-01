@@ -27,5 +27,5 @@
       "@desktop-common/*": ["../common/*"],
     }
   },
-  "include": ["src"]
+  "include": ["src", "tests/game"]
 }

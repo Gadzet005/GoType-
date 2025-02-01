@@ -1,36 +1,22 @@
 import fs from "fs/promises";
 import path from "path";
 import url from "url";
-import {
-    AUDIO_FILENAME,
-    AudioType,
-    BACKGROUND_FILENAME,
-    PictureType,
-    PREVIEW_FILENAME,
-    VideoType,
-} from "../common/consts";
-import { Language } from "../common/language";
+import { LanguageCode } from "../common/language";
 import { Level } from "../common/level";
-import { WordGroup } from "../common/wordGroup";
+import { Sentence } from "../common/sentence";
+import { AudioType, PictureType, VideoType } from "../common/types";
 
-interface StoredLevel {
-    id: number;
-    name: string;
-    description: string;
-    author: {
-        id: number;
-        name: string;
-    };
-    duration: number;
-    tags: string[];
-    language: Language;
+interface StoredLevel extends Omit<Level, "preview" | "game"> {
     previewType: PictureType;
     audioType: AudioType;
-    backgroundType: VideoType | PictureType;
-    groups: WordGroup[];
+    backgroundType: PictureType | VideoType;
+    sentences: Sentence[];
 }
 
 export class LevelStore {
+    static readonly PREVIEW_FILENAME = "preview";
+    static readonly AUDIO_FILENAME = "audio";
+    static readonly BACKGROUND_FILENAME = "background";
     private path: string;
 
     constructor(path: string) {
@@ -59,11 +45,11 @@ export class LevelStore {
             author: level.author,
             duration: level.duration,
             tags: level.tags,
-            language: level.language,
+            languageCode: level.languageCode,
             previewType: level.preview.type,
             audioType: level.game.audio.type,
             backgroundType: level.game.background.type,
-            groups: level.game.groups,
+            sentences: level.game.sentences,
         };
     }
 
@@ -75,12 +61,12 @@ export class LevelStore {
             author: stored.author,
             duration: stored.duration,
             tags: stored.tags,
-            language: stored.language,
+            languageCode: stored.languageCode,
             preview: {
                 type: stored.previewType,
                 url: this.getLevelAssetUrl(
                     stored.id,
-                    PREVIEW_FILENAME + "." + stored.previewType
+                    LevelStore.PREVIEW_FILENAME + "." + stored.previewType
                 ),
             },
             game: {
@@ -88,17 +74,19 @@ export class LevelStore {
                     type: stored.audioType,
                     url: this.getLevelAssetUrl(
                         stored.id,
-                        AUDIO_FILENAME + "." + stored.audioType
+                        LevelStore.AUDIO_FILENAME + "." + stored.audioType
                     ),
                 },
                 background: {
                     type: stored.backgroundType,
                     url: this.getLevelAssetUrl(
                         stored.id,
-                        BACKGROUND_FILENAME + "." + stored.backgroundType
+                        LevelStore.BACKGROUND_FILENAME +
+                            "." +
+                            stored.backgroundType
                     ),
                 },
-                groups: stored.groups,
+                sentences: stored.sentences,
             },
         };
     }

@@ -1,30 +1,18 @@
 import { Level } from "@desktop-common/level";
 import { TICK_TIME } from "./consts";
+import { Language } from "@desktop-common/language";
 
+export interface GameLevel extends Level {}
 export class GameLevel implements Level {
-    id: Level["id"];
-    name: Level["name"];
-    description: Level["description"];
-    authorId: Level["authorId"];
-    duration: Level["duration"];
-    preview: Level["preview"];
-    tags: Level["tags"];
-    language: Level["language"];
-    game: Level["game"];
+    readonly language: Language;
 
     constructor(level: Level) {
-        this.id = level.id;
-        this.name = level.name;
-        this.description = level.description;
-        this.authorId = level.authorId;
-        this.duration = level.duration;
-        this.preview = level.preview;
-        this.tags = level.tags;
-        this.game = level.game;
-        this.language = level.language;
+        Object.assign(this, level);
+        this.language =
+            Language.byCode(this.languageCode) || Language.byCode("eng")!;
     }
 
-    get durationInTicks() {
+    get durationInTicks(): number {
         return Math.ceil((this.duration * 1000) / TICK_TIME);
     }
 }
