@@ -1,25 +1,24 @@
-import { signIn } from "@/api/user";
+import { Button } from "@/components/ui/Button";
+import { Link } from "@/components/ui/Link";
+import { RoutePath } from "@/core/config/routes/path";
+import { useNavigate, useService, useTitle } from "@/core/hooks";
 import { PasswordField } from "@common/components/form/PasswordField";
-import { useUser } from "@/hooks/user";
-import { RoutePath } from "@/navigation/routePath";
 import { Alert, Box, Container, TextField, Typography } from "@mui/material";
-import { Button } from "@/components/common/Button";
-import { Link } from "@/components/common/Link";
-import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "@/hooks/navigation";
 import { BackButton } from "../common/BackButton";
-import { useTitle } from "@/hooks/title";
-import { auth } from "@/public/auth/utils";
+import {
+  SignInService,
+  SignInServiceResult,
+} from "@/core/services/user/signIn";
+import { ApiError } from "@/core/config/api.config";
+import { observer } from "mobx-react";
 
 export const SignInPage = observer(() => {
   useTitle("Вход");
 
-  const user = useUser();
   const navigate = useNavigate();
-
   const [formError, setFormError] = React.useState<string | null>(null);
-  const [waiting, setWaiting] = React.useState<boolean>(false);
+  const { call: signIn, isPending } = useService(SignInService);
 
   const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -28,18 +27,14 @@ export const SignInPage = observer(() => {
     const name: string = formData.get("name") as string;
     const password: string = formData.get("password") as string;
 
-    setWaiting(() => true);
-    signIn(name, password).then((result) => {
-      setWaiting(() => false);
+    signIn({ name, password }).then((result: SignInServiceResult) => {
       if (result.ok) {
-        auth(user, result.payload!).then(() => {
-          navigate(RoutePath.profile);
-        });
+        navigate(RoutePath.profile);
       } else {
         const error = result.error!;
-        if (error === "ERR_NO_SUCH_USER") {
+        if (error === ApiError.noSuchUser) {
           setFormError("Неверное имя или пароль.");
-        } else if (error === "ERR_INVALID_INPUT") {
+        } else if (error === ApiError.invalidInput) {
           setFormError("Неверный формат имени или пароля");
         } else {
           console.error("Unknown error:", error);
@@ -92,7 +87,7 @@ export const SignInPage = observer(() => {
               variant="contained"
               type="submit"
               size="large"
-              disabled={waiting}
+              disabled={isPending()}
             >
               Вход
             </Button>

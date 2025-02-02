@@ -1,10 +1,10 @@
-import { GameState } from "@/public/game/state";
+import { GameState } from "@/core/store/game/state";
 import { Language } from "@desktop-common/language";
 import { createDummySentence } from "../dummy/sentence";
 import {
     AddSentenceEvent,
     RemoveSentenceEvent,
-} from "@/public/game/state/event";
+} from "@/core/store/game/state/event";
 
 const eng = Language.byCode("eng")!;
 

@@ -1,5 +1,5 @@
-import { EventStorage } from "@/public/game/state/eventStorage";
-import { GameEvent } from "@/public/game/state/event";
+import { EventStorage } from "@/core/store/game/state/eventStorage";
+import { GameEvent } from "@/core/store/game/state/event";
 
 class DoNothingEvent implements GameEvent {
     run(): void {}

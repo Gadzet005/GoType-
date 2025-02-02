@@ -1,4 +1,4 @@
-import { Game } from "@/public/game/game";
+import { Game } from "@/core/store/game";
 import { createDummyLevel } from "./dummy/level";
 
 test("Game.init", () => {

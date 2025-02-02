@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import React from "react";
-import { GameStatistics } from "@/public/game/statistics";
+import { GameStatistics } from "@/core/store/game/statistics";
 import { StatRow } from "./StatRow";
 
 interface StatTableProps {

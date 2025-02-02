@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import { BackButton } from "../../common/BackButton";
-import { RoutePath } from "@/navigation/routePath";
-import { useTitle } from "@/hooks/title";
+import { RoutePath } from "@/core/config/routes/path";
+import { useTitle } from "@/core/hooks";
 import React from "react";
 import { Level } from "@desktop-common/level";
 import { LevelList } from "./LevelList";

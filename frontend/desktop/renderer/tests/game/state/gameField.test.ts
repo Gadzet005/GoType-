@@ -1,5 +1,5 @@
 import { createDummySentence } from "../dummy/sentence";
-import { GameField } from "@/public/game/state/field";
+import { GameField } from "@/core/store/game/state/field";
 import { Language } from "@desktop-common/language";
 
 const eng = Language.byCode("eng")!;

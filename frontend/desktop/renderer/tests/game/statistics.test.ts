@@ -1,6 +1,6 @@
-import { GameStatistics } from "@/public/game/statistics";
+import { GameStatistics } from "@/core/store/game/statistics";
 import { Language } from "@desktop-common/language";
-import { GameScore } from "@/public/game/consts";
+import { GameScore } from "@/core/store/game/consts";
 
 const eng = Language.byCode("eng")!;
 

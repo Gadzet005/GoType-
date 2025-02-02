@@ -1,7 +1,7 @@
-import { AppNavigation } from "@/components/navigation/AppNavigation";
+import { AppNavigation } from "@/core/navigation/AppNavigation";
 import { render } from "@testing-library/react";
-import { Button } from "@/components/common/Button";
-import { Link } from "@/components/common/Link";
+import { Button } from "@/components/ui/Button";
+import { Link } from "@/components/ui/Link";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 
@@ -35,10 +35,22 @@ function getDummyRoutes(LinkComponent: React.FC<any>) {
       "home",
       () => (
         <DummyPageComponent text="home page">
-          <LinkComponent href="level" params={[1, "Level-1"]}>
+          <LinkComponent
+            href="level"
+            params={{
+              id: 1,
+              name: "Level-1",
+            }}
+          >
             go to Level 1
           </LinkComponent>
-          <LinkComponent href="level" params={[2, "Level-2"]}>
+          <LinkComponent
+            href="level"
+            params={{
+              id: 2,
+              name: "Level-2",
+            }}
+          >
             go to Level 2
           </LinkComponent>
         </DummyPageComponent>
@@ -46,7 +58,7 @@ function getDummyRoutes(LinkComponent: React.FC<any>) {
     ],
     [
       "level",
-      (id: number, name: string) => (
+      ({ id, name }: { id: number; name: string }) => (
         <DummyPageComponent text={getLeveLText(id, name)}>
           <LinkComponent href="not found">go to not found</LinkComponent>
         </DummyPageComponent>
@@ -64,7 +76,7 @@ test.each([
     label: "Link",
     LinkComponent: Link,
   },
-])("AppNavigation with %label", async ({ LinkComponent }) => {
+])("AppNavigation with $label", async ({ LinkComponent }) => {
   const dummyRoutes = getDummyRoutes(LinkComponent);
   const { getByText } = render(<AppNavigation routes={dummyRoutes} />);
 

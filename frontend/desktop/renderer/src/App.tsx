@@ -1,8 +1,8 @@
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import { appTheme } from "@/public/theme/appTheme";
-import { UserProvider } from "./public/user/UserProvider";
-import { AppNavigation } from "./components/navigation/AppNavigation";
-import { routes } from "./navigation/routes";
+import { appTheme } from "@/core/theme/appTheme";
+import { UserProvider } from "./core/store/user/UserProvider";
+import { AppNavigation } from "./core/navigation/AppNavigation";
+import { routes } from "./core/config/routes";
 
 export const App = () => {
   return (

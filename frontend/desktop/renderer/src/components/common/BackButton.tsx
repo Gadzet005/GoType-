@@ -1,11 +1,10 @@
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { Button, ButtonProps } from "@/components/common/Button";
-import { useNavigate } from "@/hooks/navigation";
-import { useKeyboard } from "@/hooks/keyboard";
+import { Button, ButtonProps } from "@/components/ui/Button";
+import { useNavigate, useKeyboard } from "@/core/hooks";
 
 interface BackButtonProps extends ButtonProps {
   href: string;
-  params?: any[];
+  params?: object;
 }
 
 export const BackButton: React.FC<BackButtonProps> = ({
@@ -16,7 +15,6 @@ export const BackButton: React.FC<BackButtonProps> = ({
   ...other
 }) => {
   const navigate = useNavigate();
-
   useKeyboard("Escape", () => navigate(other.href, other.params));
 
   return (
