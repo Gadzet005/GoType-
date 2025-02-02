@@ -11,7 +11,7 @@ export const Link: React.FC<LinkProps> = (props) => {
   const navigate = useNavigate();
 
   const handleClick = (event: any) => {
-    onClick && onClick(event);
+    onClick && onClick(event); // eslint-disable-line
     if (href) {
       event.preventDefault();
       navigate(href, ...(params || []));

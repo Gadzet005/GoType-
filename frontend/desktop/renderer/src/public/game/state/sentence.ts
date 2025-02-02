@@ -35,6 +35,11 @@ export class SentenceCursor {
     }
 }
 
+/* 
+    eslint-disable 
+    @typescript-eslint/no-empty-object-type,
+    @typescript-eslint/no-unsafe-declaration-merging
+*/
 // sentence on game field
 export interface GameFieldSentence extends Sentence {}
 export class GameFieldSentence implements Sentence {
@@ -44,7 +49,7 @@ export class GameFieldSentence implements Sentence {
 
     constructor(id: number, sentence: Sentence) {
         makeObservable(this, {
-            // @ts-ignore
+            // @ts-expect-error: private observable
             state: observable,
             cursor: observable,
         });
@@ -95,3 +100,5 @@ export class GameFieldSentence implements Sentence {
         return this.content[this.cursor.position];
     }
 }
+
+/* eslint-enable */

@@ -23,7 +23,7 @@ export const AppNavigation: React.FC<AppNavigationProps> = ({ routes }) => {
   };
 
   const componentGetter =
-    routes.get(path) || routes.get(DEFAULT_PATH) || ((..._: any[]) => null);
+    routes.get(path) || routes.get(DEFAULT_PATH) || (() => null);
 
   const page = componentGetter(...params);
 

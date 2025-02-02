@@ -26,9 +26,8 @@ export class Game {
         makeObservable(this, {
             state: observable,
             statistics: observable,
-            // @ts-ignore
+            // @ts-expect-error: private observable
             currentTick: observable,
-            // @ts-ignore
             status: observable,
 
             progress: computed,

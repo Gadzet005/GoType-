@@ -7,7 +7,7 @@ export class EventStorage {
 
     constructor() {
         makeObservable(this, {
-            // @ts-ignore
+            // @ts-expect-error: private observable
             events: observable.shallow,
             addEvent: action,
             removeTickEvents: action,
@@ -16,7 +16,7 @@ export class EventStorage {
     }
 
     addEvent(tick: tick, event: GameEvent) {
-        let tickEvents = this.events.get(tick);
+        const tickEvents = this.events.get(tick);
         if (tickEvents) {
             tickEvents.push(event);
         } else {

@@ -27,7 +27,7 @@ export class GameField {
 
     constructor(lang: Language) {
         makeObservable(this, {
-            // @ts-ignore
+            // @ts-expect-error: private observable
             completeSentences: observable,
             activeSentences: observable,
 

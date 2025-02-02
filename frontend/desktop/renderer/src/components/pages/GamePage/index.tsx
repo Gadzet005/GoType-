@@ -61,7 +61,7 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
     return () => {
       game.pause();
     };
-  }, []);
+  }, [game]);
 
   React.useEffect(() => {
     when(
@@ -70,7 +70,7 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
         navigate(RoutePath.gameStatistics, level, game.statistics);
       }
     );
-  }, []);
+  }, [game.isFinished, game.statistics, level, navigate]);
 
   return (
     <Box

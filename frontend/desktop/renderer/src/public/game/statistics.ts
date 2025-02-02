@@ -10,7 +10,7 @@ export class GameStatistics {
 
     constructor(language: Language) {
         makeObservable(this, {
-            // @ts-ignore
+            // @ts-expect-error: private observable
             _score: observable,
             score: computed,
             reset: action,

@@ -3,8 +3,7 @@ import { User } from "./index";
 import { getAuthTokens } from "../auth";
 import { auth } from "../auth/utils";
 import { observer } from "mobx-react";
-
-export const UserContext = React.createContext<User>(new User());
+import { UserContext } from "./UserContext";
 
 export const UserProvider = observer(
   ({ children }: { children: React.ReactNode }) => {
@@ -16,7 +15,7 @@ export const UserProvider = observer(
           auth(user, tokens, false);
         }
       });
-    }, []);
+    }, [user]);
 
     return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
   }
