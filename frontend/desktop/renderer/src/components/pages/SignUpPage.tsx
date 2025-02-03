@@ -1,59 +1,57 @@
-import { signUp } from "@/api/user";
+import { Button } from "@/components/ui/Button";
+import { Link } from "@/components/ui/Link";
+import { ApiError } from "@/core/config/api.config";
+import { RoutePath } from "@/core/config/routes/path";
+import { useNavigate, useService, useTitle } from "@/core/hooks";
+import {
+  SignUpService,
+  SignUpServiceResult,
+} from "@/core/services/user/signUp";
 import { PasswordField } from "@common/components/form/PasswordField";
-import { useUser } from "@/hooks/user";
-import { RoutePath } from "@/public/navigation/routePath";
 import { Alert, Box, Container, TextField, Typography } from "@mui/material";
-import { observer } from "mobx-react-lite";
 import React from "react";
-import { useNavigate } from "@/hooks/navigation";
 import { BackButton } from "../common/BackButton";
-import { useTitle } from "@/public/utils/title";
-import { auth } from "@/public/auth/utils";
-import { Button } from "@/components/common/Button";
-import { Link } from "@/components/common/Link";
+import { observer } from "mobx-react";
 
 export const SignUpPage = observer(() => {
   useTitle("Регистрация");
 
-  const user = useUser();
   const navigate = useNavigate();
-
   const [formError, setFormError] = React.useState<string | null>(null);
-  const [waiting, setWaiting] = React.useState<boolean>(false);
+  const { call: signUp, isPending } = useService(SignUpService);
 
-  const submitHandler = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  const submitHandler = React.useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
 
-    const formData = new FormData(event.target as HTMLFormElement);
-    const name: string = formData.get("name") as string;
-    const password: string = formData.get("password") as string;
-    const passwordRepeat: string = formData.get("passwordRepeat") as string;
+      const formData = new FormData(event.target as HTMLFormElement);
+      const name: string = formData.get("name") as string;
+      const password: string = formData.get("password") as string;
+      const passwordRepeat: string = formData.get("passwordRepeat") as string;
 
-    if (password !== passwordRepeat) {
-      setFormError(() => "Пароли не совпадают.");
-      return;
-    }
-
-    setWaiting(() => true);
-    signUp(name, password).then((result) => {
-      setWaiting(() => false);
-      if (result.ok) {
-        auth(user, result.payload!).then(() => {
-          navigate(RoutePath.profile);
-        });
-      } else {
-        const error = result.error!;
-        if (error === "ERR_USER_EXISTS") {
-          setFormError("Пользователь с таким именем уже зарегистрирован.");
-        } else if (error === "ERR_INVALID_INPUT") {
-          setFormError("Неверный формат имени или пароля");
-        } else {
-          console.error("Unknown error:", error);
-          setFormError("Неизвестная ошибка.");
-        }
+      if (password !== passwordRepeat) {
+        setFormError(() => "Пароли не совпадают.");
+        return;
       }
-    });
-  };
+
+      signUp({ name, password }).then((result: SignUpServiceResult) => {
+        if (result.ok) {
+          navigate(RoutePath.profile);
+        } else {
+          const error = result.error!;
+          if (error === ApiError.userExists) {
+            setFormError("Пользователь с таким именем уже зарегистрирован.");
+          } else if (ApiError.invalidInput) {
+            setFormError("Неверный формат имени или пароля");
+          } else {
+            console.error("Unknown error:", error);
+            setFormError("Неизвестная ошибка.");
+          }
+        }
+      });
+    },
+    [navigate, signUp]
+  );
 
   return (
     <Box sx={{ p: 2 }}>
@@ -99,7 +97,7 @@ export const SignUpPage = observer(() => {
               variant="contained"
               type="submit"
               size="large"
-              disabled={waiting}
+              disabled={isPending()}
             >
               Зарегистрироваться
             </Button>

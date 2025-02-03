@@ -1,6 +1,6 @@
-import { TICK_TIME } from "@/public/game/consts";
-import { GameFieldSentence } from "@/public/game/state/sentence";
-import { useSize } from "@/public/utils/size";
+import { TICK_TIME } from "@/core/store/game/consts";
+import { GameFieldSentence } from "@/core/store/game/state/sentence";
+import { useSize } from "@/core/hooks";
 import { FadeAnimation } from "@desktop-common/sentence/style";
 import { Box } from "@mui/material";
 import { observer } from "mobx-react";
@@ -23,9 +23,9 @@ function getFadeStep(fadeAnimation: FadeAnimation, length: number): number {
 function getAbsoluteCoord(
   relative: number,
   fieldSize: number,
-  groupSize: number
+  sentenceSize: number
 ): number {
-  return (relative * (fieldSize - groupSize)) / 100;
+  return (relative * (fieldSize - sentenceSize)) / 100;
 }
 
 export const SentenceView: React.FC<SentenceViewProps> = observer(
@@ -51,7 +51,7 @@ export const SentenceView: React.FC<SentenceViewProps> = observer(
         });
       }, letterInterval);
       return () => clearInterval(intervalId);
-    }, [isPaused]);
+    }, [isPaused, sentence.content.length, sentence.duration]);
 
     const animations = sentence.style.animations;
     const fadeInStep = getFadeStep(animations.fadeIn, sentence.content.length);
@@ -87,7 +87,7 @@ export const SentenceView: React.FC<SentenceViewProps> = observer(
       );
     });
 
-    const groupFadeOutDelay =
+    const fadeOutDelay =
       sentence.duration * TICK_TIME - animations.fadeOut.duration;
 
     return (
@@ -102,8 +102,17 @@ export const SentenceView: React.FC<SentenceViewProps> = observer(
           borderRadius: sentence.style.borderRadius,
           rotate: `${sentence.style.rotate}deg`,
           animation: `
-            fadeIn ${animations.fadeIn.duration}ms ${animations.fadeIn.easing} 0ms forwards,
-            fadeIn ${animations.fadeIn.duration}ms ${animations.fadeOut.easing} ${groupFadeOutDelay}ms forwards reverse
+            fadeIn 
+            ${animations.fadeIn.duration}ms 
+            ${animations.fadeIn.easing} 
+            0ms 
+            forwards,
+
+            fadeIn 
+            ${animations.fadeIn.duration}ms 
+            ${animations.fadeOut.easing}
+            ${fadeOutDelay}ms
+            forwards reverse
           `,
           animationPlayState: isPaused ? "paused" : "running",
         }}

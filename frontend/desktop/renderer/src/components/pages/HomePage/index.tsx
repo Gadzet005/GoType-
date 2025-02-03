@@ -1,7 +1,6 @@
 import { Box, Typography } from "@mui/material";
-import { useUser } from "@/hooks/user";
 import { observer } from "mobx-react";
-import { useTitle } from "@/public/utils/title";
+import { useTitle, useUser } from "@/core/hooks";
 import { Menu } from "./Menu";
 
 export const HomePage = observer(() => {

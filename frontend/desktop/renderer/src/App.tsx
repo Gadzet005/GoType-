@@ -1,7 +1,8 @@
 import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import { appTheme } from "@/public/theme/appTheme";
-import { UserProvider } from "./public/user/UserProvider";
-import { AppNavigation } from "./public/navigation/AppNavigation";
+import { appTheme } from "@/core/theme/appTheme";
+import { UserProvider } from "./core/store/user/UserProvider";
+import { AppNavigation } from "./core/navigation/AppNavigation";
+import { routes } from "./core/config/routes";
 
 export const App = () => {
   return (
@@ -9,7 +10,7 @@ export const App = () => {
       <ThemeProvider theme={appTheme}>
         <CssBaseline />
         <Box sx={{ height: "100%" }}>
-          <AppNavigation />
+          <AppNavigation routes={routes} />
         </Box>
       </ThemeProvider>
     </UserProvider>

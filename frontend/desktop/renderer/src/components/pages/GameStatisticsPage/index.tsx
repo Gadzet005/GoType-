@@ -1,12 +1,11 @@
+import { GameStatistics } from "@/core/store/game/statistics";
+import { RoutePath } from "@/core/config/routes/path";
+import { useKeyboard, useNavigate } from "@/core/hooks";
 import { Level } from "@desktop-common/level";
 import { Box, Container, Typography } from "@mui/material";
 import React from "react";
-import { Button } from "../../common/Button";
-import { RoutePath } from "@/public/navigation/routePath";
-import { GameStatistics } from "@/public/game/statistics";
+import { Button } from "../../ui/Button";
 import { StatTable } from "./StatTable";
-import { useKeyboard } from "@/hooks/keyboard";
-import { useNavigate } from "@/hooks/navigation";
 
 interface GameStatisticsPageProps {
   level: Level;
@@ -67,7 +66,7 @@ export const GameStatisticsPage: React.FC<GameStatisticsPageProps> = ({
             color="success"
             variant="contained"
             href={RoutePath.game}
-            params={[level]}
+            params={{ level }}
             fullWidth
           >
             Пройти снова

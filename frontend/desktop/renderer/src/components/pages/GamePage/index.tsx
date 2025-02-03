@@ -1,17 +1,15 @@
-import { Box, LinearProgress, Stack, Typography } from "@mui/material";
+import { Button } from "@/components/ui/Button";
+import { RoutePath } from "@/core/config/routes/path";
+import { useKeyboard, useNavigate, useTitle } from "@/core/hooks";
+import { Game } from "@/core/store/game";
+import { Level } from "@desktop-common/level";
 import MenuIcon from "@mui/icons-material/Menu";
-import { RoutePath } from "@/public/navigation/routePath";
-import { useTitle } from "@/public/utils/title";
+import { Box, LinearProgress, Stack, Typography } from "@mui/material";
+import { when } from "mobx";
 import { observer } from "mobx-react";
 import React from "react";
-import { Game } from "@/public/game/game";
 import { GameField } from "./GameField";
-import { Level } from "@desktop-common/level";
-import { useNavigate } from "@/hooks/navigation";
-import { when } from "mobx";
-import { Button } from "@/components/common/Button";
 import PauseMenu from "./PauseMenu";
-import { useKeyboard } from "@/hooks/keyboard";
 
 import "./index.css";
 
@@ -61,16 +59,19 @@ export const GamePage: React.FC<GamePageProps> = observer(({ level }) => {
     return () => {
       game.pause();
     };
-  }, []);
+  }, [game]);
 
   React.useEffect(() => {
     when(
       () => game.isFinished,
       () => {
-        navigate(RoutePath.gameStatistics, level, game.statistics);
+        navigate(RoutePath.gameStatistics, {
+          level,
+          statistics: game.statistics,
+        });
       }
     );
-  }, []);
+  }, [game.isFinished, game.statistics, level, navigate]);
 
   return (
     <Box

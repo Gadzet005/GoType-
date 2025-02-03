@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/ui/Button";
 import { BackButton } from "@/components/common/BackButton";
-import { RoutePath } from "@/public/navigation/routePath";
-import { useTitle } from "@/public/utils/title";
+import { RoutePath } from "@/core/config/routes/path";
+import { useTitle } from "@/core/hooks";
 import { observer } from "mobx-react";
 import { Level } from "@desktop-common/level";
 

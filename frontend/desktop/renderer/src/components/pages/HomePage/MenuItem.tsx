@@ -1,4 +1,4 @@
-import { Button, ButtonProps } from "@/components/common/Button";
+import { Button, ButtonProps } from "@/components/ui/Button";
 import React from "react";
 
 export interface MenuItemProps {

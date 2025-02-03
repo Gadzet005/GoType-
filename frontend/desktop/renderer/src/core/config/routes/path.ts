@@ -1,0 +1,12 @@
+export enum RoutePath {
+    default = "",
+    error = "error",
+    home = "home",
+    signIn = "sign-in",
+    signUp = "sign-up",
+    profile = "profile",
+    levelList = "level-list",
+    editor = "editor",
+    game = "game",
+    gameStatistics = "game-statistics",
+}

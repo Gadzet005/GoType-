@@ -9,9 +9,9 @@ import {
 } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonIcon from "@mui/icons-material/Person";
-import { Button } from "@/components/common/Button";
+import { Button } from "@/components/ui/Button";
 import React from "react";
-import { RoutePath } from "@/public/navigation/routePath";
+import { RoutePath } from "@/core/config/routes/path";
 
 interface LevelListItemProps {
   level: Level;
@@ -72,7 +72,7 @@ export const LevelListItem: React.FC<LevelListItemProps> = ({ level }) => {
         </Stack>
         <Button
           href={RoutePath.game}
-          params={[level]}
+          params={{ level }}
           size="large"
           variant="contained"
           fullWidth
