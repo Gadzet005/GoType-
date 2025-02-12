@@ -1,0 +1,36 @@
+body {
+    background-image: url('pattern.svg');
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+  
+  .root-block {
+    width: 100vw;
+    height: 100vh;
+    font-family: "Comic Sans MS", "Comic Sans", cursive, sans-serif !important;
+  }
+
+  .container {
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    
+  }
+  .inn{
+    width:80%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgb(244, 244, 244);
+  }
+  .out{
+    width:90%;
+    left: 50%;
+    transform: translateX(-50%);
+    //background-color: rgb(244, 2444, 244, 0.5)
+  }
+
+  
