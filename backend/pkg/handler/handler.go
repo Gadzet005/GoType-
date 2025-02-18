@@ -59,6 +59,12 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		admin.POST("/ban-level", h.BanLevel)
 		admin.POST("/unban-level")
 		admin.POST("/change-user-access", h.ChangeUserAccess)
+
+		admin.GET("/get-user-complaints", h.getUserComplaints)
+		admin.GET("/get-level-complaints", h.getLevelComplaints)
+		admin.POST("/process-user-complaint", h.processUserComplaint)
+		admin.POST("/process-level-complaint", h.processLevelComplaint)
+		admin.GET("/get-users", h.getUsers)
 	}
 
 	level := router.Group("/level", h.UserIdentity)

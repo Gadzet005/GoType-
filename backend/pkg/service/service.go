@@ -31,6 +31,11 @@ type Admin interface {
 	TryBanLevel(adminAccess int, ban entities.LevelBan) error
 	TryUnbanLevel(adminAccess int, ban entities.LevelBan) error
 	TryChangeAccessLevel(adminAccess int, ban entities.ChangeUserAccess) error
+	GetUserComplaints(adminId int, adminAccess int) ([]entities.UserComplaint, error)
+	GetLevelComplaints(adminId int, adminAccess int) ([]entities.LevelComplaint, error)
+	ProcessUserComplaint(adminId int, adminAccess int, complaintId int) error
+	ProcessLevelComplaint(adminId int, adminAccess int, complaintId int) error
+	GetUsers(adminAccess int, searchParams entities.UserSearchParams) ([]entities.UserInfo, error)
 }
 
 type MultiplayerGame interface {

@@ -32,6 +32,11 @@ type Admin interface {
 	BanLevel(levelId int) error
 	UnbanLevel(levelId int) error
 	ChangeUserAccess(userId int, newAccess int) error
+	GetUserComplaints(moderatorId int) ([]entities.UserComplaint, error)
+	GetLevelComplaints(moderatorId int) ([]entities.LevelComplaint, error)
+	DeleteUserComplaint(moderatorId int, complaintId int) error
+	DeleteLevelComplaint(moderatorId int, complaintId int) error
+	GetUsers(params entities.UserSearchParams) ([]entities.UserInfo, error)
 }
 
 type MultiplayerGame interface {
